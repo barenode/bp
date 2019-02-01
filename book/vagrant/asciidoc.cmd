@@ -1,0 +1,1 @@
+vagrant ssh -c "asciidoctor-pdf -r asciidoctor-mathematical /opt/dev/book.adoc"

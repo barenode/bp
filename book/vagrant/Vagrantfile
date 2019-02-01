@@ -1,0 +1,65 @@
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|                                          
+  
+  # box 
+  config.vm.box = "/dev/vagrant/c72/package.box"    
+  
+  #synced folders
+  config.vm.synced_folder '../.', '/opt/dev', type: 'nfs'
+
+
+  #defaul VM settings
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", 5120] 
+    vb.customize ["modifyvm", :id, "--cpus", 2] 
+  end
+  
+  config.vm.provision :puppet do |puppet|
+    puppet.environment_path = "environments"
+    puppet.module_path = "modules"
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  =  "asciidoc.pp"
+    #puppet.options = "--verbose --debug"
+  end
+  
+$script = <<SCRIPT
+
+#!/bin/bash
+
+curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+curl -L get.rvm.io | bash -s stable
+source /etc/profile.d/rvm.sh
+rvm reload
+rvm requirements run
+rvm install 2.5
+rvm use 2.5 --default
+gem install --no-ri --no-rdoc asciidoctor
+gem install --no-ri --no-rdoc asciidoctor-pdf --pre
+gem install --no-ri --no-rdoc rouge
+gem install --no-ri --no-rdoc pygments.rb
+gem install --no-ri --no-rdoc coderay
+gem install --no-ri --no-rdoc asciidoctor-mathematical
+wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -O /tmp/epel-release-latest-7.noarch.rpm
+rpm -Uvh /tmp/epel-release-latest-7.noarch.rpm
+yum -y install lyx-fonts 
+cat /opt/dev/vagrant/extension.rb > /usr/local/rvm/gems/default/gems/asciidoctor-mathematical-0.2.2/lib/asciidoctor-mathematical/extension.rb  
+
+SCRIPT
+  config.vm.provision :shell do |shell|
+    shell.inline = $script
+  end
+  
+  # asciidoctor
+   config.vm.define :asciidoc do |asciidoc|
+     asciidoc.vm.hostname = "asciidoc.barenode.org"
+     asciidoc.vm.network :private_network, ip: "192.168.72.102"
+   end 
+   
+
+ 
+      
+end
+                        
