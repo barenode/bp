@@ -1,1 +1,1 @@
-vagrant ssh -c "asciidoctor-pdf -r asciidoctor-mathematical /opt/dev/book.adoc"
+vagrant ssh -c "/usr/local/rvm/gems/default/gems/asciidoctor-pdf-1.5.0.alpha.18/bin/asciidoctor-pdf -a pdf-style=/opt/dev/themes/basic-theme.yml -a pdf-fontsdir=/opt/dev/fonts /opt/dev/book.adoc"
