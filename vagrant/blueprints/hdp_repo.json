@@ -1,0 +1,8 @@
+{ 
+  "Repositories" : {
+    "repo_name": "HDPLocal",
+    "base_url":"http://localhost/HDP/centos7/3.x/updates/3.1.0.0", 
+    "verify_base_url":true 
+  }
+}
+

@@ -1,0 +1,37 @@
+package samples
+
+import org.apache.spark.{SparkConf, SparkContext, SparkFunSuite}
+import org.apache.spark.mllib.util.{LocalClusterSparkContext, MLlibTestSparkContext}
+
+class SparkTest extends SparkFunSuite {
+
+  test("sc") {
+
+    val conf = new SparkConf()
+      .setMaster("local-cluster[2, 1, 1024]")
+      .setAppName("test-cluster")
+      .set("spark.rpc.message.maxSize", "1") // set to 1MB to detect direct serialization of data
+    val sc = new SparkContext(conf)
+
+    assert(sc!=null)
+    var rdd = sc.parallelize(
+      List(
+        (1, 2), (1, 2), (1, 2), (1, 2)
+      )
+    )
+
+
+    val xx = rdd.mapPartitions(iter =>
+      iter.flatMap(r=>{
+          Iterator.single(1)
+        }
+      )
+    )
+    System.out.println("**************************")
+    System.out.println("**************************")
+    System.out.println(xx.sum())
+    System.out.println("**************************")
+    System.out.println("**************************")
+
+  }
+}

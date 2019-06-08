@@ -28,3 +28,5 @@ target
 **/*.pdf
 **/generated_images
 **/.vagrant
+
+vagrant/log/hadoop/*

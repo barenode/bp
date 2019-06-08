@@ -1,0 +1,14 @@
+[HDP-3.1-repo-1]
+name=HDP-3.1-repo-1
+baseurl=http://localhost/HDP/centos7/3.x/updates/3.1.0.0
+
+path=/
+enabled=1
+gpgcheck=0
+[HDP-UTILS-1.1.0.22-repo-1]
+name=HDP-UTILS-1.1.0.22-repo-1
+baseurl=http://localhost/HDP-UTILS-1.1.0.22/repos/centos7
+
+path=/
+enabled=1
+gpgcheck=0
