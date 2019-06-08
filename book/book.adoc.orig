@@ -1,0 +1,93 @@
+:toc-title: Obsah
+:scala-sourcedir: src/main/scala
+
+:source-highlighter: rouge
+
+:math:
+:imagesoutdir: generated_images
+:imagesdir: images
+:stem: latexmath
+:mathematical-format: svg
+:mathematical-zoom: 1.4
+:doctype: book
+
+  
+= Žluťoučký kůň
+Doc Writer <doc.writer@example.org>
+
+v1.0, 2014-09-09
+:example-caption!:
+ifndef::imagesdir[:imagesdir: images]
+
+== Úvod
+
+This project does something.
+We just haven't decided what that is yet.
+
+Check the <<Attributes>> section.
+
+include::projection.adoc[]
+
+== Scala
+
+
+
+[source,scala]
+----
+include::./App.scala[]
+----
+
+[latexmath]
+++++
+k_{n+1} = n^2 + k_n^2 - k_{n-1}
+(A^TA)^{-1}
+++++
+
+Some useful text! Formula for quadratic root:
+
+[stem]
+++++
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+++++
+
+[stem]
+++++
+A_{m,n} =
+ \begin{pmatrix}
+  a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\
+  a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
+  \vdots  & \vdots  & \ddots & \vdots  \\
+  a_{m,1} & a_{m,2} & \cdots & a_{m,n}
+ \end{pmatrix}
+++++
+
+Inline equation works too! latexmath:[a^2+b^2=c^2]. Or as stem
+stem:[a^2+b^2=c^2]. Pretty nice, huh? stem:[\sqrt{a^2+b^2}]
+
+== Images
+
+.This is an image caption
+image::test.svg[scaledwidth=75%]
+
+== Build
+
+This page was built by the following command:
+
+ $ mvn
+
+=== Attributes
+
+.Built-in
+asciidoctor-version:: {asciidoctor-version}
+safe-mode-name:: {safe-mode-name}
+docdir:: {docdir}
+docfile:: {docfile}
+imagesdir:: {imagesdir}
+
+.Custom
+sourcedir:: {sourcedir}
+
+== Includes
+
+WARNING: Includes can be tricky!
+

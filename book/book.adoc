@@ -1,90 +1,17 @@
-:toc-title: Obsah
-:scala-sourcedir: src/main/scala
+= My document title
+:doctype: book
+:toc:
 
-:source-highlighter: rouge
+[colophon#colophon%nonfacing]
+include::colophon.adoc[]
 
-:math:
-:imagesoutdir: generated_images
-:imagesdir: images
-:stem: latexmath
-:mathematical-format: svg
-:mathematical-zoom: 1.4
-  
-= Žluťoučký kůň
-Doc Writer <doc.writer@example.org>
-v1.0, 2014-09-09
-:example-caption!:
-ifndef::imagesdir[:imagesdir: images]
+[abstract]
+The abstract goes here
 
-== Úvod
+== First document section
 
-This project does something.
-We just haven't decided what that is yet.
+First document section content
 
-Check the <<Attributes>> section.
+== Second document section
 
-include::projection.adoc[]
-
-== Scala
-
-
-
-[source,scala]
-----
-include::./App.scala[]
-----
-
-[latexmath]
-++++
-k_{n+1} = n^2 + k_n^2 - k_{n-1}
-(A^TA)^{-1}
-++++
-
-Some useful text! Formula for quadratic root:
-
-[stem]
-++++
-x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
-++++
-
-[stem]
-++++
-A_{m,n} =
- \begin{pmatrix}
-  a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\
-  a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
-  \vdots  & \vdots  & \ddots & \vdots  \\
-  a_{m,1} & a_{m,2} & \cdots & a_{m,n}
- \end{pmatrix}
-++++
-
-Inline equation works too! latexmath:[a^2+b^2=c^2]. Or as stem
-stem:[a^2+b^2=c^2]. Pretty nice, huh? stem:[\sqrt{a^2+b^2}]
-
-== Images
-
-.This is an image caption
-image::test.svg[scaledwidth=75%]
-
-== Build
-
-This page was built by the following command:
-
- $ mvn
-
-=== Attributes
-
-.Built-in
-asciidoctor-version:: {asciidoctor-version}
-safe-mode-name:: {safe-mode-name}
-docdir:: {docdir}
-docfile:: {docfile}
-imagesdir:: {imagesdir}
-
-.Custom
-sourcedir:: {sourcedir}
-
-== Includes
-
-WARNING: Includes can be tricky!
-
+sdjkfhsajkdfh asdjfh asjkdfhjkashd faskjdfh sdkjfhasjkdhfjashdfasjdfh jsdhfjshdf j dsfjhas dfjdfjh asf jsadhf asjhdf jasdhfj asdfjashdf ashdfj sdfjas jashdf jashdf jsdhfj jsdhf jsahdf jasdh f jsdhf jsdhf sjdfh sdjfh sjsdhf sjdhf asjdfh sjdfh asjdhf jsdfh asjdhf asjdhf jasdh fjasd f kdfjskldjfiksadjb dsfjhasdjf asdkjfh asdjkfh sdjfh sajdfa asdjfh sjdfh sjdfh sdjfhsjdf js dfjshd fjsdfh  sjdfh ssdjf jsd fjsdhf jsd jsdhf sjdfh sjdhf jsdh fjsdhf jsdhf  jsdhf sjdhf js dfjsDHF JDJH JHSD 
