@@ -1,17 +1,46 @@
-= My document title
 :doctype: book
 :toc:
-
-[colophon#colophon%nonfacing]
-include::colophon.adoc[]
-
-[abstract]
-The abstract goes here
+:toc-title: Obsah
+:numbered:
+:chapter-label:
+:table-caption: Tabulka
 
 == First document section
 
 First document section content
 
+_The Pragmatic Programmer_ <<pp>> should be required reading for all developers.
+To learn all about design patterns, refer to the book by the "`Gang of Four`" <<gof>>.
+
 == Second document section
 
 sdjkfhsajkdfh asdjfh asjkdfhjkashd faskjdfh sdkjfhasjkdhfjashdfasjdfh jsdhfjshdf j dsfjhas dfjdfjh asf jsadhf asjhdf jasdhfj asdfjashdf ashdfj sdfjas jashdf jashdf jsdhfj jsdhf jsahdf jasdh f jsdhf jsdhf sjdfh sdjfh sjsdhf sjdhf asjdfh sjdfh asjdhf jsdfh asjdhf asjdhf jasdh fjasd f kdfjskldjfiksadjb dsfjhasdjf asdkjfh asdjkfh sdjfh sajdfa asdjfh sjdfh sjdfh sdjfhsjdf js dfjshd fjsdfh  sjdfh ssdjf jsd fjsdhf jsd jsdhf sjdfh sjdhf jsdh fjsdhf jsdhf  jsdhf sjdhf js dfjsDHF JDJH JHSD 
+
+.A formal table
+|=== 
+| Cell in column 1, row 1 | Cell in column 2, row 1  
+| Cell in column 1, row 2 | Cell in column 2, row 2
+| Cell in column 1, row 3 | Cell in column 2, row 3
+|===
+
+.Other table. Zdroj <<gof>>.
+|=== 
+| Cell in column 1, row 1 | Cell in column 2, row 1  
+| Cell in column 1, row 2 | Cell in column 2, row 2
+| Cell in column 1, row 3 | Cell in column 2, row 3
+|===
+
+.CSV table
+[%header,format=csv]
+|===
+Artist,Track,Genre
+Baauer,Harlem Shake,Hip Hop
+The Lumineers,Ho Hey,Folk Rock
+|===
+
+== References
+[bibliography]
+- [[[pp,1]]] Andy Hunt & Dave Thomas. The Pragmatic Programmer:
+  From Journeyman to Master. Addison-Wesley. 1999.
+- [[[gof,2]]] Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides. Design Patterns:
+  Elements of Reusable Object-Oriented Software. Addison-Wesley. 1994.

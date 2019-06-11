@@ -1,0 +1,65 @@
+﻿= Machine learning with Apache Spark
+:book-title: {doctitle}
+:author: František Hylmar
+:university: Univerzita Hradec Králové
+:faculty: Fakulta informatiky a managementu
+:department: Katedra?
+:field_of_study: Studijní obor: Studijní obor
+:email:  youremail@infoq.com
+:revnumber: 1.0
+:revdate: {docdate}
+:revyear: 2018
+:subject: JHipster
+:keywords: Angular, Bootstrap, Spring Boot
+:doctype: book
+:media: screen
+ifeval::["{media}" != "prepress"]
+:coverfilesuffix: .png
+ifdef::backend-pdf[:coverfilesuffix: .jpg]
+:front-cover-image: image:cover{coverfilesuffix}[Front Cover,1050,1600]
+endif::[]
+:toc:
+:icons: font
+:lang: en
+:language: javadocript
+:experimental:
+:pdf-fontsdir: /opt/dev/custom/src/docs/asciidoc/styles/pdf/fonts
+:pdf-stylesdir: /opt/dev/custom/src/docs/asciidoc/styles/pdf/
+:pdf-style: infoq-screen
+:testvar: testvar
+
+ifndef::ebook-format[:leveloffset: 1]
+
+[colophon#colophon%nonfacing]
+include::chapters/colophon.adoc[]
+
+[dedication#dedication%nonfacing]
+include::chapters/dedication.adoc[]
+
+[abstract]
+--
+Abstract
+--
+
+[acknowledgements]
+include::chapters/acknowledgements.adoc[]
+
+[preface]
+include::chapters/preface.adoc[]
+
+include::chapters/introduction.adoc[]
+
+include::chapters/chapter1.adoc[]
+
+include::chapters/chapter2.adoc[]
+
+include::chapters/chapter3.adoc[]
+
+include::chapters/action.adoc[]
+
+include::chapters/about.adoc[]
+
+//ifdef::backend-pdf,backend-docbook[]
+//[index]
+//== Index
+//endif::[]s

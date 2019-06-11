@@ -1,0 +1,1 @@
+vagrant ssh -c "/usr/local/rvm/gems/default/gems/asciidoctor-pdf-1.5.0.alpha.18/bin/asciidoctor-pdf --trace -r /opt/dev/custom/src/main/ruby/asciidoctor-pdf-extensions.rb /opt/dev/custom/src/docs/asciidoc/index.adoc"
