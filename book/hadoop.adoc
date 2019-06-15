@@ -1,6 +1,0 @@
-repository
-
-HDP
-
-https://docs.hortonworks.com/HDPDocuments/Ambari-2.7.3.0/bk_ambari-installation/content/hdp_31_repositories.html
-

@@ -36,6 +36,7 @@ rvm reload
 rvm requirements run
 rvm install 2.5
 rvm use 2.5 --default
+#--no-document
 gem install -no-ri-no-rdoc asciidoctor
 gem install -no-ri-no-rdoc asciidoctor-pdf --pre
 gem install -no-ri-no-rdoc rouge
