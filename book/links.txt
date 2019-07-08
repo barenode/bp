@@ -1,0 +1,5 @@
+Evaluating Recommender Systems: Choosing the best one for your business
+https://medium.com/recombee-blog/evaluating-recommender-systems-choosing-the-best-one-for-your-business-c688ab781a35
+
+Recommender Systems in Practice
+https://towardsdatascience.com/recommender-systems-in-practice-cef9033bb23a
