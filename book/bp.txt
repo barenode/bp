@@ -2,6 +2,30 @@ V soucasnosti kazde uspesna e-komercni spolecnost vyuziva nejaky system na dopor
 
 Nevyhody impicitni vazby:
 
-1. Pouze pozitivni feedback. POkud evidujeme pouze polozky, ktere si uzivatel vybral vybral. Je tezke rozlisit ty ktere ma rad a ty ktere ne. Napriklad pokud uzivatel neshledl dany film, muze byt zpusobeno tim ze o nem zatim nevi ale take tim, ze ho nema rad.
+1. Pouze pozitivni feedback. Pokud evidujeme pouze polozky, ktere si uzivatel vybral vybral. Je tezke rozlisit ty ktere ma rad a ty ktere ne. Napriklad pokud uzivatel neshledl dany film, muze byt zpusobeno tim ze o nem zatim nevi ale take tim, ze ho nema rad.
 
-2.       
+2. Implicitni dataset obsahuje sum. dle [1] pokud pasivne trackujeme chovani uzivatele, muzeme pouze hadat jejich preference a prave motivy. Napriklad i presto ze uzivatel zhledl nektery film, nemusel se mu libit.
+
+3. Studeny start. Nove pridane polozky do systemu majinulovy pocet interakci. System by mel doporucovat i takove polozky.
+
+
+
+NN models
+
+Zakladni SF pristupy jsou zalozene modelovani nejblizsich sousedu.  
+TYto modely jsou uziovatelsky nebo polozkove orientovane.
+Item based approach is usually preferred over user-based approach. User-based approach is often harder to scale because of the dynamic nature of users, whereas items usually don’t change much, and item based approach often can be computed offline and served without constantly re-training.
+
+KNN
+
+Faktorizace matic
+
+Interakce uzivatelu s polozkami jsou definovany jako matice A = {aij} u x v. Kde u je pocet uzivatelu a v je pocet polozek. skalar aij representuje hodnoceni polozky j uzivatelem j. Tato matice je typicky velmi ridka. Ukolem systemu je dopocitat chybejici hodnoty v matici. matrix factorization algorithms work by decomposing the user-item interaction matrix into the product of two lower dimensionality rectangular matrices. One matrix can be seen as the user matrix where rows represent users and columns are latent factors. The other matrix is the item matrix where rows are latent factors and columns represent items.
+
+SVD
+
+
+
+ALS    
+
+Algoritmy by mely byt skalovatelne pro velke mnoztvi dat. Tj. vypocetni doba by mela byt linearne zavisla na vypocetnim vykonu.  

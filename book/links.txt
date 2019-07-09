@@ -3,3 +3,12 @@ https://medium.com/recombee-blog/evaluating-recommender-systems-choosing-the-bes
 
 Recommender Systems in Practice
 https://towardsdatascience.com/recommender-systems-in-practice-cef9033bb23a
+
+Prototyping a Recommender System Step by Step Part 2: Alternating Least Square (ALS) Matrix Factorization in Collaborative Filtering
+https://towardsdatascience.com/prototyping-a-recommender-system-step-by-step-part-2-alternating-least-square-als-matrix-4a76c58714a1  
+
+Prototyping a Recommender System Step by Step Part 1: KNN Item-Based Collaborative Filtering
+https://towardsdatascience.com/prototyping-a-recommender-system-step-by-step-part-1-knn-item-based-collaborative-filtering-637969614ea 
+
+How do you build a “People who bought this also bought that”-style recommendation engine
+https://datasciencemadesimpler.wordpress.com/tag/alternating-least-squares/
