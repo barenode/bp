@@ -37,16 +37,17 @@ rvm requirements run
 rvm install 2.5
 rvm use 2.5 --default
 #--no-document
-gem install -no-ri-no-rdoc asciidoctor
-gem install -no-ri-no-rdoc asciidoctor-pdf --pre
-gem install -no-ri-no-rdoc rouge
-gem install -no-ri-no-rdoc pygments.rb
-gem install -no-ri-no-rdoc coderay
-gem install -no-ri-no-rdoc asciidoctor-mathematical
+gem install --no-document asciidoctor
+gem install --no-document asciidoctor-pdf --pre
+gem install --no-document rouge
+gem install --no-document pygments.rb
+gem install --no-document coderay
+gem install --no-document asciidoctor-mathematical
 wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -O /tmp/epel-release-latest-7.noarch.rpm
 rpm -Uvh /tmp/epel-release-latest-7.noarch.rpm
-yum -y install lyx-fonts 
-cat /opt/dev/vagrant/extension.rb > /usr/local/rvm/gems/default/gems/asciidoctor-mathematical-0.2.2/lib/asciidoctor-mathematical/extension.rb  
+yum -y install lyx-fonts
+#change math extension 
+#cat /opt/dev/vagrant/extension.rb > /usr/local/rvm/gems/default/gems/asciidoctor-mathematical-0.2.2/lib/asciidoctor-mathematical/extension.rb  
 
 SCRIPT
   config.vm.provision :shell do |shell|
