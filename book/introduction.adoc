@@ -1,0 +1,4 @@
+
+== Uvod
+
+Ucelem teto prace je experimentalni aplikace strojoveho uceni na platforme apache Spark. Pro experimenty byla vybrana skupina algoritmu 'kolaboratni filtrovani pro implicitni datasety'. Algoritmy by mely byt skalovatelne pro velke mnoztvi dat. Tj. vypocetni doba by mela byt linearne zavisla na vypocetnim vykonu.    

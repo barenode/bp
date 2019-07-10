@@ -10,97 +10,12 @@
 :stem: latexmath
 :mathematical-format: svg
 :mathematical-zoom: 1.4
-
-include::projection.adoc[]
-
-== First document section
-
-[latexmath]
-++++
-k_{n+1} = n^2 + k_n^2 - k_{n-1}
-(A^TA)^{-1}
-++++
-
-Some useful text! Formula for quadratic root:
-
-[stem]
-++++
-x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
-++++
-
-[stem]
-++++
-A_{m,n} =
- \begin{pmatrix}
-  a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\
-  a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
-  \vdots  & \vdots  & \ddots & \vdots  \\
-  a_{m,1} & a_{m,2} & \cdots & a_{m,n}
- \end{pmatrix}
-++++
-
-Inline equation works too! latexmath:[a^2+b^2=c^2]. Or as stem
-stem:[a^2+b^2=c^2]. Pretty nice, huh? stem:[\sqrt{a^2+b^2}]
-
-_The Pragmatic Programmer_ <<pp>> should be required reading for all developers.
-To learn all about design patterns, refer to the book by the "`Gang of Four`" <<gof>>.
-
-== Projection
-
-[stem]
-++++
-\begin{align}
- p = \hat{x}a \\
- e = b - p \\
- e = b - \hat{x}a \\
- a \cdot (b - \hat{x}a) = 0 \\
- a \cdot b - \hat{x}a \cdot a = 0 \\
- \hat{x} =  \frac{a \cdot b}{a\cdot a} =  \frac{a^Tb}{a^Ta}  \\
- p = \hat{x}a = \frac{a^Tb}{a^Ta} a \\
- p = a\hat{x} =  a \frac{a^Tb}{a^Ta} = Pb \\
- P = \frac{aa^T}{a^Ta}
-\end{align}
-++++
-
-[stem]
-++++
-\begin{align}
- A^T(b - A\hat{x}) = 0 \\
- A^TA\hat{x} = A^Tb  \\
- p = A\hat{x} = A(A^TA)^{-1}A^Tb   \\
- P = A(A^TA)^{-1}A^T 
-\end{align}
-++++
-
-== Second document section
-
-sdjkfhsajkdfh asdjfh asjkdfhjkashd faskjdfh sdkjfhasjkdhfjashdfasjdfh jsdhfjshdf j dsfjhas dfjdfjh asf jsadhf asjhdf jasdhfj asdfjashdf ashdfj sdfjas jashdf jashdf jsdhfj jsdhf jsahdf jasdh f jsdhf jsdhf sjdfh sdjfh sjsdhf sjdhf asjdfh sjdfh asjdhf jsdfh asjdhf asjdhf jasdh fjasd f kdfjskldjfiksadjb dsfjhasdjf asdkjfh asdjkfh sdjfh sajdfa asdjfh sjdfh sjdfh sdjfhsjdf js dfjshd fjsdfh  sjdfh ssdjf jsd fjsdhf jsd jsdhf sjdfh sjdhf jsdh fjsdhf jsdhf  jsdhf sjdhf js dfjsDHF JDJH JHSD 
-
-.A formal table
-|=== 
-| Cell in column 1, row 1 | Cell in column 2, row 1  
-| Cell in column 1, row 2 | Cell in column 2, row 2
-| Cell in column 1, row 3 | Cell in column 2, row 3
-|===
-
-.Other table. Zdroj <<gof>>.
-|=== 
-| Cell in column 1, row 1 | Cell in column 2, row 1  
-| Cell in column 1, row 2 | Cell in column 2, row 2
-| Cell in column 1, row 3 | Cell in column 2, row 3
-|===
-
-.CSV table
-[%header,format=csv]
-|===
-Artist,Track,Genre
-Baauer,Harlem Shake,Hip Hop
-The Lumineers,Ho Hey,Folk Rock
-|===
-
-== References
-[bibliography]
-- [[[pp,1]]] Andy Hunt & Dave Thomas. The Pragmatic Programmer:
-  From Journeyman to Master. Addison-Wesley. 1999.
-- [[[gof,2]]] Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides. Design Patterns:
-  Elements of Reusable Object-Oriented Software. Addison-Wesley. 1994.
+          
+include::introduction.adoc[]
+include::recommendation.adoc[]
+include::recommendation-implicit.adoc[]
+include::recommendation-implicit-knn.adoc[]
+include::recommendation-implicit-svd.adoc[]
+include::recommendation-implicit-als.adoc[]
+include::spark.adoc[]
+include::references.adoc[]
