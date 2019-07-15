@@ -1,4 +1,20 @@
+:stem: latexmath
 
 == ALS
 
-ALS. 
+Definujme matici stem:[R_{m,n}] kde stem:[m] urcuje pocet uzivatelu a stem:[n] pocet polozek v katalogu. Elementy stem:[r_{ij} \in \mathbb{R}] matice stem:[R] definuji ohodnoceni uzivatele stem:[i] polozky stem:[j]. Predpokladame, ze matice stem:[R] je rozsahla ale zaroven velice ridka, vetsinou mene nez 1% poli ma prirazenou hodnotu. 
+
+[stem]
+++++
+\begin{align}
+R_{m,n} =
+ \begin{pmatrix}
+  r_{1,1} & r_{1,2} & \cdots & r_{1,n} \\
+  r_{2,1} & r_{2,2} & \cdots & r_{2,n} \\
+  \vdots  & \vdots  & \ddots & \vdots  \\
+  r_{m,1} & r_{m,2} & \cdots & r_{m,n}
+ \end{pmatrix}
+\end{align}
+++++ 
+
+Matici stem:[R] rozlozime na 2 matice stem:[X_{m,k}] a stem:[Y_{m,k}] tak, ze stem:[XY^T \approx R]. Matice obsahuji radky pro kadeho uzivatele resp. produkt. Radky maji nekolik hodnot stem:[k]. Kazda hodnota odpovida latentni vlastnosti modelu. Kada hodnota v radku odpovida tomu nakolik jsou uzivatele a produkty splaty s touto skrytou vlastnosti [aas:46]. Na rozdil od stem:[R] je vysledna matice stem:[XY^T] husta, doplnene hodnoty obsahuji odhad ohodnoceni mezi uzivateli a polozkami. 

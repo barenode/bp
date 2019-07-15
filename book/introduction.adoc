@@ -1,4 +1,4 @@
 
-== Uvod
+== Úvod
 
-Ucelem teto prace je experimentalni aplikace strojoveho uceni na platforme apache Spark. Pro experimenty byla vybrana skupina algoritmu 'kolaboratni filtrovani pro implicitni datasety'. Algoritmy by mely byt skalovatelne pro velke mnoztvi dat. Tj. vypocetni doba by mela byt linearne zavisla na vypocetnim vykonu.    
+Účelem této práce je experimentální aplikace strojového učení na platformě  Spark. Pro experiment byly vybrány doporučovací systémy, konkrétně skupina algoritmů pro kolaborativní filtrování implicitních datasetů. Jednotlivé algoritmy by měly být implementovány s důrazem distribuovaný výpočet a zpracování velkých objemů dat. Pro algoritmy by měla být navržena metodika ohodnocení přesnosti jednotlivých výpočtů. Závěrem budou jednotlivé algoritmy porovnány z hlediska přesnosti, rychlosti a škálovatelnosti.  

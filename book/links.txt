@@ -19,3 +19,6 @@ http://glaros.dtc.umn.edu/gkhome/fetch/papers/itemrsTOIS04.pdf
 distributed SVD
 https://www.irisa.fr/sage/bernard/publis/SVD-Chapter06.pdf
 https://pdfs.semanticscholar.org/02cc/21ab712ec9cc87dab40b28193c703e8c7368.pdf?_ga=2.8043250.1913255965.1562675507-1376639739.1562675507
+
+Application of Dimensionality Reduction in Recommender System -- A Case Study 
+http://files.grouplens.org/papers/webKDD00.pdf
