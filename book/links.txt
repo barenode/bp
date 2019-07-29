@@ -22,3 +22,10 @@ https://pdfs.semanticscholar.org/02cc/21ab712ec9cc87dab40b28193c703e8c7368.pdf?_
 
 Application of Dimensionality Reduction in Recommender System -- A Case Study 
 http://files.grouplens.org/papers/webKDD00.pdf
+
+
+ALS
+https://www.quora.com/What-is-the-Alternating-Least-Squares-method-in-recommendation-systems-And-why-does-this-algorithm-work-intuition-behind-this
+
+RMSE
+https://www.includehelp.com/ml-ai/root-mean-square%20error-rmse.aspx
