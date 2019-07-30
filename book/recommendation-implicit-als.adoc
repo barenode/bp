@@ -6,7 +6,7 @@ Definujme matici stem:[R_{m,n}] kde stem:[m] urcuje pocet uzivatelu a stem:[n] p
 
 [stem]
 ++++
-\begin{align}
+\begin{align*}
 R_{m,n} =
  \begin{pmatrix}
   r_{1,1} & r_{1,2} & \cdots & r_{1,n} \\
@@ -14,34 +14,19 @@ R_{m,n} =
   \vdots  & \vdots  & \ddots & \vdots  \\
   r_{m,1} & r_{m,2} & \cdots & r_{m,n}
  \end{pmatrix}
-\end{align}
+\end{align*}
 ++++ 
 
 Matici stem:[R] rozlozime na 2 matice stem:[X_{m,k}] a stem:[Y_{m,k}] tak, ze stem:[XY^T \approx R]. Matice obsahuji radky pro kadeho uzivatele resp. produkt. Radky maji nekolik hodnot stem:[k]. Kazda hodnota odpovida latentni vlastnosti modelu. Kada hodnota v radku odpovida tomu nakolik jsou uzivatele a produkty splaty s touto skrytou vlastnosti [aas:46]. Na rozdil od stem:[R] je vysledna matice stem:[XY^T] husta, doplnene hodnoty obsahuji odhad ohodnoceni mezi uzivateli a polozkami. 
 
-== Projection
+=== LS
 
 [stem]
 ++++
-\begin{align}
- p = \hat{x}a \\
- e = b - p \\
- e = b - \hat{x}a \\
- a \cdot (b - \hat{x}a) = 0 \\
- a \cdot b - \hat{x}a \cdot a = 0 \\
- \hat{x} =  \frac{a \cdot b}{a\cdot a} =  \frac{a^Tb}{a^Ta}  \\
- p = \hat{x}a = \frac{a^Tb}{a^Ta} a \\
- p = a\hat{x} =  a \frac{a^Tb}{a^Ta} = Pb \\
- P = \frac{aa^T}{a^Ta}
-\end{align}
-++++
-
-[stem]
-++++
-\begin{align}
- A^T(b - A\hat{x}) = 0 \\
- A^TA\hat{x} = A^Tb  \\
- p = A\hat{x} = A(A^TA)^{-1}A^Tb   \\
- P = A(A^TA)^{-1}A^T 
-\end{align}
+\begin{align*}
+ A^T(b - A\hat{x}) &= 0 \\
+ A^TA\hat{x} &= A^Tb  \\
+ A\hat{x} &= A(A^TA)^{-1}A^Tb   \\
+ P &= A(A^TA)^{-1}A^T 
+\end{align*}
 ++++ 
