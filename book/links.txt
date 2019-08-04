@@ -32,3 +32,6 @@ https://www.quora.com/What-is-the-Alternating-Least-Squares-method-in-recommenda
 
 RMSE
 https://www.includehelp.com/ml-ai/root-mean-square%20error-rmse.aspx
+
+LSH
+https://towardsdatascience.com/locality-sensitive-hashing-for-music-search-f2f1940ace23
