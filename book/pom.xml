@@ -36,7 +36,7 @@
             </goals>
             <configuration>
                 <workingDirectory>${basedir}/vagrant/</workingDirectory>
-                <executable>asciidoc.cmd</executable>
+                <executable>book.cmd</executable>
             </configuration>
           </execution>
           <execution>

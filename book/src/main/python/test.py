@@ -30,7 +30,7 @@ class Test:
 
         rmse_array = []
 
-        for i in range(8):
+        for i in range(15):
             y = linalg.inv(x.dot(x.transpose())).dot(x).dot(a)
             x = linalg.inv(y.dot(y.transpose())).dot(y).dot(a.transpose())
             p = x.transpose().dot(y)
@@ -44,8 +44,10 @@ class Test:
         print("RMSE: ", rmse_array)
         print(numpy.around(p, decimals=2))
         # print("RMSE: ", rmse_array)
-        pyplot.figure()
+        pyplot.figure(figsize=(9, 4))
         pyplot.plot(rmse_array)
+        pyplot.xlabel('Iterace')
+        pyplot.ylabel('RMSE')
         pyplot.savefig('figpath.svg')
         return a
 
