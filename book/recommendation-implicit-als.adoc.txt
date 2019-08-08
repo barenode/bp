@@ -1,9 +1,9 @@
 ï»¿:stem: latexmath
 :imagesdir: images
 
-=== ALS
+== ALS
 
-ALS z anglického názvu **Alternating square roots** volnì pøeloeno jako *støídavá metoda nejmenších ètvercù*. Definujme matici stem:[R_{m,n}] kde stem:[m] urèuje pocet uzivatelu a stem:[n] pocet polozek v katalogu. Elementy stem:[r_{ij} \in \mathbb{R}] matice stem:[R] definuji ohodnoceni uzivatele stem:[i] polozky stem:[j]. Predpokladame, ze matice stem:[R] je rozsahla ale zaroven velice ridka, vetsinou mene nez 1% poli ma prirazenou hodnotu. 
+ALS z anglickÃ©ho nÃ¡zvu **Alternating square roots** volnÄ› pÅ™eloÅ¾eno jako *stÅ™Ã­davÃ¡ metoda nejmenÅ¡Ã­ch ÄtvercÅ¯*. Definujme matici stem:[R_{m,n}] kde stem:[m] urÄuje pocet uzivatelu a stem:[n] pocet polozek v katalogu. Elementy stem:[r_{ij} \in \mathbb{R}] matice stem:[R] definuji ohodnoceni uzivatele stem:[i] polozky stem:[j]. Predpokladame, ze matice stem:[R] je rozsahla ale zaroven velice ridka, vetsinou mene nez 1% poli ma prirazenou hodnotu. 
 
 [stem]
 ++++
@@ -55,7 +55,6 @@ Pro stem:[U], stem:[U=(VV^T)^{-1}VR^T]
 Na zacatku nastavime hodnoty matice stem:[U] na nahodna mala cisla a spocitame stem:[V]. Nasledne stridave pocitame stem:[U] a stem:[V] do te doby nez se stabilizuje hodnota stem:[\lVert R-U^TV \rVert_{2}].
 
 === Pripadova studie
-==== Pripadova studie
 
 Mejme matici stem:[R_{11,8}] 
 

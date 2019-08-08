@@ -1,5 +1,5 @@
 
-== Kolaborativní filtrování pro implicitní datasety
+=== Kolaborativní filtrování pro implicitní datasety
 
 Implicitní data vznikají samotnou interakcí uživatele se systémem, mají tedy tendenci být komplexnější. Tento přístup má ale i řadu nevýhod, které je nutné v příslušném algorimtu zohlednit:
 
