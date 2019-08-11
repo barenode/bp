@@ -4,7 +4,7 @@
 :numbered:
 :chapter-label:
 :table-caption: Tabulka
-:figure-caption: Obrázek
+:figure-caption: obr.
 :math:
 :imagesoutdir: generated_images
 :imagesdir: images
@@ -12,11 +12,11 @@
 :eqnums: none
 :mathematical-format: svg
 :mathematical-zoom: 1.4
+:xrefstyle: short
           
 include::introduction.adoc[]
 include::recommendation.adoc[]
 include::recommendation-implicit.adoc[]
 include::recommendation-implicit-knn.adoc[]
 include::recommendation-implicit-als.adoc[]
-include::spark.adoc[]
 include::references.adoc[]

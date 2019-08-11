@@ -1,9 +1,9 @@
 ﻿:stem: latexmath
 :imagesdir: images
 
-=== ALS
+==== ALS
 
-ALS z anglick�ho n�zvu **Alternating square roots** voln� p�elo�eno jako *st��dav� metoda nejmen��ch �tverc�*. Definujme matici stem:[R_{m,n}] kde stem:[m] ur�uje pocet uzivatelu a stem:[n] pocet polozek v katalogu. Elementy stem:[r_{ij} \in \mathbb{R}] matice stem:[R] definuji ohodnoceni uzivatele stem:[i] polozky stem:[j]. Predpokladame, ze matice stem:[R] je rozsahla ale zaroven velice ridka, vetsinou mene nez 1% poli ma prirazenou hodnotu. 
+ALS z anglického názvu **Alternating square roots** volně přeloženo jako *střídavá metoda nejmenších čtverců*. Definujme matici stem:[R_{m,n}] kde stem:[m] určuje počet uživatelů a stem:[n] počet položek v katalogu. Elementy stem:[r_{ij} \in \mathbb{R}] matice stem:[R] definují ohodnocení uživatele stem:[i] položky stem:[j]. Předpokládáme, že matice stem:[R] je rozsáhlá ale zároveň velice řídká, většinou méně než 1 % polí má přiřazenou hodnotu. 
 
 [stem]
 ++++
@@ -18,9 +18,8 @@ R_{m,n} =
 \end{align*}
 ++++ 
 
-Matici stem:[R] rozlozime na 2 matice stem:[U_{k,m}] a stem:[V_{k,n}] tak, ze stem:[U^TV \approx R]. Matice obsahuji sloupce pro kadeho uzivatele resp. produkt. Radky maji nekolik hodnot stem:[k]. Kazda hodnota odpovida latentni vlastnosti modelu. Kada hodnota v radku odpovida tomu nakolik jsou uzivatele a produkty splaty s touto skrytou vlastnosti [aas:46]. Na rozdil od stem:[R] je vysledna matice stem:[U^TV] husta, doplnene hodnoty obsahuji odhad ohodnoceni mezi uzivateli a polozkami. 
-
-Rovnice stem:[U^TV = R] nema reseni. Duvodem je priliz mnoho rovnic stem:[m] pro stem:[U] resp. stem:[n] pro stem:[V] a pouze stem:[k] neznamych. Resenim je pouzit netodu nejmensich ctvercu kdy hledame reseni s minimalni chybou
+Matici stem:[R] rozložíme na 2 matice stem:[U_{k,m}] a stem:[V_{k,n}] tak, že stem:[U^TV \approx R]. Matice obsahují sloupce pro každého uživatele resp. produkt. Řádky mají pouze několik hodnot stem:[k]. Každá hodnota odpovída latentní vlastnosti modelu. Každá hodnota v řádku odpovídá tomu nakolik jsou uživatelé a produkty spjaty s touto skrytou vlastností <<aas>>. Na rozdíl od stem:[R] je vysledná matice stem:[U^TV] hustá, doplněné hodnoty obsahují odhad ohodnocení mezi uživateli a položkami. 
+Soustava rovnic daná stem:[U^TV = R] nemá pravděpodobně řešení. Důvodem je příliš mnoho rovnic stem:[m] pro stem:[U] resp. stem:[n] pro stem:[V] a pouze stem:[k] neznámých. Řešením je použít metodu nejmenších čtverců, kdy hledáme řešení s minimální chybou.
 
 [stem]
 ++++
@@ -29,7 +28,7 @@ Rovnice stem:[U^TV = R] nema reseni. Duvodem je priliz mnoho rovnic stem:[m] pro
 \end{align*} 
 ++++
 
-Vyjadrime reseni pro stem:[U] a stem:[V] zvlast. Pro stem:[V], stem:[V=(UU^T)^{-1}UR]
+Vyjádříme řešení pro stem:[U] a stem:[V] zvlášť. Pro stem:[V], stem:[V=(UU^T)^{-1}UR]
 
 [stem]
 ++++
@@ -52,10 +51,9 @@ Pro stem:[U], stem:[U=(VV^T)^{-1}VR^T]
 \end{align*}
 ++++
 
-Na zacatku nastavime hodnoty matice stem:[U] na nahodna mala cisla a spocitame stem:[V]. Nasledne stridave pocitame stem:[U] a stem:[V] do te doby nez se stabilizuje hodnota stem:[\lVert R-U^TV \rVert_{2}].
+Na začátku nastavíme hodnoty matice stem:[U] na náhodná malá čísla a spočítáme stem:[V]. Následně střídavě počítáme stem:[U] a stem:[V] do té doby, než se stabilizuje hodnota stem:[\lVert R-U^TV \rVert_{2}].
 
-=== Pripadova studie
-==== Pripadova studie
+===== Pripadova studie
 
 Mejme matici stem:[R_{11,8}] 
 
@@ -78,12 +76,12 @@ Mejme matici stem:[R_{11,8}]
 \end{align*}
 ++++
 
-Experimantalne nastavime stem:[k] na stem:[2] a stridave pocitame matice stem:[U_{2,11}] a stem:[V_{2,8}]. Z obrazku jew patrne, ze po 10 iteracich se hodnota chyby stabilizuje na hodnote 1.328.
+Experimentálně nastavíme stem:[k] na stem:[2] a střídavě počítáme matice stem:[U_{2,11}] a stem:[V_{2,8}]. Z <<als-rmse>>. je patrné, že po stem:[10] iteracích se hodnota chyby stabilizuje na hodnotě stem:[1.328].
 
 [[als-rmse]]
-image::../src/main/python/figpath.svg[title="ALS <<pp>>", pdfwidth="100%"]
+image::../src/main/python/figpath.svg[title="ALS", pdfwidth="100%"]
 
-Vysledna faktorizce stem:[U^TV]
+Výsledná faktorizce stem:[U^TV]
 
 [stem]
 ++++
@@ -108,7 +106,7 @@ Vysledna faktorizce stem:[U^TV]
 \end{align*}
 ++++
 
-Vysledna aproximovana matice  stem:[\hat{R} \approx U^TV]
+Výsledná aproximovaná matice stem:[\hat{R} \approx U^TV]
 
 [stem]
 ++++

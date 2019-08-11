@@ -14,10 +14,10 @@ public class PDFMerge {
         try {
 
             PDFMergerUtility pdfMerger = new PDFMergerUtility();
-            pdfMerger.setDestinationFileName("./merged.pdf");
+            pdfMerger.setDestinationFileName("./BakalarskaPrace.pdf");
 
-            //PDDocumentInformation documentInformation = new PDDocumentInformation();
-            //documentInformation.setTitle("Apache PdfBox Merge PDF Documents");
+            PDDocumentInformation documentInformation = new PDDocumentInformation();
+            documentInformation.setTitle("Strojové učení na platformě Spark");
             //documentInformation.setCreator("memorynotfound.com");
             //documentInformation.setSubject("Merging PDF documents with Apache PDF Box");
 

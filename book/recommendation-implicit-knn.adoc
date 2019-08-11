@@ -1,8 +1,8 @@
-
-=== K nejbliszich sousedu
+﻿
+==== K nejbližšísich sousedů
 
 Algoritmus spocita vzdalenost mezi cilovym produktem a vsemi ostatnimi produkty. Nasledne ohodnoti tuto vzdalenost a nalezne K nejbliszich produktu jako vysledne doporuceni.
-Definujme matici stem:[R_{m,n}] kde stem:[m] urcuje pocet uzivatelu a stem:[n] pocet produktu v katalogu. Kazdy produkt muzeme nasledne interpretovat jako vektor s stem:[m] rozmery, tj. jeden rozmer pro kazdeho uzivatele. Pro vypocet vsdalenosti mezi dvemi vektory existuje vice postupu. Standartni norm-2 neboli euklidovska vzdalenost stem:norm-2 neni  pro vypocet vzdalenosti vektoru s velkym poctem rozmeru doporucena <<knn>>. Dopporucena je takzvana kosinova podobnost <<cosine_similarity>>: stem:cosine_similarity. 
+Definujme matici stem:[R_{m,n}] kde stem:[m] urcuje pocet uzivatelu a stem:[n] pocet produktu v katalogu. Kazdy produkt muzeme nasledne interpretovat jako vektor s stem:[m] rozmery, tj. jeden rozmer pro kazdeho uzivatele. Pro vypocet vsdalenosti mezi dvemi vektory existuje vice postupu. Standartni norm-2 neboli euklidovska vzdalenost stem:norm-2 neni  pro vypocet vzdalenosti vektoru s velkym poctem rozmeru doporucena <<knn>>. Dopporucena je takzvana kosinova podobnost.
 
  
 
