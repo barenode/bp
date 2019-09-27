@@ -53,7 +53,7 @@ Pro stem:[U], stem:[U=(VV^T)^{-1}VR^T]
 
 Na začátku nastavíme hodnoty matice stem:[U] na náhodná malá čísla a spočítáme stem:[V]. Následně střídavě počítáme stem:[U] a stem:[V] do té doby, než se stabilizuje hodnota stem:[\lVert R-U^TV \rVert_{2}].
 
-===== Pripadova studie
+===== Případová studie
 
 Mejme matici stem:[R_{11,8}] 
 
