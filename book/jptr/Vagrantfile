@@ -1,0 +1,60 @@
+# REQUIRED:
+#  vagrant plugin install vagrant-vbguest
+#
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|                                          
+  
+  # box 
+  config.vm.box = "centos/7"
+  # config.vm.box = "/dev/vagrant/c72/package.box"    
+  
+  #synced folders
+  config.vm.synced_folder '../.', '/opt/dev', type: 'nfs'
+
+
+  #defaul VM settings
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", 5120] 
+    vb.customize ["modifyvm", :id, "--cpus", 2] 
+  end
+  
+  
+$script = <<SCRIPT
+
+#!/bin/bash
+
+#yum install -y centos-release-scl
+#yum install -y rh-python36
+#yum groupinstall -y 'Development Tools'
+#mkdir /opt/dev/proj
+#cd /opt/dev/proj
+#scl enable rh-python36 bash
+#python -m venv proj_venv
+#jupyter notebook --no-browser --allow-root --port=8889 &
+
+#https://linuxize.com/post/how-to-install-python-3-on-centos-7/
+#https://linuxize.com/post/how-to-install-pip-on-centos-7/
+#https://jupyter.org/install
+#https://amber-md.github.io/pytraj/latest/tutorials/remote_jupyter_notebook
+#hhttps://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-a-centos-7-server
+#https://towardsdatascience.com/running-jupyter-notebooks-on-remote-servers-603fbcc256b3
+#http://www.codemarvels.com/2012/08/temporarily-enable-ssh-password-authentication-on-rhelcentos-vms/
+
+
+SCRIPT
+  config.vm.provision :shell do |shell|
+    shell.inline = $script
+  end
+  
+  # asciidoctor
+   config.vm.define :jupyter do |jupyter|
+     jupyter.vm.network :private_network, ip: "192.168.72.150"
+   end 
+   
+
+ 
+      
+end
+                        
