@@ -1,5 +1,5 @@
 ﻿
-== Seznam použité literatuty
+== Seznam použité literatury
 
 [bibliography]
 - [[[cfi, 1]]] Yifan Hu, Yehuda Koren, Chris Volinsky. Collaborative Filtering for Implicit Feedback Datasets. IEEE. 2008 Eighth IEEE International Conference on Data Mining. 15-19 Prosinec 2008. http://yifanhu.net/PUB/cf.pdf

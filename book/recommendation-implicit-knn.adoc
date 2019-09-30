@@ -1,8 +1,8 @@
 ﻿
 ==== K nejbližšísich sousedů
 
-Algoritmus spocita vzdalenost mezi cilovym produktem a vsemi ostatnimi produkty. Nasledne ohodnoti tuto vzdalenost a nalezne K nejbliszich produktu jako vysledne doporuceni.
-Definujme matici stem:[R_{m,n}] kde stem:[m] urcuje pocet uzivatelu a stem:[n] pocet produktu v katalogu. Kazdy produkt muzeme nasledne interpretovat jako vektor s stem:[m] rozmery, tj. jeden rozmer pro kazdeho uzivatele. Pro vypocet vsdalenosti mezi dvemi vektory existuje vice postupu. Standartni norm-2 neboli euklidovska vzdalenost stem:norm-2 neni  pro vypocet vzdalenosti vektoru s velkym poctem rozmeru doporucena <<knn>>. Dopporucena je takzvana kosinova podobnost.
+Algoritmus spočítá vzdálenost mezi cílovým produktem a všemi ostatními produkty. Následně ohodnotí tuto vzdálenost a nalezne stem:[k] nejbližších produktů jako výsledné doporučení.
+Definujme matici stem:[R_{m,n}] kde stem:[m] určuje počet uživatelů a stem:[n] počet produktů v katalogu. Každý produkt můžeme následně interpretovat jako vektor s stem:[m] rozměry, tj. jeden rozměr pro každého uživatele. Pro výpočet vzdálenosti mezi dvěma vektory existuje více postupů. Standartní norm-2 neboli euklidovská vzdálenost není pro výpočet vzdálenosti vektorů s velkým počtem rozměrů doporučená<<knn>>. Doporučená je takzvaná kosinová podobnost.
 
  
 
