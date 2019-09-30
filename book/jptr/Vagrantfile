@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.box = "/dev/vagrant/c72/package.box"    
   
   #synced folders
-  config.vm.synced_folder '../.', '/opt/dev', type: 'nfs'
+  config.vm.synced_folder '../../.', '/opt/dev', type: 'nfs'
 
 
   #defaul VM settings
@@ -25,23 +25,59 @@ $script = <<SCRIPT
 
 #!/bin/bash
 
-#yum install -y centos-release-scl
-#yum install -y rh-python36
-#yum groupinstall -y 'Development Tools'
-#mkdir /opt/dev/proj
-#cd /opt/dev/proj
-#scl enable rh-python36 bash
-#python -m venv proj_venv
-#jupyter notebook --no-browser --allow-root --port=8889 &
+#
+# SSH tunneling
+#
+# c:\dev\proj\bp\book\jptr>ssh -i .vagrant/machines/jupyter/virtualbox/private_key -N -f -L localhost:7777:localhost:8889 vagrant@192.168.56.150
+#
 
-#https://linuxize.com/post/how-to-install-python-3-on-centos-7/
-#https://linuxize.com/post/how-to-install-pip-on-centos-7/
-#https://jupyter.org/install
-#https://amber-md.github.io/pytraj/latest/tutorials/remote_jupyter_notebook
-#hhttps://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-a-centos-7-server
-#https://towardsdatascience.com/running-jupyter-notebooks-on-remote-servers-603fbcc256b3
-#http://www.codemarvels.com/2012/08/temporarily-enable-ssh-password-authentication-on-rhelcentos-vms/
+#
+# prerequisities
+#
+sudo yum install -y mc
+sudo yum install -y wget
 
+#
+# install JDK 1.8
+#
+sudo yum install -y java-1.8.0-openjdk
+
+#
+# install Spark
+#
+cd /tmp
+sudo /bin/wget http://ftp.ps.pl/pub/apache/spark/spark-2.3.4/spark-2.3.4-bin-hadoop2.7.tgz
+sudo /bin/tar xf spark-2.3.4-bin-hadoop2.7.tgz
+sudo /bin/mkdir /usr/local/spark
+sudo /bin/cp -r spark-2.3.4-bin-hadoop2.7/* /usr/local/spark
+PATH=$PATH:$HOME/bin:/usr/local/spark/bin
+sudo source ~/.bash_profile
+
+
+#
+# install python3
+#
+sudo yum install -y centos-release-scl
+sudo yum install -y rh-python36
+sudo yum groupinstall -y 'Development Tools'
+
+sudo /opt/rh/rh-python36/root/bin/python3 -m pip install --upgrade pip
+sudo /opt/rh/rh-python36/root/bin/python3 -m pip install jupyter
+sudo /opt/rh/rh-python36/root/bin/python3 -m pip install numpy
+sudo /opt/rh/rh-python36/root/bin/python3 -m pip install pandas
+sudo /opt/rh/rh-python36/root/bin/python3 -m pip install matplotlib
+sudo /opt/rh/rh-python36/root/bin/python3 -m pip install scikit-learn
+sudo /opt/rh/rh-python36/root/bin/python3 -m pip install findspark
+
+SPARK_HOME=/usr/local/spark
+export SPARK_HOME
+
+HADOOP_HOME=$SPARK_HOME
+export HADOOP_HOME
+
+cd /opt/dev/lab
+
+/opt/rh/rh-python36/root/bin/jupyter notebook --no-browser --allow-root --port=8889 --ip='*' --NotebookApp.token='' --NotebookApp.password='' &
 
 SCRIPT
   config.vm.provision :shell do |shell|
@@ -50,11 +86,9 @@ SCRIPT
   
   # asciidoctor
    config.vm.define :jupyter do |jupyter|
-     jupyter.vm.network :private_network, ip: "192.168.72.150"
+     #jupyter.vm.network :private_network, ip: "192.168.72.150"
+     jupyter.vm.network :private_network, ip: "192.168.56.150"
    end 
-   
-
- 
       
 end
                         
