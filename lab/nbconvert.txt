@@ -1,0 +1,9 @@
+ssh -i .vagrant/machines/jupyter/virtualbox/private_key vagrant@192.168.56.150 "sudo /opt/rh/rh-python36/root/bin/jupyter nbconvert --to asciidoc '/opt/dev/lab/test1.ipynb' --stdout"
+
+
+sudo /opt/rh/rh-python36/root/bin/jupyter nbconvert --to asciidoc '/opt/dev/lab/test1.ipynb' --stdout
+
+https://nbconvert.readthedocs.io/en/latest/customizing.html
+http://blog.juliusschulz.de/blog/ultimate-ipython-notebook
+https://ipypublish.readthedocs.io/en/latest/metadata_tags.html
+
