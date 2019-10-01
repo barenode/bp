@@ -34,4 +34,5 @@ vagrant/log/hadoop/*
 book/stem-*.png
 book/images/stem-*.png
 
+
 lab/data/*
