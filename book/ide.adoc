@@ -1,0 +1,18 @@
+== ide
+
+Vedle nastroje pro automaticke sestaveni aplikace budeme dale potrebovat integrovane vyvojove prostredi. Takove prostredi usnadnuje psani zdrojoveho kodu spousteni jednotlivych testu atd. Na toto prostredi bylo nekolik zakladnich pozadavku ktere musi splnovat:
+
+1) Podpora Pache Maven. IDE by melo byt schopne naimportovat informace s deskriptoru aplikace. Primarne se jedna o sadu zavislosti, ktera by mela byt nadefinovana na jedinem miste. Apache Maven je zahrnuta ve vetsine java IDE.
+
+2) Podpora Scaly. Scala je jeden z monha JVM jazyku a je mnohem mene pouzivana nez Java samotna. Kvalitni pdpora toho jazyka nei uplne bezna.
+
+2) Podpora Scala testu. Ackoliv je Apache Maven skvely nastroj a pri sestavovani aplikace spusti kompletni sadu testu, pri implementaci samotne potrebujeme jemnejsi kontrolu nad tim , ktery test spoustime. IDE by melo tuto moznost podporovat a umoznit nam spoustet dane testy jednotlive podle potreby. V nasem porojektu pouzijeme stejny testovaci ramec jako je pouzity ve Sparku samotnem. To proto aby jsme mohli pouzit stejen kontruktuy usnadnujici vytvareni a rusenich instanci SParku samotneho. 
+
+
+Do uzsiho vyberu postoupili dva kandidati. Prvni je Scala IDE, vyvojove postredi postavene na popularni platforme Eclipse. Druhe je nemene popularni vyvojove prostredi IntelliJ IDEA. Scala IDE ve verzi 4.7.0 splnovalo prvni dva z nasich pozadavku. Nicmene se nepodarila uzpokojive zapojit podpora testu. IntelliJ IDEA splniula vsechny tri pozadavky na vybornou. Pro vyvoj nasi plaikce tedy pouzijeme toto IDE.
+
+=== IntelliJ IDEA instalace
+
+
+  
+  

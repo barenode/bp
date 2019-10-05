@@ -29,9 +29,4 @@ class FooTest extends SparkFunSuite {
     rawArtistData.toDF().write.parquet("/filmy/data/user_artist_data/")
   }
 
-  def train[ID: ClassTag]
-  (
-    ratings: RDD[Rating[ID]]) : (RDD[(ID, Array[Float])], RDD[(ID, Array[Float])]) = {
-
-  }
 }

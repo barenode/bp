@@ -86,8 +86,8 @@ SCRIPT
   
   # asciidoctor
    config.vm.define :jupyter do |jupyter|
-     #jupyter.vm.network :private_network, ip: "192.168.72.150"
-     jupyter.vm.network :private_network, ip: "192.168.56.150"
+     jupyter.vm.network :private_network, ip: "192.168.72.150"
+     #jupyter.vm.network :private_network, ip: "192.168.56.150"
    end 
       
 end
