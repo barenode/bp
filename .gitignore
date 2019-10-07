@@ -29,7 +29,7 @@ target
 **/generated_images
 **/.vagrant
 
-vagrant/log/hadoop/*
+vagrant/log/**/*
 
 book/stem-*.png
 book/images/stem-*.png
