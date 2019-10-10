@@ -108,7 +108,7 @@ StructType(List(StructField(ISBN,StringType,true),StructField(Book-Title,StringT
 +----------+
 only showing top 2 rows
 
-----
+271379----
 
 
 +*In[ ]:*+

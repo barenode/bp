@@ -71,9 +71,11 @@ sudo /opt/rh/rh-python36/root/bin/python3 -m pip install findspark
 
 SPARK_HOME=/usr/local/spark
 export SPARK_HOME
+echo $SPARK_HOME
 
 HADOOP_HOME=$SPARK_HOME
 export HADOOP_HOME
+echo $HADOOP_HOME
 
 cd /opt/dev/lab
 
