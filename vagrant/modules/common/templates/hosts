@@ -1,6 +1,6 @@
 127.0.0.1       localhost       localhost.localdomain localhost4 localhost4.localdomain4
 ::1     localhost       localhost.localdomain localhost6 localhost6.localdomain6
-192.168.72.101  c7201   c7201.barenode.org c7201
-192.168.72.102  c7202   c7202.barenode.org c7202
-192.168.72.103  c7203   c7203.barenode.org c7203
-192.168.72.104  c7204   c7204.barenode.org c7204
+192.168.56.101  c7201   c7201.barenode.org c7201
+192.168.56.102  c7202   c7202.barenode.org c7202
+192.168.56.103  c7203   c7203.barenode.org c7203
+192.168.56.104  c7204   c7204.barenode.org c7204

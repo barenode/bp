@@ -5,7 +5,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   # urcuje z ktereho boxu bude virtualni stroj vytvoren
   # v nasem pripade pouzijeme verejne barebone centos7 s podporou puppetu 
-  config.vm.box = "puppetlabs/centos-7.2-64-puppet"
+  # config.vm.box = "puppetlabs/centos-7.2-64-puppet"
+  config.vm.box = "/box/c7/package.box"                 
   
   #konfigurace sdilenych adresaru z hostitelskeho pocitace  
   #adresar kam jsme stahli a robalili repositare pro Ambari a HDP, tytp budo namapovany na cestu /var/www/html
@@ -36,8 +37,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #c7201 je masternode                            
   config.vm.define :c7201 do |c7201|
     
-    c7201.vm.hostname = "c7201.barenode.org"
-    c7201.vm.network :private_network, ip: "192.168.72.101"
+    #c7201.vm.hostname = "c7201.barenode.org"
+     config.vm.network "private_network", ip: "192.168.56.101"
     
     #adresar bleprints obsahuje definici jednotlivych sluzeb pro cely kluster       
     c7201.vm.synced_folder './blueprints', '/tmp/vagrant-puppet/blueprints', type: 'nfs'   
