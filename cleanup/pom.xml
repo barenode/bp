@@ -172,7 +172,18 @@
                         <version>1.6.0</version>
                         <executions>
                             <execution>
-                                <id>asciidoc</id>
+                                <id>book-nbconvert</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <executable>book-nbconvert.cmd</executable>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>book-asciidoctor</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>exec</goal>

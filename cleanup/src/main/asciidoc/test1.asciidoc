@@ -1,11 +1,8 @@
-+*In[7]:*+
 [source, ipython3]
 ----
 import numpy as np
 ----
 
-
-+*In[8]:*+
 [source, ipython3]
 ----
 import findspark
@@ -19,7 +16,38 @@ spark = SparkSession.builder.getOrCreate()
 ----
 
 
-+*In[9]:*+
+
+    ---------------------------------------------------------------------------
+
+    ValueError                                Traceback (most recent call last)
+
+    <ipython-input-3-e31d9fa06a93> in <module>
+          1 import findspark
+    ----> 2 findspark.init()
+          3 
+          4 import pyspark
+          5 from pyspark.sql import SparkSession
+
+
+    /opt/rh/rh-python36/root/lib/python3.6/site-packages/findspark.py in init(spark_home, python_path, edit_rc, edit_profile)
+        120 
+        121     if not spark_home:
+    --> 122         spark_home = find()
+        123 
+        124     if not python_path:
+
+
+    /opt/rh/rh-python36/root/lib/python3.6/site-packages/findspark.py in find()
+         31 
+         32     if not spark_home:
+    ---> 33         raise ValueError("Couldn't find Spark, make sure SPARK_HOME env is set"
+         34                          " or Spark is in an expected location (e.g. from homebrew installation).")
+         35 
+
+
+    ValueError: Couldn't find Spark, make sure SPARK_HOME env is set or Spark is in an expected location (e.g. from homebrew installation).
+
+
 [source, ipython3]
 ----
 df = spark.read.format("csv")\
@@ -31,7 +59,6 @@ df.show(5)
 ----
 
 
-+*Out[9]:*+
 ----
 StructType(List(StructField(User-ID,StringType,true),StructField(ISBN,StringType,true),StructField(Book-Rating,StringType,true)))
 +-------+----------+-----------+
@@ -47,8 +74,6 @@ only showing top 5 rows
 
 ----
 
-
-+*In[10]:*+
 [source, ipython3]
 ----
 df = spark.read.format("csv")\
@@ -61,7 +86,6 @@ df.show(5)
 ----
 
 
-+*Out[10]:*+
 ----
 root
  |-- User-ID: string (nullable = true)
@@ -81,8 +105,6 @@ only showing top 5 rows
 
 ----
 
-
-+*In[11]:*+
 [source, ipython3]
 ----
 df = spark.read.format("csv")\
@@ -97,7 +119,6 @@ df.count()
 ----
 
 
-+*Out[11]:*+
 ----
 StructType(List(StructField(ISBN,StringType,true),StructField(Book-Title,StringType,true),StructField(Book-Author,StringType,true),StructField(Year-Of-Publication,IntegerType,true),StructField(Publisher,StringType,true),StructField(Image-URL-S,StringType,true),StructField(Image-URL-M,StringType,true),StructField(Image-URL-L,StringType,true)))
 +----------+
@@ -108,10 +129,9 @@ StructType(List(StructField(ISBN,StringType,true),StructField(Book-Title,StringT
 +----------+
 only showing top 2 rows
 
-271379----
+----
 
 
-+*In[ ]:*+
 [source, ipython3]
 ----
 
@@ -119,8 +139,6 @@ only showing top 2 rows
 jhsdjkahsd
 askdfaLSKDJAs
 asdioaOPDA
-
-+*In[12]:*+
 [source, ipython3]
 ----
 %matplotlib inline
@@ -131,14 +149,8 @@ plt.plot([1,1.6,3])
 ----
 
 
-+*Out[12]:*+
-----[<matplotlib.lines.Line2D at 0x7f40a1fde710>]
-![png](test1_files/test1_7_1.png)
-----
 
 
-+*In[ ]:*+
-[source, ipython3]
-----
-
-----
+[[rndg]]
+image::../test1_files/test1_7_1.png[title="Nejaky nahodny graf"]
+Viz <<rndg>> nejaky dalsi text.
