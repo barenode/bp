@@ -1,0 +1,55 @@
+font:
+  catalog:
+    TNR:
+      normal: times-new-roman.ttf
+      italic: times-new-roman.ttf
+      bold: times-new-roman.ttf
+      bold_italic: times-new-roman.ttf
+    TIMES:
+      normal: times.ttf
+      italic: timesi.ttf
+      bold: timesbd.ttf
+      bold_italic: timesbi.ttf
+    ARIAL:
+      normal: arial.ttf
+      italic: ariali.ttf
+      bold: arialbd.ttf
+      bold_italic: arialbi.ttf         
+    CAMBRIA:
+      normal: cambria.ttc
+      italic: cambriai.ttf
+      bold: cambriab.ttf
+      bold_italic: cambriaz.ttf    
+            
+page:
+  layout: portrait
+  margin: [0.75in, 1in, 0.75in, 1in]
+  size: Letter
+base:
+  align: justify
+  font_color: #333333
+  font_family: CAMBRIA
+  font_size: 12
+  line_height_length: 17
+  line_height: $base_line_height_length / $base_font_size	
+vertical_spacing: $base_line_height_length
+heading:
+  font_color: #262626
+  font_family: ARIAL
+  font_size: 16
+  font_style: bold
+  line_height: 1.2
+  margin_bottom: $vertical_spacing
+link:
+  font_color: #002FA7
+outline_list:
+  indent: $base_font_size * 1.5
+footer:
+  height: $base_line_height_length * 2.5
+  line_height: 1
+  recto:
+    right:
+      content: '{page-number}'
+  verso:
+    left:
+      content: $footer_recto_right_content

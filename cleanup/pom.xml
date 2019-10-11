@@ -6,7 +6,7 @@
   <groupId>org.barenode</groupId>
   <artifactId>ml-on-spark</artifactId>
   <version>1.0-SNAPSHOT</version>  
-  <type>jar</type>
+  <packaging>jar</packaging>
   <name>Strojove ucemni na paltforme Spark</name>
   
   <properties>
@@ -161,47 +161,50 @@
     </plugins>
   </build>
   
-  <profiles>
-		<profile>
+    <profiles>
+        <profile>
 			<id>book</id>
 			<build>
-				<plugins>
-		      <plugin>
-		        <artifactId>exec-maven-plugin</artifactId>
-		        <groupId>org.codehaus.mojo</groupId>
-		        <executions>
-		          <execution>
-		            <id>asciidoc</id>
-		            <phase>package</phase>
-		            <goals>
-		              <goal>exec</goal>
-		            </goals>
-		            <configuration>
-		                <workingDirectory>${basedir}/vagrant/</workingDirectory>
-		                <executable>book.cmd</executable>
-		            </configuration>
-		          </execution>
-		          <execution>
-		            <id>merge</id>
-		            <phase>package</phase>
-		            <goals>
-		              <goal>java</goal>
-		            </goals>
-		            <configuration>
-		                <workingDirectory>${basedir}</workingDirectory>
-		                <mainClass>pdf.PDFMerge</mainClass>
-		            </configuration>
-		          </execution>
-		        </executions>
-		        <dependencies>
-					    <dependency>
-					      <groupId>org.apache.pdfbox</groupId>
-					      <artifactId>pdfbox</artifactId>
-					      <version>2.0.8</version>
-					    </dependency>
-					  </dependencies>
-		      </plugin>
-		    </plugins>
+                <plugins>
+		            <plugin>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>asciidoc</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <executable>book-asciidoctor.cmd</executable>
+                                </configuration>
+                            </execution>
+                            <!--
+                            <execution>
+                                <id>merge</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <mainClass>pdf.PDFMerge</mainClass>
+                                </configuration>
+                            </execution>
+                            -->
+		                </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.pdfbox</groupId>
+                                <artifactId>pdfbox</artifactId>
+                                <version>2.0.8</version>
+                            </dependency>
+                        </dependencies>
+		            </plugin>
+		        </plugins>
 			</build>
 		</profile>
 	</profiles>

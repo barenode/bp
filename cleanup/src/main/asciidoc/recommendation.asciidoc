@@ -1,0 +1,30 @@
+
+== Doporučovací systémy
+
+Doporučovací systémy jsou příkladem strojového učení s jehož aplikací se setala naprostá většina lidí. Tyto systémy mají dnes široké spektrum použití od socialních sítí přes streamovací služby až po online prodejce. Nasazení těchto systémů sahá daleko do minulosti. Průkopníky v této oblasti jsou komerčně ůspěšné společnosti jako Amazon, Spotify nebo Netflix. Vzhledem k dlouhé historii existuje mnoho různých, kvalitně zdokumentovaných přístupů. Doporučovací systémy jsou založeny na dvou základních strategiích. Jedná se o obsahově zaměřené systémy a systémy kolaborativního filtrování. Viz. <<rec-systems>>. 
+
+[[rec-systems]]
+image::rec-systems.png[title="Doporučovací systémy", pdfwidth="75%"]
+
+U obsahově zaměřených systémů je nutné nejprve vytvořit profil jednotlivých produktů na zakládě jejich vlastností. Například profil knihy může obsahovat autora a žánrovou příšlusnost. Na základě těchto informací může systém následně doporučovat uživateli produkty, které mají schodné nebo podobné charakteristiky. Výhodou těchto systémů je jednoduchost a přesnost. Na druhou stranu spravovat detailní informace o velkém množství jednotlivých produktů může být časově či finančně náročné. Druhá stratregie je kolaborativní filtrování. Kolaborativní filtrování je založeno na předchozí interakci uživatele se systémem. Na základě této interakce se systém snaží identifikovat nové vazby mezi zákazníky a produkty. Pro systémy kolaborativního filtrování existují dva základní druhy vstupu:
+
+Explicitní::
+    Uživatel explicitně zadává zpětnou vazbu. Například zadá nějakou formou numerického hodnocení produktu - například počet hvězd. Nebo zadá binární hodnocení - líbí/nelíbí. Vetšina starších systémů byla založena na analýze explicitního vstupu. Velkou nevýhodou těchto systémů je nutnost spolupráce uživatele. Naprostá větsina z nich žádné explicitní hodnocení neposkytuje.
+
+Implicitní::
+  Zde se analyzuje předchozí interakce se sytémem např. zakoupené knihy, pustěné filmy atd. Systémy založené na implicitní zpětné vazbě jsou široce používané ve společnostech jako Netflix nebo Amazon. Tato práce se bude dále zabývat pouze algoritmy tohoto typu. 
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+

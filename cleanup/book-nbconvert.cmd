@@ -1,0 +1,1 @@
+ssh -i e:/box/c7/.vagrant/machines/default/virtualbox/private_key vagrant@192.168.72.101 "sudo /opt/rh/rh-python36/root/bin/jupyter nbconvert --to asciidoc --output-dir /opt/dev/src/main/asciidoc /opt/dev/src/main/jupyter/test1"

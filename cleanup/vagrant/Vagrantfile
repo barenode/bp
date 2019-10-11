@@ -7,8 +7,8 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|                                          
   
   # box 
-  config.vm.box = "centos/7"
-  # config.vm.box = "/dev/vagrant/c72/package.box"    
+  # config.vm.box = "centos/7"
+  config.vm.box = "/box/c7/package.box"   
   
   #synced folders
   config.vm.synced_folder '../.', '/opt/dev', type: 'nfs'
@@ -20,15 +20,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--cpus", 2] 
   end  
   
-  config.vm.provision "shell", path: "./shell/spark.sh"        
-	config.vm.provision "shell", path: "./shell/jupyter.sh"     
+    config.vm.provision "shell", path: "./shell/spark.sh"        
+    config.vm.provision "shell", path: "./shell/jupyter.sh"     
 	config.vm.provision "shell", path: "./shell/asciidoctor.sh"         
   
   # asciidoctor
-   config.vm.define :asciidoc do |asciidoc|
+    config.vm.define :asciidoc do |asciidoc|
  #    asciidoc.vm.hostname = "asciidoc.barenode.org"
- #    asciidoc.vm.network :private_network, ip: "192.168.72.102"
-   end 
+        asciidoc.vm.network :private_network, ip: "192.168.72.101"
+    end 
    
 
  
