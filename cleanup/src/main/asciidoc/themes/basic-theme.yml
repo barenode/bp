@@ -20,7 +20,12 @@ font:
       italic: cambriai.ttf
       bold: cambriab.ttf
       bold_italic: cambriaz.ttf    
-            
+    # M+ 1mn supports ASCII and the circled numbers used for conums
+    M+ 1mn:
+      normal: mplus1mn-regular-subset.ttf
+      bold: mplus1mn-bold-subset.ttf
+      italic: mplus1mn-italic-subset.ttf
+      bold_italic: mplus1mn-bold_italic-subset.ttf            
 page:
   layout: portrait
   margin: [0.75in, 1in, 0.75in, 1in]
@@ -39,9 +44,12 @@ heading:
   font_size: 16
   font_style: bold
   line_height: 1.2
-  margin_bottom: $vertical_spacing
+  margin_bottom: $vertical_spacing           
 link:
-  font_color: #002FA7           
+  font_color: #002FA7         
+literal:
+  font_color: b12146
+  font_family: M+ 1mn    
 outline_list:
   indent: $base_font_size * 1.5
 footer:
@@ -53,3 +61,14 @@ footer:
   verso:
     left:
       content: $footer_recto_right_content    
+# code is used for source blocks (perhaps change to source or listing?)
+code:
+  font_color: $base_font_color
+  font_family: $literal_font_family
+  font_size: 10
+conum:
+  font_family: $literal_font_family
+  font_color: $literal_font_color
+  font_size: 10
+  line_height: 4 / 3
+  glyphs: circled

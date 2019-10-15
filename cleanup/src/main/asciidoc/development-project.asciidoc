@@ -1,5 +1,5 @@
 
-== Založení projektu
+=== Struktura projektu
 
 V kořenovém adresáři projektu vytvoříme základní adresářovou strukturu tak jak je rozpoznaná nástrojem Apache Maven. Tato struktura je následující:
 
@@ -7,9 +7,9 @@ V kořenovém adresáři projektu vytvoříme základní adresářovou strukturu
 ----
   src/
     main/      
-      scala/ <zdrojove soubory aplikace>        
+      scala/ <zdrojové soubory aplikace>        
     test/
-      scala/ <zdrojove soubory testu aplikace>        
+      scala/ <zdrojové soubory testu aplikace>        
 ----
 
 Projekty řízené nástrojem Apache Maven vyžadují základní deskriptor projektu. Tento deskriptor je uložený v kořenovéem adresáři projektu pod fixním jménem pom.xml. Deskriptor obsahuje několik základních částí, které ovlivňují průběh sestavení a výslednou podobu aplikace.
@@ -42,16 +42,18 @@ V sekci properties definujeme proměnné použité dále v deskriptoru. V našem
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>   
-      <version>${scala.version}</version>    
+      <version>${scala.version}</version>    <1>
     </dependency>    
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-core_${scala.binary.version}</artifactId>
-      <version>${spark.version}</version> 
+      <version>${spark.version}</version>    <2>
     </dependency>    
     ...
   <dependencies>    
 ----
+<1> Verze Scaly je nadefinována v sekci properties
+<2> Verze Sparku je nadefinována v sekci properties
 
 Sekce dependencies obsahuje takzvané závislosti projektu. Reálně se jedná o standartní Java archivy (jary) ze kterých budeme importovat třídy do našeho zdrojového kódu. Apache Maven pro nás tyto knihovny automaticky stáhne a nalinkuje včetne tranzitivních závislostí těchto knihoven. Seznam záavislostí je poměrně rozsáhlý, uvadíme zde tedy pouze zkrácenou verzi s knihovnami pro Spark a Scalu.      
 Dále deskriptor obsahuje v sekci plugins definici rozšířeni pro Scalu. Ve výchozím stavu podporuje Apache Maven pouze zdrojový kód v jazyce Java. Podporu Scaly je nutné expilictně definovat. Rozšíření scala-maven-plugin zavádí podporu kompilaci Scala zdrojového kódu. Rozšíření scalatest-maven-plugin aktivuje podporu jednotkových testů pro Scalu. Tato definice obsahuje dodatečné atributy potřebné pro vytváření lokalních instancí Sparku v rámci jednotlivých testů.
@@ -59,7 +61,7 @@ Dále deskriptor obsahuje v sekci plugins definici rozšířeni pro Scalu. Ve v�
 Korektní sestavení aplikace ověříme z přikazové radky příkazem:
 
 ----
-    > mvn clean install
+  > mvn clean install
 ----
 
 Do konzole se nám následně vypíší informace o uspěsném zkompletovaní aplikace:
