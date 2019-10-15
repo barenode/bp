@@ -1,0 +1,73 @@
+
+== Založení projektu
+
+V kořenovém adresáři projektu vytvoříme základní adresářovou strukturu tak jak je rozpoznaná nástrojem Apache Maven. Tato struktura je následující:
+
+[source]
+----
+  src/
+    main/      
+      scala/ <zdrojove soubory aplikace>        
+    test/
+      scala/ <zdrojove soubory testu aplikace>        
+----
+
+Projekty řízené nástrojem Apache Maven vyžadují základní deskriptor projektu. Tento deskriptor je uložený v kořenovéem adresáři projektu pod fixním jménem pom.xml. Deskriptor obsahuje několik základních částí, které ovlivňují průběh sestavení a výslednou podobu aplikace.
+
+[source, xml]
+----
+  <groupId>org.barenode</groupId>
+  <artifactId>ml-on-spark</artifactId>
+  <version>1.0</version>  
+  <type>jar</type>
+  <name>Strojove uceni na paltforme Spark</name>
+----
+
+Každý deskriptor projektu musí obsahuje základní informace o aplikaci. Jedná se o identifikátor skupiny, identifikátor aplikace a verzi aplikace. Tyto informace řídí jak bude cílová aplikace pojmenována a jakého bude typu. V případě naší aplikace bude tedy výsledkem standartní java Java archiv (jar) s přiřazeným jménem ml-on-spark-1.0.jar. 
+
+[source, xml]
+----
+  <properties>   
+    <spark.version>2.3.1</spark.version>
+    <java.version>1.8</java.version>    
+    <scala.version>2.11.12</scala.version>
+  </properties>
+----
+
+V sekci properties definujeme proměnné použité dále v deskriptoru. V našem případě obsahují tyto proměnné zejména verze jednotlivých závislostí projektu. Verzím je třeba věnovat zvýšenou pozornost, je žádouci aby tyto verze přesně odpovídaly verzím, které jsou nainstalovány v našem testovacím Spark klusteru. Pokud by byly použity nekomapatibilní verze, mohlo by docházet k chybám při běhu programu. Tedy ačkoliv byla době implementace aplikace posední vydaná verze Sparku 2.4.4 v projektu jsme použili verzi 2.3.1, která odpovídá verzi Sparku z Hadoop distribuce našeho testovacího klusteru. Použijeme také stejné verze Javy a Scaly, ktere jsou použity v této verzi. Pro tuto verzi Sparku byla použita Java 8 a Scala 2.11.12.
+
+[source, xml]
+----
+  <dependencies>  
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>   
+      <version>${scala.version}</version>    
+    </dependency>    
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
+      <version>${spark.version}</version> 
+    </dependency>    
+    ...
+  <dependencies>    
+----
+
+Sekce dependencies obsahuje takzvané závislosti projektu. Reálně se jedná o standartní Java archivy (jary) ze kterých budeme importovat třídy do našeho zdrojového kódu. Apache Maven pro nás tyto knihovny automaticky stáhne a nalinkuje včetne tranzitivních závislostí těchto knihoven. Seznam záavislostí je poměrně rozsáhlý, uvadíme zde tedy pouze zkrácenou verzi s knihovnami pro Spark a Scalu.      
+Dále deskriptor obsahuje v sekci plugins definici rozšířeni pro Scalu. Ve výchozím stavu podporuje Apache Maven pouze zdrojový kód v jazyce Java. Podporu Scaly je nutné expilictně definovat. Rozšíření scala-maven-plugin zavádí podporu kompilaci Scala zdrojového kódu. Rozšíření scalatest-maven-plugin aktivuje podporu jednotkových testů pro Scalu. Tato definice obsahuje dodatečné atributy potřebné pro vytváření lokalních instancí Sparku v rámci jednotlivých testů.
+
+Korektní sestavení aplikace ověříme z přikazové radky příkazem:
+
+----
+    > mvn clean install
+----
+
+Do konzole se nám následně vypíší informace o uspěsném zkompletovaní aplikace:
+
+----
+  [INFO] BUILD SUCCESS
+  [INFO] --------------------------
+  [INFO] Total time: 6.714 s
+  [INFO] Finished at: 2019-10-15T07:49:24+02:00
+  [INFO] Final Memory: 29M/421M
+----

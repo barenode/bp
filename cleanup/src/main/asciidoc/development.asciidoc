@@ -1,21 +1,21 @@
 
-== Implementace vybranıch algoritmù v øešené oblasti
+== Implementace vybranÃ½ch algoritmÅ¯ v Å™eÅ¡enÃ© oblasti
 
-=== Vıbìr vhodnıch technologií
+=== VÃ½bÄ›r vhodnÃ½ch technologiÃ­
 
-==== Vıbìr programovacího jazyka
+==== VÃ½bÄ›r programovacÃ­ho jazyka
 
-Spark podporuje nìkolik rùznıch jazykù a to jsou Scala, Java, Python a R. Scala je jazyk, kterı se pokusil zkombinovat objektovì orientované a funkcionální programování. Scala je JMV jazyk, kterı potøebuje ke svému bìhu nainstalovanou Javu, konkrétnì její bìhové prostøedí. Scala je nativní jazyk Sparku a jeho pøidruenıch knihoven. Zdrojovı kód v jazyce Scala se pøi komilaci pøevede do Java byte kódu. To znamená, e se aplikace distribuuje ve formì javovskıch archivù takzvanıch jarù. Toto má za následek, e k vıvoji aplikací mùzeme pouít také pøímo Javu samotnou. Aplikace napsané v Javì mohou pouívat knihovny napsané ve Scale a naopak. Python je velice populární jazyk urèenı pro rychlé protypování. V posledních letech se stale vícemén standartem pro experimentování v oblasti umìlé inteligence a strojového uèení. Python má k dispozici mnoho specializovanæh knihoven jako jsou Sciki-learn nebo TensorFlow. Python není nativním jazykem Sparku, místo toho pouívá specializovanou knihovnu Py4J pro interakci s JVM. R je velice populární jazyk v rámci statistické komunity. 
+Spark podporuje nÄ›kolik rÅ¯znÃ½ch jazykÅ¯ a to jsou Scala, Java, Python a R. Scala je jazyk, kterÃ½ se pokusil zkombinovat objektovÄ› orientovanÃ© a funkcionÃ¡lnÃ­ programovÃ¡nÃ­. Scala je JMV jazyk, kterÃ½ potÅ™ebuje ke svÃ©mu bÄ›hu nainstalovanou Javu, konkrÃ©tnÄ› jejÃ­ bÄ›hovÃ© prostÅ™edÃ­. Scala je nativnÃ­ jazyk Sparku a jeho pÅ™idruÅ¾enÃ½ch knihoven. ZdrojovÃ½ kÃ³d v jazyce Scala se pÅ™i komilaci pÅ™evede do Java byte kÃ³du. To znamenÃ¡, Å¾e se aplikace distribuuje ve formÄ› javovskÃ½ch archivÅ¯ takzvanÃ½ch jarÅ¯. Toto mÃ¡ za nÃ¡sledek, Å¾e k vÃ½voji aplikacÃ­ mÅ¯zeme pouÅ¾Ã­t takÃ© pÅ™Ã­mo Javu samotnou. Aplikace napsanÃ© v JavÄ› mohou pouÅ¾Ã­vat knihovny napsanÃ© ve Scale a naopak. Python je velice populÃ¡rnÃ­ jazyk urÄenÃ½ pro rychlÃ© protypovÃ¡nÃ­. V poslednÃ­ch letech se stale vÃ­cemÃ©n standartem pro experimentovÃ¡nÃ­ v oblasti umÄ›lÃ© inteligence a strojovÃ©ho uÄenÃ­. Python mÃ¡ k dispozici mnoho specializovanÄ‡h knihoven jako jsou Sciki-learn nebo TensorFlow. Python nenÃ­ nativnÃ­m jazykem Sparku, mÃ­sto toho pouÅ¾Ã­vÃ¡ specializovanou knihovnu Py4J pro interakci s JVM. R je velice populÃ¡rnÃ­ jazyk v rÃ¡mci statistickÃ© komunity. 
 
-Pro vıvoj aplikace byl vyhodnocen jako nejvhodnìjší jazyk Scala. Pøi vıvoji se budeme moci nechat inspirovat praktikami pouitımi pøi vıvoji Sparku samotného, zejména jeho knihoven urèenıch pro strojové uèení. Dále budeme pouívat Python k optimalizaci hyper parametrù jednotlivıch algoritmù. Python budeme pouívat interaktivnì v prostøedí takzvanıch zápisnikù.     
+Pro vÃ½voj aplikace byl vyhodnocen jako nejvhodnÄ›jÅ¡Ã­ jazyk Scala. PÅ™i vÃ½voji se budeme moci nechat inspirovat praktikami pouÅ¾itÃ½mi pÅ™i vÃ½voji Sparku samotnÃ©ho, zejmÃ©na jeho knihoven urÄenÃ½ch pro strojovÃ© uÄenÃ­. DÃ¡le budeme pouÅ¾Ã­vat Python k optimalizaci hyper parametrÅ¯ jednotlivÃ½ch algoritmÅ¯. Python budeme pouÅ¾Ã­vat interaktivnÄ› v prostÅ™edÃ­ takzvanÃ½ch zÃ¡pisnikÅ¯.     
 
-==== Vıbìr nástroje pro automatizaci buildù aplikace
+==== VÃ½bÄ›r nÃ¡stroje pro automatizaci buildÅ¯ aplikace
 
-Nástroj pro automatizaci buildù zaštíuje kompletní cyklus sestavení aplikace. Toto zahrnuje zejména kompilaci zdrojového kódu a spuštìní kompletní sady projektovıch testù. Na závìr cyklu nástroj vytvoøí koneènou verzi aplikace a uloí ji pod pøíslušnım identifikátorem verze do sdíleného repositáøe. Pro aplikace vyvıjené v jazyce Scala existují dva základní build nástroje. První sbt (Scala build tool) je orientován vıluènì na Scalu. Druhı, Apache Maven je obecnı nástroj pro vıvoj aplikací v Javì, kterı se stal víceménì standartem. Pro náš projekt byl vybrán nástroj Apache Maven. 
+NÃ¡stroj pro automatizaci buildÅ¯ zaÅ¡tÃ­Å¥uje kompletnÃ­ cyklus sestavenÃ­ aplikace. Toto zahrnuje zejmÃ©na kompilaci zdrojovÃ©ho kÃ³du a spuÅ¡tÄ›nÃ­ kompletnÃ­ sady projektovÃ½ch testÅ¯. Na zÃ¡vÄ›r cyklu nÃ¡stroj vytvoÅ™Ã­ koneÄnou verzi aplikace a uloÅ¾Ã­ ji pod pÅ™Ã­sluÅ¡nÃ½m identifikÃ¡torem verze do sdÃ­lenÃ©ho repositÃ¡Å™e. Pro aplikace vyvÃ½jenÃ© v jazyce Scala existujÃ­ dva zÃ¡kladnÃ­ build nÃ¡stroje. PrvnÃ­ sbt (Scala build tool) je orientovÃ¡n vÃ½luÄnÄ› na Scalu. DruhÃ½, Apache Maven je obecnÃ½ nÃ¡stroj pro vÃ½voj aplikacÃ­ v JavÄ›, kterÃ½ se stal vÃ­cemÃ©nÄ› standartem. Pro nÃ¡Å¡ projekt byl vybrÃ¡n nÃ¡stroj Apache Maven. 
 
-==== Vıbìr IDE
+==== VÃ½bÄ›r IDE
 
-Vedle pro automatizaci buildù budeme dale potrebovat integrovane vyvojove prostredi . Takove prostredi usnadnuje psani zdrojoveho kodu spousteni jednotlivych testu atd. Na toto prostredi bylo nekolik zakladnich pozadavku ktere musi splnovat:
+Vedle pro automatizaci buildÅ¯ budeme dale potrebovat integrovane vyvojove prostredi . Takove prostredi usnadnuje psani zdrojoveho kodu spousteni jednotlivych testu atd. Na toto prostredi bylo nekolik zakladnich pozadavku ktere musi splnovat:
 
 1) Podpora Pache Maven. IDE by melo byt schopne naimportovat informace s deskriptoru aplikace. Primarne se jedna o sadu zavislosti, ktera by mela byt nadefinovana na jedinem miste. Apache Maven je zahrnuta ve vetsine java IDE.
 
@@ -27,80 +27,4 @@ Vedle pro automatizaci buildù budeme dale potrebovat integrovane vyvojove prostr
 Do uzsiho vyberu postoupili dva kandidati. Prvni je Scala IDE, vyvojove postredi postavene na popularni platforme Eclipse. Druhe je nemene popularni vyvojove prostredi IntelliJ IDEA. Scala IDE ve verzi 4.7.0 splnovalo prvni dva z nasich pozadavku. Nicmene se nepodarila uzpokojive zapojit podpora testu. IntelliJ IDEA splniula vsechny tri pozadavky na vybornou. Pro vyvoj nasi plaikce tedy pouzijeme toto IDE.
 
 
-Zejména proto, e osahuje Tento je velice flexibilni a dobre zdokumentovany <https://maven.apache.org>. Vsechny projekty pro ktere je pouzity Apache Maven maji jednontnou adresarovou strukturu pro zdrojove kody a pridruzene soubory. Tato struktura je nasledujici:
-
----
-src/
-  main/
-    resources/   
-      <v adresari resources jsou soubory ktere se zahrnou do vysledneho baliku>
-    scala/
-      <zdrojove soubory aplikace>
-  test
-    resources/    
-      <v adresari resources jsou soubory ktere se zahrnou do vysledneho baliku s testy>
-    scala/
-      <zdrojove soubory testu aplikace>
-
----
-
-Dale projekty rizene Apache Maven obsahuji deskriptor projektu. Tento deskriptor je ulozeny v root projektu a ma fixni jemno pom.xml. Tento deskriptor obsahuje nekolik casti, ktere ovlivnuji vyslednou podobu aplikace. Nase aplikace bude obsahovat nasledujici casti:
-
----
-  <groupId>org.barenode</groupId>
-  <artifactId>ml-on-spark</artifactId>
-  <version>1.0</version>  
-  <type>jar</type>
-  <name>Strojove ucemni na paltforme Spark</name>
----
-
-Tato sekce obsahuje zakldani informace o projektu. Jemno, verzi a typ. 
-Tyto inromace ovlivnuji jak bude cilova aplikace pojmenovana a jakeho bude type. V nasem pripade tesy vznikne java balik se jmenem ml-on-spark-1.0.jar.
-
----
-  <properties>   
-    <spark.version>2.4.4</spark.version>
-    <java.version>1.8</java.version>    
-    <scala.version>2.11.12</scala.version>
-  </properties>
----
-
-V sekci properties definujeme promenne pouzite dale v deskriptoru. V nasem pripade tyto promenne opbsahuji verze jednotlivych zavislosti projektu. Aktualni posledni vydana verze Sparku ma cislo 2.4.4, pouzijeme tedy stejne verze javy a scaly, ktere jsou pouzity tam. Pro tuto verzi sparku byla pouzita java 8 a scala 2.11.12.
-
----
-  <dependencies>   
-    <!-- scala -->
-		<dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-    
-    <!-- spark -->
-    <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-core_${scala.binary.version}</artifactId>
-      <version>${spark.version}</version>
-		</dependency>
-     
-    ...
-    
-  <dependencies>    
----
-
-Sekce dependencies obsahuje takzvane zavislosti projektu. Realne se jedna o knihovny (jary) na ktere se budemem odkazovat z nasich zdrojovych kodu. Apache Maven pro nas tyto knihvny automaticky stahne a nalinkuje vcetne tranzitivnich zavislosti techto knihoven. Seznam dependenci je rozsahny, uvadime zde tedy pouze zkracenou verzi s knihovnami pro spark a pro scalu.
-
-Dale deskriptor obsahuje definici rozsireni pro scalu. Ve vychozim stavu podporuje Apache MAven pouze javu. Podpora scaly se musi expilictne definovat. Prvni rozsireni scala-maven-plugin aktivuje kompilaci scala zdrojovych souboru. Dalsi rozsireni scalatest-maven-plugin aktivuje podporu junit testu. Tato definice obsahuje dalsi atributy potrebne pro vytvareni lokalnich instanci Sparku pro potreby jednotlivych testu.
-
-Sestaveni aplikace aktivujeme z prikazove radky prikazem:
-
----
-mvn clean install
----
-
-Na konzili se nam naslednbe vypisi informace o uspesnem zkompletovani aplikace:
-
----
----
-
-V automaticky vytvorenem adresari target je ulozena vysledna aplikace. Tato je zatim prazdna jelikjoz nas projekt zatim nebsahuje zadny zdrojovy kody.
+ZejmÃ©na proto, Å¾e osahuje Tento je velice flexibilni a dobre zdokumentovany <https://maven.apache.org>. 

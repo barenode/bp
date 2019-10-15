@@ -15,4 +15,3 @@
 :xrefstyle: short
           
 include::development.asciidoc[]
-include::development-project.asciidoc[]
