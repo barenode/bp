@@ -1,0 +1,4 @@
+[AMBARI]
+name=AMBARI
+baseurl=http://localhost/ambari/centos7/2.7.4.0-118
+gpgcheck=0

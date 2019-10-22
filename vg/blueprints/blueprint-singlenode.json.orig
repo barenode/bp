@@ -1,0 +1,94 @@
+{
+  "configurations" : [
+    {
+      "hadoop-env" : {
+        "properties" : {          
+          "namenode_heapsize" : "3072m"          
+        }
+      }
+    },
+    {
+      "hive-site" : {
+        "properties" : {         
+          "javax.jdo.option.ConnectionPassword" : "hive"
+        }
+      }
+    }
+  ],
+  "host_groups" : [
+    {
+      "name" : "master",
+      "components" : [
+      {
+        "name" : "NAMENODE"
+      },
+      {
+        "name" : "SECONDARY_NAMENODE"
+      },
+      {
+        "name" : "DATANODE"
+      },
+      {
+        "name" : "HDFS_CLIENT"
+      },
+      {
+        "name" : "RESOURCEMANAGER"
+      },
+      {
+        "name" : "NODEMANAGER"
+      },
+      {
+        "name" : "YARN_CLIENT"
+      },
+      {
+        "name" : "HISTORYSERVER"
+      },
+      {
+        "name" : "MAPREDUCE2_CLIENT"
+      },
+      {
+        "name" : "ZOOKEEPER_SERVER"
+      },
+      {
+        "name" : "ZOOKEEPER_CLIENT"
+      },
+      {
+        "name" : "APP_TIMELINE_SERVER"
+      },
+      {
+         "name" : "TEZ_CLIENT"
+      },
+      {
+        "name" : "MYSQL_SERVER"
+      },
+      {
+        "name" : "HIVE_SERVER"
+      },
+      {
+        "name" : "HIVE_METASTORE"
+      },
+      {
+        "name" : "HIVE_CLIENT"
+      },
+      {
+        "name" : "SPARK2_JOBHISTORYSERVER"
+      },
+      {
+          "name": "SPARK2_CLIENT"
+      }
+      ],
+      "cardinality" : "1",
+      "settings" : [{
+        "recovery_settings" : [{
+          "recovery_enabled" : "true",
+          "recovery_type" : "AUTO_START"
+        }]
+      }]
+    }     
+  ],    
+  "Blueprints" : {
+    "blueprint_name" : "blueprint",
+    "stack_name" : "HDP",
+    "stack_version" : "3.1"
+  }
+}

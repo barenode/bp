@@ -1,1 +1,1 @@
-ssh -i %HOMEPATH%/.ssh/vagrant_private_key -N -f -L localhost:7777:localhost:8889 vagrant@192.168.72.101
+ssh -i %HOMEDRIVE%%HOMEPATH%/.ssh/vagrant_private_key -N -f -L localhost:7777:localhost:8889 vagrant@192.168.72.101

@@ -1,0 +1,4 @@
+[HDP-UTILS-1.1.0.22-repo-1]
+name=HDP-UTILS-1.1.0.22-repo-1
+baseurl=http://localhost/hdp/HDP-UTILS/centos7/1.1.0.22
+gpgcheck=0
