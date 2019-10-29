@@ -6,6 +6,14 @@
           "namenode_heapsize" : "3072m"          
         }
       }
+    },     
+    {
+      "core-site": {
+        "properties": {
+          "hadoop.proxyuser.root.groups": "*",
+          "hadoop.proxyuser.root.hosts": "*"
+        }
+      }
     },
     {
       "hive-site" : {

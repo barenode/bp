@@ -1,61 +1,68 @@
+# REQUIRED:
+#  vagrant plugin install vagrant-vbguest
+#
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|                                          
   
-  # urcuje z ktereho boxu bude virtualni stroj vytvoren
-  # v nasem pripade pouzijeme verejne barebone centos7 s podporou puppetu 
-  # config.vm.box = "puppetlabs/centos-7.2-64-puppet"
-  config.vm.box = "/box/c7/package.box"                 
+    # box 
+    # config.vm.box = "centos/7"
+    config.vm.box = "/box/c7/package.box"   
   
-  #konfigurace sdilenych adresaru z hostitelskeho pocitace  
-  #adresar kam jsme stahli a robalili repositare pro Ambari a HDP, tytp budo namapovany na cestu /var/www/html
-  #tato je pouzita jako vychozi sluzbou httpd (apache web server)
-  #dane soubory budou tedy dostupne na lokalnim webovem serveru 
+    #synced folders
+    config.vm.synced_folder '../.',       '/opt/dev',            type: 'nfs'
+    config.vm.synced_folder '/yum/repo',  '/var/www/html',       type: 'nfs'
+    config.vm.synced_folder '.',          '/tmp/vagrant',        type: 'nfs'                                                                     
   
-  config.vm.synced_folder '/yum/repo', '/var/www/html', type: 'nfs'
-  
-  
-  #vychozi nastavani virtualniho stroje                                 
-  #2 jadra a 5GB RAM
-  
-  config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", 5120] 
-    vb.customize ["modifyvm", :id, "--cpus", 2] 
-  end
-  
-  #nastavani pomoci puppetu
-  #toto nastaveni je spolecne pro vsechny uzly v klusteru
-  config.vm.provision :puppet do |puppet|
-    puppet.environment_path        = "environments"
-    puppet.module_path             = "modules"
-    puppet.manifests_path          =  "./manifests/"
-    puppet.manifest_file           =  "ambari-agent.pp"
-    puppet.options = "--verbose --debug"
-  end 
-
-  #c7201 je masternode                            
-  config.vm.define :c7201 do |c7201|
-    
-    #c7201.vm.hostname = "c7201.barenode.org"
-     config.vm.network "private_network", ip: "192.168.56.101"
-    
-    #adresar bleprints obsahuje definici jednotlivych sluzeb pro cely kluster       
-    c7201.vm.synced_folder './blueprints', '/tmp/vagrant-puppet/blueprints', type: 'nfs'   
-    
-    c7201.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", 10216] 
-      vb.customize ["modifyvm", :id, "--cpus", 4] 
+    #defaul VM settings
+    config.vm.provider :virtualbox do |vb|
+        vb.customize ["modifyvm", :id, "--memory", 5120] 
+        vb.customize ["modifyvm", :id, "--cpus", 2] 
+    end 
+         
+    config.vm.provision "shell", path: "./shell/python.sh"                                                           
+    config.vm.provision "shell", path: "./shell/ambari-agent.sh"  
+    config.vm.provision "shell", path: "./shell/hadoop-rpm.sh"       
+   
+    # c7202
+    config.vm.define :c7202 do |c7202|
+#        c7202.vm.synced_folder '/data/2',    '/hadoop/hdfs',        type: 'nfs'
+        c7202.vm.hostname = "c7202.barenode.org"
+        c7202.vm.network :private_network, ip: "192.168.72.102"
     end
+  
+    # c7203
+    config.vm.define :c7203 do |c7203|
+#        c7203.vm.synced_folder '/data/3',    '/hadoop/hdfs',        type: 'nfs'
+        c7203.vm.hostname = "c7203.barenode.org"
+        c7203.vm.network :private_network, ip: "192.168.72.103"
+    end
+  
+    # c7204
+    config.vm.define :c7204 do |c7204|
+#        c7204.vm.synced_folder '/data/4',    '/hadoop/hdfs',        type: 'nfs'
+        c7204.vm.hostname = "c7204.barenode.org"
+        c7204.vm.network :private_network, ip: "192.168.72.104"
+    end 
     
-    #nastavani pomoci puppetu
-    #toto nastaveni je specificke pro master node
-    c7201.vm.provision :puppet do |puppet|
-        puppet.environment_path     = "environments"
-        puppet.manifests_path       =  "./manifests/"
-        puppet.manifest_file        =  "ambari-server.pp"
-    end    
-     
-  end
+    #c7201    
+    config.vm.define :c7201 do |c7201|        
+#        c7201.vm.synced_folder '/data/1',    '/hadoop/hdfs',        type: 'nfs'
+        c7201.vm.network :private_network, ip: "192.168.72.101"
+        c7201.vm.hostname = "c7201.barenode.org"
         
+        c7201.vm.provider :virtualbox do |vb|
+          vb.customize ["modifyvm", :id, "--memory", 10216] 
+          vb.customize ["modifyvm", :id, "--cpus", 4] 
+        end        
+        
+        c7201.vm.provision "shell", path: "./shell/ambari-server.sh" 
+        c7201.vm.provision "shell", path: "./shell/spark-env.sh"               
+        c7201.vm.provision "shell", path: "./shell/asciidoctor.sh"  
+        c7201.vm.provision "shell", path: "./shell/jupyter.sh"        
+    end 
+    
+      
 end
+                        

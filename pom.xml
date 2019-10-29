@@ -6,7 +6,7 @@
   <groupId>org.barenode</groupId>
   <artifactId>ml-on-spark</artifactId>
   <version>1.0-SNAPSHOT</version>  
-  <type>jar</type>
+  <packaging>jar</packaging>
   <name>Strojove ucemni na paltforme Spark</name>
   
   <properties>
@@ -14,7 +14,7 @@
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>    
-    <spark.version>2.4.4</spark.version>
+    <spark.version>2.3.4</spark.version>
     <scala.version>2.11.12</scala.version>
     <scala.binary.version>2.11</scala.binary.version>
   </properties>
@@ -45,6 +45,12 @@
       <version>${spark.version}</version>
 		</dependency>        
     
+    <dependency>
+                                <groupId>org.apache.pdfbox</groupId>
+                                <artifactId>pdfbox-app</artifactId>
+                                <version>2.0.8</version>
+                            </dependency>
+                            
     <!-- test -->         
 		<dependency>
       <groupId>junit</groupId>
@@ -78,6 +84,18 @@
       <version>${spark.version}</version>
       <scope>test</scope>
     </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib-local_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib-local_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
   
   <build>
@@ -160,4 +178,68 @@
         </plugin>
     </plugins>
   </build>
+  
+    <profiles>
+        <profile>
+			<id>book</id>
+			<build>
+                <plugins>
+		            <plugin>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>book-nbconvert</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <executable>book-nbconvert.cmd</executable>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>book-asciidoctor</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <executable>book-asciidoctor.cmd</executable>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>merge</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <mainClass>org.apache.pdfbox.tools.PDFMerger</mainClass>
+                                    <arguments>
+                                      <argument>${basedir}/src/main/asciidoc/pdf/header.pdf</argument>
+                                      <argument>${basedir}/src/main/asciidoc/book.pdf</argument>
+                                      <argument>${basedir}/src/main/asciidoc/bp.pdf</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+		                </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.pdfbox</groupId>
+                                <artifactId>pdfbox-app</artifactId>
+                                <version>2.0.8</version>
+                            </dependency>
+                        </dependencies>
+		            </plugin>
+		        </plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
 </project>

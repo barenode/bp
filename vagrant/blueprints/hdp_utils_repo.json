@@ -1,7 +1,0 @@
-{ 
-  "Repositories" : { 
-   "repo_name": "HDP-UTILS-1.1.0.22",
-   "base_url":"http://localhost/HDP-UTILS/centos7/1.1.0.22", 
-   "verify_base_url":true 
-  }
-}

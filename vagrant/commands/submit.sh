@@ -1,1 +1,0 @@
-spark-submit --class org.barenode.Sparkind --master yarn --deploy-mode cluster /opt/mvnrepo/org/barenode/sparkind/1.0-SNAPSHOT/sparkind-1.0-SNAPSHOT.jar hdfs:///user/spark/donation
