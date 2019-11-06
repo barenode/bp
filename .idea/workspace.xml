@@ -1,295 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9f7218a4-fda1-4d37-b9ea-925de489ca5a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/$PRODUCT_WORKSPACE_FILE$" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/hydra.xml" beforeDir="false" />
+    <list default="true" id="49ad4469-38a0-4401-9479-f6eac8fc83b3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/$PRODUCT_WORKSPACE_FILE$" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/book.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/book.adoc.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/cluster.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/colophon.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/devel.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/arial.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/arialbd.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/arialbi.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/ariali.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/cambria.ttc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/cambriab.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/cambriai.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/cambriaz.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/times-new-roman.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/times.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/timesbd.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/timesbi.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/fonts/timesi.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/ide.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/idea1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/idea3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/ideaě.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/images/rec-systems.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/inteli-scalatest-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/inteli-scalatest-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/inteli-scalatest-3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/introduction.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/jptr/Vagrantfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/links.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/pdf/header.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/pdf/header.dotx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/pdf/~$header.dotx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/pdf/Šablona _v3.dotx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/projection.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/python/knn_recommender.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/recommendation-implicit-als.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/recommendation-implicit-knn.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/recommendation-implicit.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/recommendation.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/references.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/spark.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/java/pdf/PDFMerge.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/.idea/python.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/figpath.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/matrix.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/matrix.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/plot.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/src/main/python/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/themes/basic-theme.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/trash.adoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/vagrant/Vagrantfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/vagrant/als.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/vagrant/book.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/vagrant/extension.rb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/vagrant/manifests/asciidoc.pp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/vagrant/recommendation.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/book/vagrant/test1.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/$PRODUCT_WORKSPACE_FILE$" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/scala_compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/book-asciidoctor.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/book-development.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/book-nbconvert.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/hdfs-init.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/jupyter-notebook.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/asciidoc.tpl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/book-development.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/book-development.asciidoc.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/book.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/development-project.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/development.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/development.asciidoc.backup" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/ABOUT-mplus1mn-subset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/ABOUT-mplus1p-subset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/ABOUT-notoserif-subset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/LICENSE-mplus" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/LICENSE-notoserif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/arial.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/arialbd.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/arialbi.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/ariali.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/cambria.ttc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/cambriab.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/cambriai.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/cambriaz.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-bold-ascii.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-bold-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-bold_italic-ascii (1).ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-bold_italic-ascii.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-bold_italic-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-italic-ascii.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-italic-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-regular-ascii-conums.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1mn-regular-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/mplus1p-regular-fallback.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/notoserif-bold-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/notoserif-bold_italic-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/notoserif-italic-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/notoserif-regular-subset.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/times-new-roman.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/times.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/timesbd.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/timesbi.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/fonts/timesi.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/images/rec-systems.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/introduction.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/jupter-intro.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/pdf/header.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/pdf/header.dotx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/pdf/Šablona _v3.dotx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/recommendation-implicit-als.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/recommendation-implicit-knn.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/recommendation-implicit.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/recommendation.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/references.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/test1.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/test1_files/test1_7_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/themes/basic-theme.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/themes/default-theme.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/asciidoc/themes/default-theme.yml.new" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/jupyter/.ipynb_checkpoints/test1-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/jupyter/data/BX-Book-Ratings.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/jupyter/data/BX-Books.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/jupyter/data/BX-Users.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/src/main/jupyter/test1.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/vagrant/Vagrantfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/vagrant/shell/asciidoctor.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/vagrant/shell/jupyter.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cleanup/vagrant/shell/spark.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jupyter/vagrant/Vagrantfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/.ipynb_checkpoints/test1-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/asciidoc.tpl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/nbconvert.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/output_test/test1.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/output_test/test1_files/test1_7_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/test1.asciidoc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/test1.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab/test1_files/test1_7_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/0/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/0/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/1/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/1/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/2/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/2/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/3/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/3/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/4/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/4/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/5/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/5/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/6/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/6/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/7/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/7/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/8/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216210339-0000/8/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/0/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/0/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/1/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/1/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/2/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/2/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/3/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/3/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/4/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/4/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/5/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/5/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/6/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211736-0000/6/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/0/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/0/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/1/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/1/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/2/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/2/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/3/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/3/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/4/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/4/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/5/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190216211801-0000/5/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190217195212-0000/0/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190217195212-0000/0/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190217195212-0000/1/stderr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/null/work/app-20190217195212-0000/1/stdout" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/jupyter/.ipynb_checkpoints/test1-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/jupyter/.ipynb_checkpoints/test1-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/jupyter/intro.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/jupyter/intro.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/jupyter/test1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/jupyter/test1.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/FooTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/scala/samples/FooTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/HDP-3.1.4.0-315.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/Vagrantfile" beforeDir="false" afterPath="$PROJECT_DIR$/vagrant/Vagrantfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/Vagrantfile.orig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/.ipynb_checkpoints/test1-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/HDP-3.1.4.0-315.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/ambari-hdp-1.repo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/blueprint-multinode-full.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/blueprint-multinode-hive.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/blueprint-multinode.json" beforeDir="false" afterPath="$PROJECT_DIR$/vagrant/blueprints/blueprint-multinode.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/blueprint-singlenode.json.orig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/blueprint.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/cluster.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/hdp_repo.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/hdp_repo.json.orig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/hdp_utils_repo.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/test1.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/blueprints/vdf.json" beforeDir="false" afterPath="$PROJECT_DIR$/vagrant/blueprints/vdf.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/commands.raw.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/commands/import-data.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/commands/submit.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/config/ambari-agent.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/config/ambari-hdp-1.repo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-agent/ambari-agent.log.1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-agent/ambari-agent.log.14" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-agent/ambari-agent.log.22" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-agent/ambari-agent.log.25" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-agent/ambari-agent.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-agent/ambari-alerts.log.1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-agent/ambari-alerts.log.8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/ambari-server/ambari-server.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/spark2/spark-spark-org.apache.spark.deploy.history.HistoryServer-1-c7201.barenode.org.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/spark2/spark-spark-org.apache.spark.deploy.history.HistoryServer-1-c7201.barenode.org.out.1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/spark2/spark-spark-org.apache.spark.deploy.history.HistoryServer-1-c7201.barenode.org.out.2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/spark2/spark-spark-org.apache.spark.deploy.history.HistoryServer-1-c7201.barenode.org.out.3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/spark2/spark-spark-org.apache.spark.deploy.history.HistoryServer-1-c7201.barenode.org.out.4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/log/spark2/spark-spark-org.apache.spark.deploy.history.HistoryServer-1-c7201.barenode.org.out.5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/manifests/ambari-agent.pp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/manifests/ambari-agent.pp.orig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/manifests/ambari-server.pp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/manifests/ambari-server.pp.orig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/modules/common/templates/ambari-agent.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/modules/common/templates/ambari-hdp-1.repo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/modules/common/templates/hosts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/modules/common/templates/repoinfo.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vagrant/modules/common/templates/spark_service.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/Vagrantfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/.ipynb_checkpoints/test1-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/HDP-3.1.4.0-315.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/ambari-hdp-1.repo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/blueprint-multinode-full.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/blueprint-multinode-hive.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/blueprint-multinode.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/blueprint-singlenode.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/blueprint-singlenode.json.orig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/blueprint.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/cluster-multinode.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/cluster-singlenode.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/cluster.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/hdp_repo.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/hdp_repo.json.orig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/hdp_utils_repo.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/test1.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/blueprints/vdf.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/config/AMBARI.repo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/config/HDP-UTILS.repo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/config/HDP.repo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/config/hosts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/shell/ambari-agent.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/shell/ambari-server.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/shell/asciidoctor.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/shell/hadoop-rpm.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/shell/jupyter.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/shell/python.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vg/shell/spark-env.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/barenode/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pdf/PDFMerge.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/org/barenode/recommendation/ALS.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/org/barenode/recommendation/ALS.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/samples/CALS.scala" beforeDir="false" afterPath="$PROJECT_DIR$/trash/samples/CALS.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/CALS.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/CALSTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/CorrelationTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/FooTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/RDDTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/ReadTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/RecommenderTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/SharedSparkSession.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/VectorTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/org/apache/spark/ml/recommendation/ALSSuite.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/FooTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/SampleTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/SparkTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/SparkTest.scala.old" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -300,13 +35,20 @@
   <component name="CodeStyleSettingsInfer">
     <option name="done" value="true" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Scala Object" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="c:/dev/apache-maven-3.6.2" />
+        <option name="mavenHome" value="$PROJECT_DIR$/../../maven_3" />
       </MavenGeneralSettings>
     </option>
     <option name="importingSettings">
@@ -314,14 +56,35 @@
         <option name="jdkForImporter" value="#JAVA_HOME" />
       </MavenImportingSettings>
     </option>
+    <option name="enabledProfiles">
+      <list>
+        <option value="book" />
+      </list>
+    </option>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
   </component>
-  <component name="ProjectId" id="1Sq6STLpfIgcg5SOAFz6dWWwbIO" />
+  <component name="ProjectId" id="1Ss3fFvPzilVa1MhC9qVNd1iE4a" />
   <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/scala/mlonspark" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\dev\proj\bp\trash" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\dev\proj\bp\src\main\scala\mlonspark" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="Utils" />
+    </option>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -335,16 +98,131 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="ScalaTest.NALSSuite.nals">
+    <configuration name="LoneSuite" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoneSuite.genFactors" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="testName" value="genFactors" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoneSuite.testGenFactors" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="testName" value="testGenFactors" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoneSuite.testGenImplicitTestData" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="testName" value="testGenImplicitTestData" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NALSSuite.nals" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="mlonspark.NALSSuite" />
+      <option name="testName" value="nals" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="ScalaTest.NALSSuite.nals" />
+        <item itemvalue="ScalaTest.LoneSuite.testGenImplicitTestData" />
+        <item itemvalue="ScalaTest.LoneSuite.testGenFactors" />
+        <item itemvalue="ScalaTest.LoneSuite.genFactors" />
+        <item itemvalue="ScalaTest.LoneSuite" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9f7218a4-fda1-4d37-b9ea-925de489ca5a" name="Default Changelist" comment="" />
-      <created>1572278779295</created>
+      <changelist id="49ad4469-38a0-4401-9479-f6eac8fc83b3" name="Default Changelist" comment="" />
+      <created>1572338577641</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1572278779295</updated>
+      <updated>1572338577641</updated>
     </task>
     <servers />
   </component>
