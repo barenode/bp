@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9f7218a4-fda1-4d37-b9ea-925de489ca5a" name="Default Changelist" comment="">
+    <list default="true" id="49ad4469-38a0-4401-9479-f6eac8fc83b3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/$PRODUCT_WORKSPACE_FILE$" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/barenode/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pdf/PDFMerge.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/org/barenode/recommendation/ALS.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/org/barenode/recommendation/ALS.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/samples/CALS.scala" beforeDir="false" afterPath="$PROJECT_DIR$/trash/samples/CALS.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/CALS.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/CALSTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/CorrelationTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/FooTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/RDDTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/ReadTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/RecommenderTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/SharedSparkSession.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/barenode/VectorTestCase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/org/apache/spark/ml/recommendation/ALSSuite.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/FooTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/SampleTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/SparkTest.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/samples/SparkTest.scala.old" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,13 +35,20 @@
   <component name="CodeStyleSettingsInfer">
     <option name="done" value="true" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Scala Object" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="c:/dev/apache-maven-3.6.2" />
+        <option name="mavenHome" value="$PROJECT_DIR$/../../maven_3" />
       </MavenGeneralSettings>
     </option>
     <option name="importingSettings">
@@ -27,14 +56,35 @@
         <option name="jdkForImporter" value="#JAVA_HOME" />
       </MavenImportingSettings>
     </option>
+    <option name="enabledProfiles">
+      <list>
+        <option value="book" />
+      </list>
+    </option>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
   </component>
-  <component name="ProjectId" id="1Sq6STLpfIgcg5SOAFz6dWWwbIO" />
+  <component name="ProjectId" id="1Ss3fFvPzilVa1MhC9qVNd1iE4a" />
   <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/scala/mlonspark" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\dev\proj\bp\trash" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\dev\proj\bp\src\main\scala\mlonspark" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="Utils" />
+    </option>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -48,16 +98,131 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="ScalaTest.NALSSuite.nals">
+    <configuration name="LoneSuite" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoneSuite.genFactors" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="testName" value="genFactors" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoneSuite.testGenFactors" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="testName" value="testGenFactors" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoneSuite.testGenImplicitTestData" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="org.apache.spark.ml.recommendation.LoneSuite" />
+      <option name="testName" value="testGenImplicitTestData" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NALSSuite.nals" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="ml-on-spark" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="testKind" value="Class" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="javaOptions" value="" />
+      <option name="jrePath" />
+      <option name="searchTest" value="Across module dependencies" />
+      <option name="showProgressMessages" value="true" />
+      <option name="testArgs" value="" />
+      <option name="testClassPath" value="mlonspark.NALSSuite" />
+      <option name="testName" value="nals" />
+      <option name="useSbt" value="false" />
+      <option name="useUiWithSbt" value="false" />
+      <option name="workingDirectory" value="C:\dev\proj\bp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="ScalaTest.NALSSuite.nals" />
+        <item itemvalue="ScalaTest.LoneSuite.testGenImplicitTestData" />
+        <item itemvalue="ScalaTest.LoneSuite.testGenFactors" />
+        <item itemvalue="ScalaTest.LoneSuite.genFactors" />
+        <item itemvalue="ScalaTest.LoneSuite" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9f7218a4-fda1-4d37-b9ea-925de489ca5a" name="Default Changelist" comment="" />
-      <created>1572278779295</created>
+      <changelist id="49ad4469-38a0-4401-9479-f6eac8fc83b3" name="Default Changelist" comment="" />
+      <created>1572338577641</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1572278779295</updated>
+      <updated>1572338577641</updated>
     </task>
     <servers />
   </component>

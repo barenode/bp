@@ -519,6 +519,7 @@ object ALSModel extends MLReadable[ALSModel] {
     private val className = classOf[ALSModel].getName
 
     override def load(path: String): ALSModel = {
+
       val metadata = DefaultParamsReader.loadMetadata(path, sc, className)
       implicit val format = DefaultFormats
       val rank = (metadata.metadata \ "rank").extract[Int]
