@@ -1,0 +1,5 @@
+package mlonspark
+
+class SimpleClass {
+
+}

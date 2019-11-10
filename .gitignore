@@ -38,3 +38,6 @@ book/images/stem-*.png
 lab/data/*
 
 .idea
+
+
+**/.ipynb_checkpoints
