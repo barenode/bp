@@ -1,0 +1,64 @@
+
+=== Cluster
+
+Pro testovani nasi aplikace budemem poptrebovat nekterou z forem prostredi Sparku. Nejednodusi by bylo pouzivat Spark ve stadalone modu. Vzhledem k tomu, ze se tato prace zabyva distribuovanymi vypocty byl by tento mod prilis zjednodusujici. Vhodnejsi by bylo zvolit nekterou z forem klusterovych instalaci. Zde se nabizi pouzit Spark v ramci nektere Hadoop distribuce, toto bude take nejbeznejsi forma pouziti Sparku  ramci organizaci zabyvajici se zpracovanim velkych obnjemu dat. Postavit si vlastni cluster pro ucely teto prace by bylo pekne, bohuzel ale ale financne neunossne. Dale se nabizi pouzit nejkterou z variant Hadoopu v cloudu. Napriklad Microsoft Azure tuto podporu bezne nabizi. Bohjuzel po sheldnuti prislisneho ceniku je i tato varianta finance nedostupna. Pro potreby testovani vytvorime virtualni kluster v prostredi lokalni stanice. Dale je potreba zvolit nasledujici moznosti:
+
+1) operacni system
+Vzhledem k tom, ze Hadoop je urcen pro operacni system linux, zvolime jako operacni nekterou z beznych distribuci. V nasem pripade jsme zvolili Centos 7.
+
+2) hadoop distribuce
+
+
+3) topologie klusteru
+
+
+==== 
+
+HDP (Hadoop Data Platform) je distribuce Hadoopu od spolecnosti Horton Works. Tato distribuce ve volne dostupna ve forme repositaru pro nej linuxove distribuce. Instalace muze byt budto manualni, kdy na vybrane nody nainstalujeme vybrabne sluzby. Jedna se o velice narocny ukol vyzadujici detailni znalosti vsech casti systemu. Dale je mozne pouzit nastroj, ktery kluster nainstaluje a nakonfiguruje automaticky dle nami zvolene topologie. Pro tetno ukol je v HDP pouzita aplikace Apache Ambari <https://ambari.apache.org/>. Ambari je REST aplikace s webovym rozhranim. Tato aplikace vyrazne zjednodusuje instalaci, managemet a monitoring Hadoop klusteru. 
+
+<https://www.cloudera.com/products/hdp.html> HDP diagram             
+
+<https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/ch_Deploy_and_Configure_a_HDP_Cluster.html> install guide
+
+Aktualne posledni verze HDP je 3.1.4 a 
+
+
+<https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/setting_up_a_local_repository.html> HDP install guide
+
+
+Pro instalaci byla pouzita utilita Vagrant <https://www.vagrantup.com/>. Vagrant se pouziva pro automaticke vytvoreni a konfigurovani vyvojovych prostredi. Filozofie za timto systememe je takova, ze tyto prostredi je potrebne vytyvaret opakovane a plne automaticky tak aby vyvojatr nebyl nuceny neustale opakovat stejne konfiguracni ukony. Kluste je kompletne popsany v jedinem souboru .Vagrantfile tento je ulozeny v podadresari vagrant v projektu. 
+
+Pri instalaci HDP byly pouzity pokyny z jejjich oficialni dokumentace <HDP_DOC>. Pro zrychleni instalace a omezeni mnozstvi stahovanych pri opakovane instalaci byly pouzity lokalni repozitare. Tyto lokalni repozitare jsou ulozedny na hostitelskem stroji a pres sdilene adresare dostupne vsem virtualnim systemum. Nejprve bylo nutne stahnout prislusne distribuce pro Centos 7. Tyto jsou dostupne zde <HDP_REP>.  
+
+
+Na hostitelskem pocitaci nejprve vytvorime adresar /yum/repo. Nasledne stahneme distribuci Ambari z <https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/ambari_repositories.html> a rozbalime ji do vytovreneho adresare. Dale vytvorime v adresari /yum/repo podadresar hdp a rozbalime do neho distribuci HDP stahnutou z <https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/hdp_314_repositories.html>. Dale stahnmele balik HDP_UTILS z  <https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/hdp_314_repositories.html> a take ho rozbalime do adresare hdp (tuto vetu spojit s vetou o HDP)
+
+Dale stahneme distribuci javy z oficilanich stranek Oracle a ulozime ji do podadresare common v /yum/repo.
+
+Dale je nutyne stahnout MySQL konektor pro javu. Pro nase ucely neni relacni datbaze potrebva. NIcmene je ale vyzadovana HDP slusbou Hive. Tato je v ramci HDP povinna a pouiziva relacni databazi pro uchovani metadata.
+
+Konecna adresarova struktura by mela vypadat nesledovne:
+
+----
+/yum
+    /repo
+        /ambari
+            /centos7
+                /2.7.4.0-118
+        /hdp
+            /HDP
+                /centos7
+                    /3.1.4.0-315
+            /HDP-UTILS
+                /centos7
+                    /1.1.0.22
+        /common
+         |- jdk-8u60-linux-x64.tar.gz     
+         |- mysql-connector-java.jar  
+----
+
+Zde je nutne byt opatrvny protoze tato struktura bude odovidat URL adresam nasich repozitaru.
+
+
+
+
