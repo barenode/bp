@@ -41,3 +41,5 @@ lab/data/*
 
 
 **/.ipynb_checkpoints
+
+**/*.box

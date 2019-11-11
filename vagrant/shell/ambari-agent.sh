@@ -5,9 +5,9 @@ sudo setenforce 0
 
 sudo /bin/mkdir /usr/jdk64
 sudo /bin/cd /usr/jdk64
-sudo /bin/cp -n /var/www/html/common/jdk-8u60-linux-x64.tar.gz /usr/jdk64/jdk-8u60-linux-x64.tar.gz
-sudo /bin/gunzip -c /usr/jdk64/jdk-8u60-linux-x64.tar.gz > /usr/jdk64/jdk-8u60-linux-x64.tar
-sudo /bin/tar xf /usr/jdk64/jdk-8u60-linux-x64.tar -C /usr/jdk64
+sudo /bin/cp -n /var/www/html/common/jdk-8u231-linux-x64.tar.gz /usr/jdk64/jdk-8u231-linux-x64.tar.gz
+sudo /bin/gunzip -c /usr/jdk64/jdk-8u231-linux-x64.tar.gz > /usr/jdk64/jdk-8u231-linux-x64.tar
+sudo /bin/tar xf /usr/jdk64/jdk-8u231-linux-x64.tar -C /usr/jdk64
 
 sudo /bin/cp -f /tmp/vagrant/config/hosts /etc/hosts
 sudo yum install -y mc
