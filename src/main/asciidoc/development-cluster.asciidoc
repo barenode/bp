@@ -9,51 +9,20 @@ image::hdp-architecture-diagram.png[title="Hortonworks Data Platform", pdfwidth=
 
 Na <<hdp-architecture-diagram>> je zobrazen ekosystém služeb HDP. Tento ekosystém zahrnuje mimo základních prvků Hadoopu jako jsou Spark, HDFS, YARN mnoho dalších služeb jako jsou například NoSQL databáze HBASE, framework pro podporu deep lerningu TensorFlow atd. Pro testování aplikace nainstalujeme pouze bezpodmínečně nutné služby. Pro usnadnění správy klusteru je v HDP použita aplikace Apache Ambari viz. <<hdp-architecture-diagram>> sekce Operations & Orchestration. Tato aplikace má takzvanou master-slave architekturu. Na všech  uzlech je nainstalována klientská služba. Ta má ze úkol instalovat vybrané balíky na daný uzel, dále klientská část reportuje systémové informace pro účely monitoringu. Na jeden vybraný uzel v klastru je nainstalována serverová část aplikace. Ta podle potřeby instruuje jednotlivé připojené klienty, sbírá data pro monitoring, atd. Serverová část dále disponuje REST a  webovým rozhraním. Přes webové rozhraní je možné jednoduše spravovat jenotlivé služby v rámci celého klastru. Přes REST rozhraní je možné nainstalovat kompletně celý klastr podle zadané definice. Tyto definice jsou v JSON formátu, takzvané Ambari Blueprints.    
 
-TenJako operační systém byla vybrána  na základě osobních preferencí distribuce linuxu Centos 7. 
+====  Instalace HDP
 
-==== Výběr distribuce Hadoopu
+Jako virtualizační platforma pro hostitelský počítač byl vybrán VirtualBox od společnosti Oracle. Tato platforma je volně dostupná a podporuje většinu operačních systémů. Pro usnadnění práci s virtuálními operačnímy systémy je inicializace řízena utilitou Vagrant. Vagrant umožnuje jednoduše definovat jaké virtualní stroje je potřeba vytvořit, jaké mají mít paramtery, sdílené adresáře atd. Samotná práce s VirtualBoxem se tím výrazně zjednodušuje. Filozofie za tímto nástrojem je taková, že je tyto prostředí potreba vytyvářet opakovaně a plně automaticky tak aby vývojáři nebyli nuceni neustále opakovat stejné konfigurační úkony. Úkony jako instalace databází, webových a aplikačních serverů jsou místo toho definovány ve skriptech a Vagrant je pri vytváření virtuálních strujů automaticky aplikuje. Vagrant podporuje nejznámnější konfigurační rámce jako jsou Puppet nebo Chief, podporuje také obyčejné shell skripty.  
+Jako operační systém byla vybrána volně dostupná distribuce linuxu Centos 7. Pro Centos 7 společnost Hortonworks spravuje veřejné Yum repozitáře. Pro instalalaci testovacího prostředí aplikace byly použity následující repozitáře a verze:
 
-==== Výběr distribuce Hadoopu
+[cols="3,^2,10",options="header"]
+|=========================================================
+|Jméno |Verze |URL
+|Ambari|2.7.4.0|http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.7.4.0/ambari.repo
+|HDP|3.1.4.0|http://public-repo-1.hortonworks.com/HDP/centos7/3.x/updates/3.1.4.0/hdp.repo
+|HDP-UTILS|1.1.0.22|http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.22/repos/centos7
+|=========================================================
 
-
-
- jako služjejich Napriklad Microsoft Azure tuto podporu bezne nabizi. Bohjuzel po sheldnuti prislisneho ceniku je i tato varianta finance nedostupna. Pro potreby testovani vytvorime virtualni kluster v prostredi lokalni stanice. Dale je potreba zvolit nasledujici moznosti:
-
-1) operacni system
-Vzhledem k tom, ze Hadoop je urcen pro operacni system linux, zvolime jako operacni nekterou z beznych distribuci. V nasem pripade jsme zvolili Centos 7.
-
-2) hadoop distribuce
-Postavit si vlastni cluster pro ucely teto prace by bylo pekne, bohuzel ale ale financne neunossne.
-
-3) topologie klusteru
-
-
-==== 
-
-HDP (Hadoop Data Platform) je distribuce Hadoopu od spolecnosti Horton Works. Tato distribuce ve volne dostupna ve forme repositaru pro nej linuxove distribuce. Instalace muze byt budto manualni, kdy na vybrane nody nainstalujeme vybrabne sluzby. Jedna se o velice narocny ukol vyzadujici detailni znalosti vsech casti systemu. Dale je mozne pouzit nastroj, ktery kluster nainstaluje a nakonfiguruje automaticky dle nami zvolene topologie. Pro tetno ukol je v HDP pouzita aplikace Apache Ambari <https://ambari.apache.org/>. Ambari je REST aplikace s webovym rozhranim. Tato aplikace vyrazne zjednodusuje instalaci, managemet a monitoring Hadoop klusteru. 
-
-<https://www.cloudera.com/products/hdp.html> HDP diagram             
-
-<https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/ch_Deploy_and_Configure_a_HDP_Cluster.html> install guide
-
-Aktualne posledni verze HDP je 3.1.4 a 
-
-
-<https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/setting_up_a_local_repository.html> HDP install guide
-
-
-Pro instalaci byla pouzita utilita Vagrant <https://www.vagrantup.com/>. Vagrant se pouziva pro automaticke vytvoreni a konfigurovani vyvojovych prostredi. Filozofie za timto systememe je takova, ze tyto prostredi je potrebne vytyvaret opakovane a plne automaticky tak aby vyvojatr nebyl nuceny neustale opakovat stejne konfiguracni ukony. Kluste je kompletne popsany v jedinem souboru .Vagrantfile tento je ulozeny v podadresari vagrant v projektu. 
-
-Pri instalaci HDP byly pouzity pokyny z jejjich oficialni dokumentace <HDP_DOC>. Pro zrychleni instalace a omezeni mnozstvi stahovanych pri opakovane instalaci byly pouzity lokalni repozitare. Tyto lokalni repozitare jsou ulozedny na hostitelskem stroji a pres sdilene adresare dostupne vsem virtualnim systemum. Nejprve bylo nutne stahnout prislusne distribuce pro Centos 7. Tyto jsou dostupne zde <HDP_REP>.  
-
-
-Na hostitelskem pocitaci nejprve vytvorime adresar /yum/repo. Nasledne stahneme distribuci Ambari z <https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/ambari_repositories.html> a rozbalime ji do vytovreneho adresare. Dale vytvorime v adresari /yum/repo podadresar hdp a rozbalime do neho distribuci HDP stahnutou z <https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/hdp_314_repositories.html>. Dale stahnmele balik HDP_UTILS z  <https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/hdp_314_repositories.html> a take ho rozbalime do adresare hdp (tuto vetu spojit s vetou o HDP)
-
-Dale stahneme distribuci javy z oficilanich stranek Oracle a ulozime ji do podadresare common v /yum/repo/common.
-
-Dale je nutyne stahnout MySQL konektor pro javu. Pro nase ucely neni relacni datbaze potrebva. NIcmene je ale vyzadovana HDP slusbou Hive. Tato je v ramci HDP povinna a pouiziva relacni databazi pro uchovani metadata.
-
-Konecna adresarova struktura by mela vypadat nesledovne:
+Pro zrychlení instalace a omezení množství stahovaných dat při opakované instalaci je výhodné použít lokalní repozitáře. Jednotlivé Yum repositáře stáhneme v komprimované podobě. Tyto lokální repozitáře následně uložíme na hostitelském stroji a přes sdílené adresáře učiníme dostupné všem virtualním strojům. Dále je nutné stáhnout některé knihovny, které jsou sice zadarmo ale vyžadují registraci u společnosti Oracle. Jedná se o distribuci Java SDK a dále java konektor pro databázi MySQL. Konecna adresarova struktura v souborovem systémy hostitelského počítače by tedy mela vypadat následovne:
 
 ----
 /yum
@@ -71,10 +40,4 @@ Konecna adresarova struktura by mela vypadat nesledovne:
         /common
          |- jdk-8u60-linux-x64.tar.gz     
          |- mysql-connector-java.jar  
-----
-
-Zde je nutne byt opatrvny protoze tato struktura bude odovidat URL adresam nasich repozitaru.
-
-
-
-
+----  
