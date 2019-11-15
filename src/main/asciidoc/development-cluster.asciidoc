@@ -14,7 +14,8 @@ Na <<hdp-architecture-diagram>> je zobrazen ekosystém služeb HDP. Tento ekosys
 Jako virtualizační platforma pro hostitelský počítač byl vybrán VirtualBox od společnosti Oracle. Tato platforma je volně dostupná a podporuje většinu operačních systémů. Pro usnadnění práci s virtuálními operačnímy systémy je inicializace řízena utilitou Vagrant. Vagrant umožnuje jednoduše definovat jaké virtualní stroje je potřeba vytvořit, jaké mají mít paramtery, sdílené adresáře atd. Samotná práce s VirtualBoxem se tím výrazně zjednodušuje. Filozofie za tímto nástrojem je taková, že je tyto prostředí potreba vytyvářet opakovaně a plně automaticky tak aby vývojáři nebyli nuceni neustále opakovat stejné konfigurační úkony. Úkony jako instalace databází, webových a aplikačních serverů jsou místo toho definovány ve skriptech a Vagrant je pri vytváření virtuálních strujů automaticky aplikuje. Vagrant podporuje nejznámnější konfigurační rámce jako jsou Puppet nebo Chief, podporuje také obyčejné shell skripty.  
 Jako operační systém byla vybrána volně dostupná distribuce linuxu Centos 7. Pro Centos 7 společnost Hortonworks spravuje veřejné Yum repozitáře. Pro instalalaci testovacího prostředí aplikace byly použity následující repozitáře a verze:
 
-[cols="3,^2,10",options="header"]
+[[hdp-yum-repo]]
+[title="HDP Yum repozitáře pro Centos 7", cols="3,^2,10", options="header"]
 |=========================================================
 |Jméno |Verze |URL
 |Ambari|2.7.4.0|http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.7.4.0/ambari.repo
@@ -22,22 +23,55 @@ Jako operační systém byla vybrána volně dostupná distribuce linuxu Centos 
 |HDP-UTILS|1.1.0.22|http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.22/repos/centos7
 |=========================================================
 
-Pro zrychlení instalace a omezení množství stahovaných dat při opakované instalaci je výhodné použít lokalní repozitáře. Jednotlivé Yum repositáře stáhneme v komprimované podobě. Tyto lokální repozitáře následně uložíme na hostitelském stroji a přes sdílené adresáře učiníme dostupné všem virtualním strojům. Dále je nutné stáhnout některé knihovny, které jsou sice zadarmo ale vyžadují registraci u společnosti Oracle. Jedná se o distribuci Java SDK a dále java konektor pro databázi MySQL. Konecna adresarova struktura v souborovem systémy hostitelského počítače by tedy mela vypadat následovne:
+Pro zrychlení instalace a omezení množství stahovaných dat při opakované instalaci je výhodné použít lokalní repozitáře. Jednotlivé Yum repositáře stáhneme v komprimované podobě. Tyto lokální repozitáře následně uložíme na hostitelském stroji a přes sdílené adresáře učiníme dostupné všem virtualním strojům. Dále je nutné stáhnout některé knihovny, které jsou sice zadarmo ale vyžadují registraci u společnosti Oracle. Jedná se o distribuci Java SDK a dále java konektor pro databázi MySQL. Konečná adresářová struktura v souborovém systém hostitelského počítače by tedy měla vypadat následovně:
 
 ----
 /yum
     /repo
-        /ambari
-            /centos7
-                /2.7.4.0-118
-        /hdp
-            /HDP
-                /centos7
-                    /3.1.4.0-315
-            /HDP-UTILS
-                /centos7
-                    /1.1.0.22
+        /ambari <1>
+        /hdp    
+            /HDP         <2>      
+            /HDP-UTILS   <3>             
         /common
-         |- jdk-8u60-linux-x64.tar.gz     
-         |- mysql-connector-java.jar  
+         |- jdk-8u231-linux-x64.tar.gz  <4>   
+         |- mysql-connector-java.jar    <5> 
 ----  
+<1> Obsah Yum repozitáře Ambari. Viz <<hdp-yum-repo>>
+<2> Obsah Yum repozitáře HDP. Viz <<hdp-yum-repo>>
+<3> Obsah Yum repozitáře HDP-UTILS. Viz <<hdp-yum-repo>>
+<4> Distribuce Oracle Java 8 SDK (build 231).
+<5> Java konkektor pro databázi MySQL.
+
+Klastr se bude složen ze čtyř virtuálních strojů viz. <<cluster-topolgy>>. Stroj c7201 bude obsahovat všechny řídící procesy pro HDFS a Yarn. Dále bude obsahovat utility pro volání služeb klusteru. V produkčním nasazení jsou typicky tyto dvě role rozděleny na rozdílných uzlech. Dále bude klastr obsahovat tři naprosto identické uzly c7202, c7203, c7204. Tyto uzly budou zpracovávat jednotlivé ulohy distribuovaných výpočtů. Každý z těchto uzlů zároveň slouži jako datový uzel pro HDFS. Počet pracovních uzlů (3) odpovídá výchozímu replikačnímu faktoru HDFS. Reálně to tedy znamená že jsou všechny data uloženy na všech třech pracovních uzech.          
+
+[[cluster-topolgy]]
+[title="Topologie klastru", options="header"]
+|=========================================================
+|Jméno |IP adresa |RAM   |Počet jader| Role
+|c7201|192.168.72.101|8GB|3|Master, Edge
+|c7202|192.168.72.102|5GB|2|Worker
+|c7203|192.168.72.103|5GB|2|Worker
+|c7204|192.168.72.104|5GB|2|Worker
+|=========================================================
+
+Soubor Vagrantfile je uložen v podadresáři vagrant v kořenovém adresáři projektu. V tomto souboru jsou nadefinovány jednotlivé virtuální stroje a jejich parametry. 
+
+[source, ruby, numbered]
+----
+include::../../../vagrant/Vagrantfile[tags=box-def]
+----
+
+[source, ruby, numbered]
+----
+include::../../../vagrant/Vagrantfile[tags=synced-folders]
+----
+
+[source, ruby, numbered]
+----
+include::../../../vagrant/Vagrantfile[tags=vm-settings]
+----
+
+[source, ruby, numbered]
+----
+include::../../../vagrant/Vagrantfile[tags=c7202]
+----

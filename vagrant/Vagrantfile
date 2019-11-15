@@ -4,45 +4,56 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|                                          
-  
-    # box 
-    # config.vm.box = "centos/7"
-    config.vm.box = "../box/package.box"   
-  
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+=begin
+    tag::box-def[]
+    config.vm.box = "centos/7"
+    end::box-def[]
+=end
+    config.vm.box = "../box/package.box"
+
     #synced folders
+    #tag::synced-folders[]
     config.vm.synced_folder '../.',       '/opt/dev',            type: 'nfs'
     config.vm.synced_folder '/yum/repo',  '/var/www/html',       type: 'nfs'
     config.vm.synced_folder '.',          '/tmp/vagrant',        type: 'nfs'                                                                     
-  
-    #defaul VM settings
+    #end::synced-folders[]
+
+    #default VM settings
+    #tag::vm-settings[]
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", 5120] 
         vb.customize ["modifyvm", :id, "--cpus", 2] 
-    end 
-         
+    end
+    #end::vm-settings[]
+
     config.vm.provision "shell", path: "./shell/python.sh"                                                           
     config.vm.provision "shell", path: "./shell/ambari-agent.sh"  
     config.vm.provision "shell", path: "./shell/hadoop-rpm.sh"       
-   
-#    # c7202
-#    config.vm.define :c7202 do |c7202|
-#        c7202.vm.hostname = "c7202.barenode.org"
-#        c7202.vm.network :private_network, ip: "192.168.72.102"
-#    end
-#  
-#    # c7203
-#    config.vm.define :c7203 do |c7203|
-#        c7203.vm.hostname = "c7203.barenode.org"
-#        c7203.vm.network :private_network, ip: "192.168.72.103"
-#    end
-#  
-#    # c7204
-#    config.vm.define :c7204 do |c7204|
-#        c7204.vm.hostname = "c7204.barenode.org"
-#        c7204.vm.network :private_network, ip: "192.168.72.104"
-#    end 
-    
+
+=begin
+    # c7202
+    #tag::c7202[]
+    config.vm.define :c7202 do |c7202|
+        c7202.vm.hostname = "c7202.barenode.org"
+        c7202.vm.network :private_network, ip: "192.168.72.102"
+    end
+    #end::c7202[]
+
+    # c7203
+    config.vm.define :c7203 do |c7203|
+        c7203.vm.hostname = "c7203.barenode.org"
+        c7203.vm.network :private_network, ip: "192.168.72.103"
+    end
+
+    # c7204
+    config.vm.define :c7204 do |c7204|
+        c7204.vm.hostname = "c7204.barenode.org"
+        c7204.vm.network :private_network, ip: "192.168.72.104"
+    end
+=end
+
     #c7201    
     config.vm.define :c7201 do |c7201|       
         c7201.vm.network :private_network, ip: "192.168.72.101"

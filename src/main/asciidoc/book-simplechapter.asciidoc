@@ -3,7 +3,7 @@
 :toc-title: Obsah
 :numbered:
 :chapter-label:
-:table-caption: Tabulka
+:table-caption: tab.
 :figure-caption: obr.
 :math:
 :imagesoutdir: generated_images
@@ -13,5 +13,8 @@
 :mathematical-format: svg
 :mathematical-zoom: 1.4
 :xrefstyle: short
+:source-highlighter: pygments
+:pygments-style: manni
+:pygments-linenums-mode: inline
           
 include::development-cluster.asciidoc[]
