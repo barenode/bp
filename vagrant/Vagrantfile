@@ -17,8 +17,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #tag::synced-folders[]
     config.vm.synced_folder '../.',       '/opt/dev',            type: 'nfs'
     config.vm.synced_folder '/yum/repo',  '/var/www/html',       type: 'nfs'
-    config.vm.synced_folder '.',          '/tmp/vagrant',        type: 'nfs'                                                                     
     #end::synced-folders[]
+    config.vm.synced_folder '.',          '/tmp/vagrant',        type: 'nfs'                                                                
 
     #default VM settings
     #tag::vm-settings[]

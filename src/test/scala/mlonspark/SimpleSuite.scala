@@ -1,8 +1,10 @@
 package mlonspark
 
 import org.apache.spark.SparkFunSuite
+import org.apache.spark.mllib.util.MLlibTestSparkContext
+import org.apache.spark.sql.types.{ArrayType, IntegerType, StructField, StructType}
 
-class SimpleSuite extends SparkFunSuite{
+class SimpleSuite extends SparkFunSuite with MLlibTestSparkContext {
 
   private type ALSPartitioner = org.apache.spark.HashPartitioner
   test("partitioner") {
@@ -22,4 +24,30 @@ class SimpleSuite extends SparkFunSuite{
     x.zipWithIndex.map{case (v, idx) => v}.filter{_ => true}
 
   }
+
+  test("dataFrame") {
+    val spark = this.spark
+    import spark.implicits._
+    val dataset = Seq(
+      (1, .1),
+      (2, .2)
+    ).toDF("id", "rating")
+    val userFactors = Seq(
+      (1, Seq(1, 2, 3)),
+      (2, Seq(2, 3, 4)),
+      (3, Seq(3, 4, 5)),
+      (4, Seq(4, 5, 6))
+    ).toDF("id", "features")
+
+    dataset.join(userFactors, dataset("id") === userFactors("id"))
+      .select(met(dataset("id")))
+      .show()
+  }
+
+  import org.apache.spark.sql.functions._
+  val met = udf{(x: Int) => {
+    print("predict " + x)
+    x
+  }}
 }
+

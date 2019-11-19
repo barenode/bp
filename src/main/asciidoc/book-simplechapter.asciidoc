@@ -16,5 +16,6 @@
 :source-highlighter: pygments
 :pygments-style: manni
 :pygments-linenums-mode: inline
+:scala-dir: ../scala
           
-include::development-cluster.asciidoc[]
+include::development-als.asciidoc[]

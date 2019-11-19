@@ -1,18 +1,31 @@
 package mlonspark
 
 import org.apache.spark.ml.{Estimator, Model}
-import org.apache.spark.ml.param.{ParamMap, Params}
+import org.apache.spark.ml.param.{IntParam, ParamMap, ParamValidators, Params}
 import org.apache.spark.ml.param.shared.HasPredictionCol
 import org.apache.spark.ml.util.{DefaultParamsWritable, Identifiable, MLReadable, MLReader, MLWritable, MLWriter}
-import org.apache.spark.sql.Dataset
+import org.apache.spark.sql.{DataFrame, Dataset}
 import org.apache.spark.sql.types.StructType
 
 /**
  * AlternatingLeastSquareModelParams
  */
-private trait AlternatingLeastSquareModelParams
-  extends Params with HasPredictionCol
+//tag::params-def[]
+trait AlternatingLeastSquareModelParams
+  extends Params
+    with HasPredictionCol
+    //end::params-def[]
 {
+
+  /**
+   * Param for rank of the matrix factorization (positive).
+   * Default: 10
+   * @group param
+   */
+  //tag::params-rank[]
+  val rank = new IntParam(this, "rank", "rank of the factorization", ParamValidators.gtEq(1))
+  def getRank: Int = $(rank)
+  //end::params-rank[]
 }
 
 /**
@@ -20,8 +33,12 @@ private trait AlternatingLeastSquareModelParams
  *
  * @param uid
  */
+//tag::model-def[]
 class AlternatingLeastSquareModel(override val uid: String)
-  extends AlternatingLeastSquareModelParams with MLWritable
+  extends Model[AlternatingLeastSquareModel]
+    with AlternatingLeastSquareModelParams
+    with MLWritable
+    //end::model-def[]
 {
   import AlternatingLeastSquareModel._
 
@@ -30,6 +47,13 @@ class AlternatingLeastSquareModel(override val uid: String)
   override def copy(extra: ParamMap): AlternatingLeastSquareModel = defaultCopy(extra)
 
   override def write: MLWriter = new AlternatingLeastSquareModelWriter(this)
+
+  override def transform(dataset: Dataset[_]): DataFrame = {
+    dataset.select("*")
+  }
+  override def transformSchema(schema: StructType): StructType = {
+    schema
+  }
 }
 
 /**

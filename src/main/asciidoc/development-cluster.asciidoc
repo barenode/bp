@@ -61,17 +61,29 @@ Soubor Vagrantfile je uložen v podadresáři vagrant v kořenovém adresáři p
 include::../../../vagrant/Vagrantfile[tags=box-def]
 ----
 
+Atribut config.vm.box obsahuje definici boxu z kterého budou vytvořeny všechny nadefinované virtuální stroje. Tyto boxy jsou uloženy ve veřejném repositáři projektu Vagrant. Pŕi vztvoření prvního virtuálního stroje se tento box automaticky stáhne z příslušného repozitáře a následně se používá lokálně uložena kopie.
+
 [source, ruby, numbered]
 ----
 include::../../../vagrant/Vagrantfile[tags=synced-folders]
 ----
 
+Atributy config.vm.synced_folder obsahují definice sdílených adresářů. Dle této definice se adresáře ze souborového systému automaticky připojí na souborový systém virtuálních strojů. První definice připoji kořenový adresář projektu do adresáře /opt/dev virtuálních strojů. Tato definice požívá relativní cestu vzhledem k Vagrantfile souboru. Druhá definice pripojí lokalní Yum repozitař do adresáře /var/www/html virtuálních strojů. Soubory uložené v tomto adresáři jsou následně dostupné přes HTTP protokol a příslušné URL mohou být použité k definici jednotlivých Yum repozitářů na  virtuálních strojích.
+ 
 [source, ruby, numbered]
 ----
 include::../../../vagrant/Vagrantfile[tags=vm-settings]
 ----
 
+Sekce config.vm.provider obsahuje konfigurace specifické pro virtualizační platformu. V tomto případě instruujeme VirtualBox kolik operační paměti a jader procesoru má dát k dispozici jednotlivým virtuálním strojům.  
+
 [source, ruby, numbered]
 ----
-include::../../../vagrant/Vagrantfile[tags=c7202]
+include::../../../vagrant/Vagrantfile[tags=c7202]             
+----
+
+Sekce config.vm.define obsahuje definici virtuálního stroje c7202 viz <<cluster-topolgy>>. Pro tento virtální stroj defujeme pouze specifickou IP adresu a jméno hosta. Všechny ostatní paramtetry jsou nadefinovány globálně, společně pro všechny virtuálním stroje. Definice ostatních strojů je analogická k tomuto nastavení. Incializaci klastru spustíme z příkazové řádky relativne k deskriptou Vagrantfile:
+
+----
+  > vagrant up
 ----
