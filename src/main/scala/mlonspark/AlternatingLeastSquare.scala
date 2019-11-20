@@ -34,7 +34,11 @@ trait AlternatingLeastSquareModelParams
  * @param uid
  */
 //tag::model-def[]
-class AlternatingLeastSquareModel(override val uid: String)
+class AlternatingLeastSquareModel(
+    override val uid: String
+//    val userFactors: DataFrame,
+//    val itemFactors: DataFrame
+                                 )
   extends Model[AlternatingLeastSquareModel]
     with AlternatingLeastSquareModelParams
     with MLWritable

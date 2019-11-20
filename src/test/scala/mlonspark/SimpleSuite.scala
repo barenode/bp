@@ -39,9 +39,15 @@ class SimpleSuite extends SparkFunSuite with MLlibTestSparkContext {
       (4, Seq(4, 5, 6))
     ).toDF("id", "features")
 
-    dataset.join(userFactors, dataset("id") === userFactors("id"))
-      .select(met(dataset("id")))
-      .show()
+//    dataset.join(userFactors, dataset("id") === userFactors("id"))
+//      .select(met(dataset("id")))
+//      .show()
+
+    dataset.crossJoin(userFactors)
+      .as[(Int, Double, Int, Seq[Int])]
+      .map{ r => {
+        r._2
+    }}.show()
   }
 
   import org.apache.spark.sql.functions._
