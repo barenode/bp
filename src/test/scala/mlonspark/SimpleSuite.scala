@@ -25,6 +25,8 @@ class SimpleSuite extends SparkFunSuite with MLlibTestSparkContext {
 
   }
 
+  def gtw(vl : Int) : Int = vl
+
   test("dataFrame") {
     val spark = this.spark
     import spark.implicits._
@@ -39,6 +41,7 @@ class SimpleSuite extends SparkFunSuite with MLlibTestSparkContext {
       (4, Seq(4, 5, 6))
     ).toDF("id", "features")
 
+    val t = gtw(1)
 //    dataset.join(userFactors, dataset("id") === userFactors("id"))
 //      .select(met(dataset("id")))
 //      .show()
