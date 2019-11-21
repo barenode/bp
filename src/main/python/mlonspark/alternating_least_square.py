@@ -1,6 +1,9 @@
 import sys
 
-from pyspark.ml.util import MLReader, _jvm
+from pyspark import since, keyword_only
+from pyspark.ml.param.shared import *
+from pyspark.ml.util import JavaMLReadable, JavaMLWritable, MLReader
+from pyspark.ml.wrapper import JavaEstimator, JavaModel, JavaTransformer, _jvm, JavaParams
 
 class AlternatingLeastSquareModel(JavaModel, JavaMLReadable, JavaMLWritable):
 
@@ -15,7 +18,7 @@ class AlternatingLeastSquareModel(JavaModel, JavaMLReadable, JavaMLWritable):
         Meta-algorithms such as Pipeline should override this method as a classmethod.
         """
         # Generate a default new instance from the stage_name class.
-        py_type = BucketizerModel
+        py_type = AlternatingLeastSquareModel
         if issubclass(py_type, JavaParams):
             # Load information from java_stage to the instance.
             py_stage = py_type()
@@ -35,11 +38,15 @@ class AlternatingLeastSquare(JavaEstimator, JavaMLReadable, JavaMLWritable):
 
     _classpath = 'mlonspark.AlternatingLeastSquare'
 
+    userCol = Param(Params._dummy(), "userCol", "userCol", typeConverter=TypeConverters.toString)
+    itemCol = Param(Params._dummy(), "itemCol", "itemCol", typeConverter=TypeConverters.toString)
+    ratingCol = Param(Params._dummy(), "ratingCol", "ratingCol", typeConverter=TypeConverters.toString)
+
     @keyword_only
     def __init__(self):
-        super(Bucketizer, self).__init__()
+        super(AlternatingLeastSquare, self).__init__()
         self._java_obj = self._new_java_obj(
-            Bucketizer._classpath ,
+            AlternatingLeastSquare._classpath ,
             self.uid
         )
         kwargs = self._input_kwargs
@@ -49,6 +56,24 @@ class AlternatingLeastSquare(JavaEstimator, JavaMLReadable, JavaMLWritable):
     def setParams(self):
         kwargs = self._input_kwargs
         return self._set(**kwargs)
+
+    def setUserCol(self, value):
+        return self._set(userCol=value)
+
+    def getUserCol(self):
+        return self.getOrDefault(self.userCol)
+
+    def setItemCol(self, value):
+        return self._set(itemCol=value)
+
+    def getItemCol(self):
+        return self.getOrDefault(self.itemCol)
+
+    def setRatingCol(self, value):
+        return self._set(ratingCol=value)
+
+    def getRatingCol(self):
+        return self.getOrDefault(self.ratingCol)
 
     def _create_model(self, java_model):
         return AlternatingLeastSquareModel(java_model)
