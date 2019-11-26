@@ -398,6 +398,7 @@ object AlternatingLeastSquare {
     val blockRatings = partitionRatings(ratings, userPart, itemPart)
     blockRatings.persist(intermediateRDDStorageLevel)
     System.out.println("blockRatings: " + blockRatings.count())
+
     val (userInBlocks, userOutBlocks) =
       makeBlocks("user", blockRatings, userPart, itemPart, intermediateRDDStorageLevel)
     userOutBlocks.count()
@@ -428,7 +429,7 @@ object AlternatingLeastSquare {
       userFactors.setName(s"userFactors-$iter").persist(intermediateRDDStorageLevel)
       val previousItemFactors = itemFactors
       itemFactors = computeFactors(userFactors, userOutBlocks, itemInBlocks, rank, regParam,
-        userLocalIndexEncoder, true, alpha, solver)
+        userLocalIndexEncoder, alpha, solver)
       previousItemFactors.unpersist()
       itemFactors.setName(s"itemFactors-$iter").persist(intermediateRDDStorageLevel)
       // TODO: Generalize PeriodicGraphCheckpointer and use it here.
@@ -438,7 +439,7 @@ object AlternatingLeastSquare {
       ////      }
       val previousUserFactors = userFactors
       userFactors = computeFactors(itemFactors, itemOutBlocks, userInBlocks, rank, regParam,
-        itemLocalIndexEncoder, true, alpha, solver)
+        itemLocalIndexEncoder, alpha, solver)
       //      if (shouldCheckpoint(iter)) {
       //        ALS.cleanShuffleDependencies(sc, deps)
       //        deletePreviousCheckpointFile()
@@ -446,6 +447,7 @@ object AlternatingLeastSquare {
       //      }
       previousUserFactors.unpersist()
     }
+
     val userIdAndFactors = userInBlocks
       .mapValues(_.srcIds)
       .join(userFactors)
@@ -458,6 +460,9 @@ object AlternatingLeastSquare {
       }, preservesPartitioning = true)
       .setName("userFactors")
       .persist(finalRDDStorageLevel)
+    System.out.println("==============================================")
+    System.out.println(userIdAndFactors.toDebugString)
+    System.out.println("==============================================")
     val itemIdAndFactors = itemInBlocks
       .mapValues(_.srcIds)
       .join(itemFactors)
@@ -468,7 +473,7 @@ object AlternatingLeastSquare {
       }, preservesPartitioning = true)
       .setName("itemFactors")
       .persist(finalRDDStorageLevel)
-
+    System.out.println(itemIdAndFactors.toDebugString)
     (userIdAndFactors, itemIdAndFactors)
   }
 
@@ -479,12 +484,11 @@ object AlternatingLeastSquare {
     rank: Int,
     regParam: Double,
     srcEncoder: LocalIndexEncoder,
-    implicitPrefs: Boolean = false,
     alpha: Double = 1.0,
     solver: LeastSquaresNESolver): RDD[(Int, FactorBlock)] =
   {
     val numSrcBlocks = srcFactorBlocks.partitions.length
-    val YtY = if (implicitPrefs) Some(computeYtY(srcFactorBlocks, rank)) else None
+    val YtY = Some(computeYtY(srcFactorBlocks, rank))
     val srcOut = srcOutBlocks.join(srcFactorBlocks).flatMap {
       case (srcBlockId, (srcOutBlock, srcFactors)) =>
         srcOutBlock.view.zipWithIndex.map { case (activeIndices, dstBlockId) =>
@@ -503,35 +507,24 @@ object AlternatingLeastSquare {
         val ls = new NormalEquation(rank)
         while (j < dstIds.length) {
           ls.reset()
-          if (implicitPrefs) {
-            ls.merge(YtY.get)
-          }
+          ls.merge(YtY.get)
           var i = srcPtrs(j)
-          var numExplicits = 0
           while (i < srcPtrs(j + 1)) {
             val encoded = srcEncodedIndices(i)
             val blockId = srcEncoder.blockId(encoded)
             val localIndex = srcEncoder.localIndex(encoded)
             val srcFactor = sortedSrcFactors(blockId)(localIndex)
             val rating = ratings(i)
-            if (implicitPrefs) {
-              // Extension to the original paper to handle rating < 0. confidence is a function
-              // of |rating| instead so that it is never negative. c1 is confidence - 1.
-              val c1 = alpha * math.abs(rating)
-              // For rating <= 0, the corresponding preference is 0. So the second argument of add
-              // is only there for rating > 0.
-              if (rating > 0.0) {
-                numExplicits += 1
-              }
-              ls.add(srcFactor, if (rating > 0.0) 1.0 + c1 else 0.0, c1)
-            } else {
-              ls.add(srcFactor, rating)
-              numExplicits += 1
-            }
+            // Extension to the original paper to handle rating < 0. confidence is a function
+            // of |rating| instead so that it is never negative. c1 is confidence - 1.
+            val c1 = alpha * math.abs(rating)
+            // For rating <= 0, the corresponding preference is 0. So the second argument of add
+            // is only there for rating > 0.
+            ls.add(srcFactor, if (rating > 0.0) 1.0 + c1 else 0.0, c1)
             i += 1
           }
           // Weight lambda by the number of explicit ratings based on the ALS-WR paper.
-          dstFactors(j) = solver.solve(ls, numExplicits * regParam)
+          dstFactors(j) = solver.solve(ls, regParam)
           j += 1
         }
         dstFactors
@@ -573,28 +566,18 @@ object AlternatingLeastSquare {
     }
   }
 
-  private def partitionRatings(
-                                ratings: RDD[Rating],
-                                srcPart: Partitioner,
-                                dstPart: Partitioner): RDD[((Int, Int), RatingBlock)] =
+  private def partitionRatingsOrig(
+    ratings: RDD[Rating],
+    srcPart: Partitioner,
+    dstPart: Partitioner): RDD[((Int, Int), RatingBlock)] =
   {
     val numPartitions = srcPart.numPartitions * dstPart.numPartitions
-    System.out.println("srcPart.numPartitions: " + srcPart.numPartitions)
-    System.out.println("dstPart.numPartitions: " + dstPart.numPartitions)
-    System.out.println("numPartitions: " + numPartitions)
-    ratings.mapPartitions { iter =>
-      System.out.println("iter: " + iter)
+    val result = ratings.mapPartitions { iter =>
       val builders = Array.fill(numPartitions)(new RatingBlockBuilder)
       iter.flatMap { r =>
-        val tid = Thread.currentThread().getId
-        System.out.println(tid + "r: " + r)
         val srcBlockId = srcPart.getPartition(r.user)
-        System.out.println(tid + " srcBlockId: " + srcBlockId)
         val dstBlockId = dstPart.getPartition(r.item)
-        System.out.println(tid + " dstBlockId: " + dstBlockId)
         val idx = srcBlockId + srcPart.numPartitions * dstBlockId
-
-        //System.out.println(tid + " idx: " + idx)
         val builder = builders(idx)
         builder.add(r)
         if (builder.size >= 2048) { // 2048 * (3 * 4) = 24k
@@ -613,6 +596,26 @@ object AlternatingLeastSquare {
     }.groupByKey().mapValues { blocks =>
       val builder = new RatingBlockBuilder
       blocks.foreach(builder.merge)
+      builder.build()
+    }.setName("ratingBlocks")
+    System.out.println(result.toDebugString)
+    result
+  }
+
+  //tag::partitionRatings[]
+  private def partitionRatings(
+      ratings: RDD[Rating],
+      srcPart: Partitioner,
+      dstPart: Partitioner): RDD[((Int, Int), RatingBlock)] =
+  //end::partitionRatings[]
+  {
+    ratings.map{r =>
+      val srcBlockId = srcPart.getPartition(r.user)
+      val dstBlockId = dstPart.getPartition(r.item)
+      ((srcBlockId, dstBlockId), r)
+    }.groupByKey().mapValues { blockRatings =>
+      val builder = new RatingBlockBuilder
+      blockRatings.foreach(builder.add)
       builder.build()
     }.setName("ratingBlocks")
   }
@@ -711,9 +714,14 @@ object AlternatingLeastSquare {
 
   private type FactorBlock = Array[Array[Float]]
 
+  //tag::Rating[]
   case class Rating(user: Long, item: Long, rating: Float)
+  //end::Rating[]
 
-  case class RatingBlock(srcIds: Array[Long], dstIds: Array[Long], ratings: Array[Float]) {
+  //tag::RatingBlock[]
+  case class RatingBlock(srcIds: Array[Long], dstIds: Array[Long], ratings: Array[Float])
+  //end::RatingBlock[]
+  {
     /** Size of the block. */
     def size: Int = srcIds.length
 

@@ -20,3 +20,29 @@ include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=model-def]
 ----
 
 
+[source, scala]
+----
+include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=Rating]
+----
+
+Dle zadanych parametru rozdelime uzivatele do m bloku a polozky do n bloku. Cely dataset tedy bude rozdelen do nxm bloku. Vysledny dataset bude obsahovat radky s dvojicemi klic, hodnota. Klic bude dvojice hodnot, ktere budou identifikovat konkretni blok. Hodnota bude objekt typu RatingBlock.
+RatingBlock obsahuje tri pole, kde index polozky odpovida trojici hodnot zdrojove hodnoceni. Dale je zarucenu, ze vsechny hodnoceni daneho uzivatele pro danou polozku jsou v jedinem bloku.
+
+[source, scala]
+----
+include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=RatingBlock]
+---- 
+
+K rozdelelni pouzijeme org.apache.spark.HashPartitioner tento ma v konstruktoru pocet bloku na ktere je treba rozdeli vstupni data nasledne vydeli hash kod vstupniho objektu pioctem bloku. Zbytek po celociselnem delelni urcuje cilovy blok.      
+Dataset objektu typu Rating prevedeme do datasetu typu RatingBlock. RatingBlock obsahuje tri pole,  
+
+-----
+(2) ratingBlocks MapPartitionsRDD[3] at mapValues at AlternatingLeastSquare.scala:607 []
+ |  ShuffledRDD[2] at groupByKey at AlternatingLeastSquare.scala:607 []
+ +-(2) MapPartitionsRDD[1] at mapPartitions at AlternatingLeastSquare.scala:586 []
+    |  ParallelCollectionRDD[0] at parallelize at AlternatingLeastSquareSuite.scala:32 []
+-----
+
+
+
+
