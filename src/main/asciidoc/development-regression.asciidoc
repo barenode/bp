@@ -1,0 +1,14 @@
+
+==== Lineární regrese
+
+Pro výpočet lineární regrese zavedeme pomocnou třídu. Tato bude udržovat lineární systém v takzvaném normálním váženém stavu stem:[\left(X^TWX\right)\hat {\beta}=X^TWy]. Konkrétně si bude udržovat dvě komponenty. První z nich odpovídající výrazu stem:[\left(X^TWX\right)] je symetrická a bude uložena jako horní trojúhelníková matice. Druhá komponenta bude vektor odpovídající výrazu stem:[X^TWy]. Pro obe komponenty inicializujeme potřebné struktury na základě celočíselného ranku matice stem:[X] vyžádaného v konstruktoru třidy:
+
+.AlternatingLeastSquare.scala
+[source, scala, numbered]
+----
+include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=normal-eq-constructor]
+----
+
+
+     
+

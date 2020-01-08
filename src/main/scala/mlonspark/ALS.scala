@@ -825,8 +825,9 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
    *
    * \sum,,i,, c,,i,, a,,i,, a,,i,,^T^ x - b,,i,, a,,i,, + lambda * x = 0.
    */
+  //tag:normal-eq-constructor
   private[recommendation] class NormalEquation(val k: Int) extends Serializable {
-
+  //end:normal-eq-constructor
     /** Number of entries in the upper triangular part of a k-by-k matrix. */
     val triK = k * (k + 1) / 2
     /** A^T^ * A */

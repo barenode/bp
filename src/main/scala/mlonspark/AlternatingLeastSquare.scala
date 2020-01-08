@@ -295,14 +295,19 @@ object AlternatingLeastSquare {
    *
    * \sum,,i,, c,,i,, a,,i,, a,,i,,^T^ x - b,,i,, a,,i,, + lambda * x = 0.
    */
+  //tag::normal-eq-constructor[]
   private[mlonspark] class NormalEquation(val k: Int) extends Serializable {
+  //end::normal-eq-constructor[]
 
     /** Number of entries in the upper triangular part of a k-by-k matrix. */
+    /** ata: A^T^ * A */
+    /** atb: A^T^ * A */
+
+    //tag::normal-eq-fields[]
     val triK = k * (k + 1) / 2
-    /** A^T^ * A */
     val ata = new Array[Double](triK)
-    /** A^T^ * b */
     val atb = new Array[Double](k)
+    //end::normal-eq-fields[]
 
     private val da = new Array[Double](k)
     private val upper = "U"

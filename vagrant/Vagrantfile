@@ -1,8 +1,13 @@
+require 'json'
+
 # REQUIRED:
 #  vagrant plugin install vagrant-vbguest
 #
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
+
+topology = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'topology.json')))
+
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -32,6 +37,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision "shell", path: "./shell/ambari-agent.sh"  
     config.vm.provision "shell", path: "./shell/hadoop-rpm.sh"       
 
+if topology['topology'] == 'multinode' 
 #=begin
     # c7202
     #tag::c7202[]
@@ -53,6 +59,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         c7204.vm.network :private_network, ip: "192.168.72.104"
     end
 #=end
+end
 
     #c7201    
     config.vm.define :c7201 do |c7201|       
@@ -65,7 +72,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end        
         
         c7201.vm.provision "shell", path: "./shell/ambari-server.sh" 
-        c7201.vm.provision "shell", path: "./shell/ambari-multinode.sh" 
+        if topology['topology'] == 'multinode' 
+            c7201.vm.provision "shell", path: "./shell/ambari-multinode.sh"
+        else
+            c7201.vm.provision "shell", path: "./shell/ambari-singlenode.sh"
+        end 
         c7201.vm.provision "shell", path: "./shell/spark-env.sh"               
         c7201.vm.provision "shell", path: "./shell/asciidoctor.sh"  
         c7201.vm.provision "shell", path: "./shell/jupyter.sh"        
