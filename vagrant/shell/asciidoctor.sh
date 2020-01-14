@@ -34,6 +34,7 @@ yum install -y 'gdk-pixbuf2-devel'
 yum install -y 'libxml2-devel'
 yum install -y 'flex'
 yum install -y 'ruby'
+yum install -y 'pandoc'
 
 curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
 curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -

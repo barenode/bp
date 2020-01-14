@@ -72,3 +72,5 @@ conum:
   font_size: 10
   line_height: 4 / 3
   glyphs: circled
+image:
+  align: center
