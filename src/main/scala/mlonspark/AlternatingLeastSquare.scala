@@ -13,10 +13,11 @@ import org.apache.spark.ml.param._
 import org.apache.spark.ml.param.shared._
 import org.apache.spark.ml.util.{DefaultParamsWritable, Identifiable, MLReadable, MLReader, MLWritable, MLWriter}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.functions.{col, udf}
 import org.apache.spark.sql.{DataFrame, Dataset}
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.storage.StorageLevel
+import org.json4s.DefaultFormats
 
 import scala.collection.mutable
 import scala.util.{Sorting, Try}
@@ -34,17 +35,6 @@ trait AlternatingLeastSquareModelParams
     with HasSeed
     //end::params-def[]
 {
-
-  /**
-   * Param for rank of the matrix factorization (positive).
-   * Default: 10
-   * @group param
-   */
-  //tag::params-rank[]
-  val rank = new IntParam(this, "rank", "rank of the factorization", ParamValidators.gtEq(1))
-  def getRank: Int = $(rank)
-  //end::params-rank[]
-
   /**
    * Param for the column name for user ids. Ids must be integers. Other
    * numeric types are supported for this column, but will be cast to integers as long as they
@@ -125,6 +115,25 @@ trait AlternatingLeastSquareModelParams
   val numItemBlocks = new IntParam(this, "numItemBlocks", "number of item blocks",
     ParamValidators.gtEq(1))
   def getNumItemBlocks: Int = $(numItemBlocks)
+}
+
+trait AlternatingLeastSquareParams
+  extends AlternatingLeastSquareModelParams
+    with HasPredictionCol
+    with HasMaxIter
+    with HasRegParam
+    with HasSeed
+    //end::params-def[]
+{
+  /**
+   * Param for rank of the matrix factorization (positive).
+   * Default: 10
+   * @group param
+   */
+  //tag::params-rank[]
+    val rank = new IntParam(this, "rank", "rank of the factorization", ParamValidators.gtEq(1))
+    def getRank: Int = $(rank)
+  //end::params-rank[]
 
   setDefault(
     rank -> 10,
@@ -139,7 +148,6 @@ trait AlternatingLeastSquareModelParams
     intermediateStorageLevel -> "MEMORY_AND_DISK",
     finalStorageLevel -> "MEMORY_AND_DISK")
 }
-
 /**
  * AlternatingLeastSquareModel
  *
@@ -148,6 +156,7 @@ trait AlternatingLeastSquareModelParams
 //tag::model-def[]
 class AlternatingLeastSquareModel(
     override val uid: String,
+    val rank: Int,
     val userFactors: DataFrame,
     val itemFactors: DataFrame)
   extends Model[AlternatingLeastSquareModel]
@@ -161,8 +170,26 @@ class AlternatingLeastSquareModel(
 
   override def write: MLWriter = new AlternatingLeastSquareModelWriter(this)
 
+  private val predict = udf { (featuresA: Seq[Float], featuresB: Seq[Float]) =>
+    if (featuresA != null && featuresB != null) {
+      var dotProduct = 0.0f
+      var i = 0
+      while (i < rank) {
+        dotProduct += featuresA(i) * featuresB(i)
+        i += 1
+      }
+      dotProduct
+    } else {
+      Float.NaN
+    }
+  }
+
   override def transform(dataset: Dataset[_]): DataFrame = {
-    dataset.select("*")
+    val predictions = dataset
+      .join(userFactors, dataset($(userCol)) === userFactors("id"), "left")
+      .join(itemFactors, dataset($(itemCol)) === itemFactors("id"), "left")
+      .select(dataset("*"), predict(userFactors("features"), itemFactors("features")).as($(predictionCol)))
+    predictions
   }
 
   override def transformSchema(schema: StructType): StructType = {
@@ -207,11 +234,13 @@ object AlternatingLeastSquareModel
 
     override def load(path: String): AlternatingLeastSquareModel = {
       val metadata = DefaultParamsReader.loadMetadata(path, sc, className)
+      implicit val format = DefaultFormats
+      val rank = (metadata.metadata \ "rank").extract[Int]
       val userPath = new Path(path, "userFactors").toString
       val userFactors = sparkSession.read.format("parquet").load(userPath)
       val itemPath = new Path(path, "itemFactors").toString
       val itemFactors = sparkSession.read.format("parquet").load(itemPath)
-      val model = new AlternatingLeastSquareModel(metadata.uid, userFactors, itemFactors)
+      val model = new AlternatingLeastSquareModel(metadata.uid, rank, userFactors, itemFactors)
       DefaultParamsReader.getAndSetParams(model, metadata)
       model
     }
@@ -227,7 +256,7 @@ object AlternatingLeastSquareModel
  */
 class AlternatingLeastSquare(override val uid: String)
   extends Estimator[AlternatingLeastSquareModel]
-    with AlternatingLeastSquareModelParams
+    with AlternatingLeastSquareParams
     with DefaultParamsWritable
 {
   import mlonspark.AlternatingLeastSquare.Rating
@@ -270,7 +299,7 @@ class AlternatingLeastSquare(override val uid: String)
     val userDF = userFactors.toDF("id", "features")
     val itemDF = itemFactors.toDF("id", "features")
 
-    new AlternatingLeastSquareModel(uid, userDF, itemDF)
+    new AlternatingLeastSquareModel(uid, $(rank), userDF, itemDF)
   }
 
   override def copy(extra: ParamMap): AlternatingLeastSquare = defaultCopy(extra)
