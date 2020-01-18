@@ -3,7 +3,7 @@
     {
       "hadoop-env" : {
         "properties" : {          
-          "namenode_heapsize" : "3072m"          
+          "namenode_heapsize" : "2048m"          
         }
       }
     },     
@@ -12,6 +12,17 @@
         "properties": {
           "hadoop.proxyuser.root.groups": "*",
           "hadoop.proxyuser.root.hosts": "*"
+        }
+      }
+    },
+    {
+      "yarn-site": {
+        "properties": {
+          "yarn.nodemanager.resource.memory-mb" : "16720", 
+          "yarn.nodemanager.resource.cpu-vcores" : "10",
+          "yarn.scheduler.minimum-allocation-mb" : "512",
+          "yarn.scheduler.maximum-allocation-mb" : "2048",
+          "yarn.scheduler.maximum-allocation-vcores" : "2"           
         }
       }
     },

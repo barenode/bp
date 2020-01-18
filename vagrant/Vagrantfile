@@ -67,8 +67,8 @@ end
         c7201.vm.hostname = "c7201.barenode.org"
         
         c7201.vm.provider :virtualbox do |vb|
-          vb.customize ["modifyvm", :id, "--memory", 20216] 
-          vb.customize ["modifyvm", :id, "--cpus", 10] 
+          vb.customize ["modifyvm", :id, "--memory", 26216] 
+          vb.customize ["modifyvm", :id, "--cpus", 12] 
 #            vb.customize ["modifyvm", :id, "--memory", 8216] 
 #            vb.customize ["modifyvm", :id, "--cpus", 3] 
         end        
