@@ -1,0 +1,17 @@
+
+==  Apache Spark
+
+Apache Spark je unifikovany vypocetni system pro paralelni zpracovani dat na pocitacovych clusterech. Spark ma zabudovanou podporu pro radu siroce pouzivanych programovacich jazyku jako jsou Java, Python, C# a R. Spark dale nabizi jednotne, konzistentni API pro reseni rady rozdilnych ukolu jako je transformace dat, zpracovani datovych proudu, strojove uceni. Spark je dale schopny automaticky optimalizovat spustene programy tak aby se dosahlo maximalniho vykonu. V dobe tvorby teto prace je Apache Spark nejaktivneji vyvijenym open source projektem v teto oblasti s vice nez tisicem aktivnich vyvojaru. 
+
+Filozofie Sparku je rozdilna od predchazejicich platform pro zpracovani velkych objemu dat jako je napriklad Apache Hadoop. Apache Hadoop zahrnuje jak vypocetni system (MapReduce) tak i uloziste dat (HDFS). Obe tyto casti jsou spolu uzce provazane a je obtizne provozovat jednu cast bez te druhe. Ackoliv je mozne Spark bez problemu provozovat na HDFS neni na tomto uloznem systemu nijak zavisly a je mozne ho pouzivat spolu s sirokou paletou ruznych zdroju dat. Hlavni motivaci tohoto pristupu je, ze data, ktere je potreba analyzovat jsou jiz ulozena v ruznych formatech v ruznych uloznych systemech. Presouvani techto dat muze byt zejmena pri vyssich objemech financne narocne. Spark je proto postaven tak aby byl pristup k datum co nejvice trsnaparentni.
+
+Dalsi soucasti Sparku vedle jeho jadra je rada knihoven specializovanyvh pro ruzne aspekty analyzy dat. Tyto knihovny jsou jak standartni, distribuovane spolu se Sparkem, tak i knihovny vyvijene tretimi stranami v ramci open source komunit. Hlavnimi standartnimi knihovnami Apache Spark jsou Spark SQL pro podporu SQL dotazu a strukturovanych dat, MLlib pro strojove uceni, Structured Spark Streaming pro datove proudy a GraphX pro analyzu grafu [SDG].
+
+
+=== Spark Aplikace
+
+Spark aplikace se sklada z ridiciho procesu a sady vykonnych procesu. Ridici proces ja srdcem cele aplikace. Je zodpovedny za analyzu a distribuci ukolu jednotlivym vykonnych procesum. Dale udrzuje veskere spjate s danou apliaci. Vykonne procesy jsou zodpovedne za zpracovani ukolu, ktery jim priradi ridici proces a za reportovani stavu tohoto ukolu zpet ridicimu processu. Cluster pocitacu, ktere Spark vyuzije pro vykonani dane aplikace je rizeny cluster managerem. Tento manager ridi pristup k prostredkum clusteru a prirazuje jeho zdroje jednotlivym aplikacim. V ramci jednoho clusteru muze tedy bezet vice Spark aplikaci zaroven. Spark neni zavisly na jednom konkretnim cluster manageru, v dobe psani prace podporoval YARN, Mesos a vlastni takzvany Spark standalone cluster manager. Vyvojar Spark aplikace je odstineny od toho na jake ukoly bude aplikace rozdelena nebo na kterych pocitacich v ramci clustru budou tyto ukolly vykonany. O vse se transparente postara Spark spolu s pouzitym cluster manazerem.                                  
+
+==== Spusteni aplikace
+
+Aplikace samotna je typicky zkompilovana java knihovna obsahujici spustitelnou tridu. V teto chvili spoustime proces na klientskem pocitaci, tento proces kontaktuje prislusny cluster manager a zazada si o prostredky pro ridici proces. CLuste manager umisti ridici proces samotny na nektery z dostupnych pocitacu. Proces na klientskem pocitaci je dokoncen a aplikace je spustena. 

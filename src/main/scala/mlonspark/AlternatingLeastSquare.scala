@@ -190,7 +190,7 @@ class AlternatingLeastSquareModel(
       .join(userFactors, dataset($(userCol)) === userFactors("id"), "left")
       .join(itemFactors, dataset($(itemCol)) === itemFactors("id"), "left")
       .select(dataset("*"), predict(userFactors("features"), itemFactors("features")).as($(predictionCol)))
-    predictions
+    predictions.na.drop("all", Seq($(predictionCol)))
   }
 
   override def transformSchema(schema: StructType): StructType = {

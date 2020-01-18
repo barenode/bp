@@ -34,10 +34,12 @@ class AlternatingLeastSquareModel(JavaModel, JavaMLReadable, JavaMLWritable):
         return CustomJavaMLReader(cls, cls._classpath_model)
 
 
-class AlternatingLeastSquare(JavaEstimator, JavaMLReadable, JavaMLWritable):
+class AlternatingLeastSquare(JavaEstimator, JavaMLReadable, JavaMLWritable, HasMaxIter, HasPredictionCol, HasRegParam, HasSeed):
 
     _classpath = 'mlonspark.AlternatingLeastSquare'
 
+    rank = Param(Params._dummy(), "rank", "rank of the factorization",  typeConverter=TypeConverters.toInt)
+    alpha = Param(Params._dummy(), "alpha", "alpha for implicit preference", typeConverter=TypeConverters.toFloat)
     userCol = Param(Params._dummy(), "userCol", "userCol", typeConverter=TypeConverters.toString)
     itemCol = Param(Params._dummy(), "itemCol", "itemCol", typeConverter=TypeConverters.toString)
     ratingCol = Param(Params._dummy(), "ratingCol", "ratingCol", typeConverter=TypeConverters.toString)
