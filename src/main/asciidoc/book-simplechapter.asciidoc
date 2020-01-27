@@ -17,5 +17,8 @@
 :pygments-style: manni
 :pygments-linenums-mode: inline
 :scala-dir: ../scala
-          
-include::spark-introduction.asciidoc[]
+ 
+include::recommendation-implicit-als.asciidoc[]      
+include::als-2.asciidoc[]   
+include::development-regression.asciidoc[]
+

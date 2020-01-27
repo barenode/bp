@@ -15,20 +15,13 @@ Spark aplikace se sklada z ridiciho procesu a sady vykonnych procesu. Ridici pro
 
 ==== Odeslani aplikace
 
-Aplikace samotna je typicky zkompilovana java knihovna obsahujici spustitelnou tridu. V teto chvili spoustime proces na klientskem pocitaci, tento proces kontaktuje prislusny cluster manager a zazada si o prostredky pro ridici proces. Cluste manager umisti ridici proces samotny na nektery z dostupnych pocitacu. Proces na klientskem pocitaci je dokoncen a aplikace je spustena. Prubezny stav aplikace je mozne sledovat pomoci dotazu na prislusny cluster mamanazer.
+Aplikace samotna je typicky zkompilovana java knihovna obsahujici spustitelnou tridu. Zpusobu jak spustit aplikaci je mnoho, zakladni z nich je pouzit utilitu spark-submit z prikazove radky. V teto chvili spoustime proces na klientskem pocitaci, tento proces kontaktuje prislusny cluster manager a zazada si o prostredky pro ridici proces. Cluste manager umisti ridici proces samotny na nektery z dostupnych pocitacu. Proces spusteny z prikazove radky na klientskem pocitaci je dokoncen a aplikace je spustena. Prubezny stav aplikace je mozne sledovat pomoci dodatecnych dotazu na prislusny cluster mamanazer. 
 
-==== Spusteni aplikace 
-
-V teto fazi je ridici proces umisteny na nekterem uzlu v clusteru. Ridici proces nasledne spusti uzivatelsky kod (spustitelna trida v ramci odeslane JARu). Tento kod obsahuje incializaci Spark session. Spark session nasledne komuniku s cluster manazerem a vazada si spusteni jednotlivych vykonnych procesu. PO inicializaci a spusteni jednotlivych vykonnych procesu odesle cluster manazer relevantni informace o jejich umisteni zpet ridicimu procesu.
-
-==== Beh aplikace
+V teto fazi je ridici proces umisteny na nekterem uzlu v clusteru. Ridici proces nasledne spusti uzivatelsky kod (spustitelna trida v ramci odeslane JARu). Tento kod musi obsahovat incializaci tridy SparkSession. SparkSession nasledne komunikuje s cluster manazerem a vazada si spusteni jednotlivych vykonnych procesu. Po inicializaci a spusteni jednotlivych vykonnych procesu odesle cluster manazer relevantni informace o jejich umisteni zpet ridicimu procesu.
 
 V teto chvili mame inicializovany Spark cluster slozeny z jednoho ridiciho procesu a sady vykonnych procesu. Ridici proces prideluje jednotlive ukoly vykonnym procesum. Vykonne procesy komunikuji mezi sebou, vykonavaji ukoly a vymenuji is potrebna data. o dokonceni prideleneho ukolu reportuji vysledny status pzet ridicimu procesu.
 
-
-==== Dokonceni aplikace
-
-PO dokonceni behu aplikace, je ridici proces ukoncen s vyslednym stavem,. Cluster manager nasledne ukonci vsechny pridelene vykonne procesy. V teto chvili je mozne zjistit vysledny status dotazem na prislusny cluster manager.
+Po dokonceni behu aplikace, je ridici proces ukoncen s vyslednym stavem,. Cluster manager nasledne ukonci vsechny pridelene vykonne procesy. V teto chvili je mozne zjistit vysledny status dotazem na prislusny cluster manager.
 
 
 === Spark API

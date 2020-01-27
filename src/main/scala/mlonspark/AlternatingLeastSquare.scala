@@ -31,9 +31,6 @@ import scala.util.hashing.byteswap64
 trait AlternatingLeastSquareModelParams
   extends Params
     with HasPredictionCol
-    with HasMaxIter
-    with HasRegParam
-    with HasSeed
     //end::params-def[]
 {
   /**
@@ -57,6 +54,25 @@ trait AlternatingLeastSquareModelParams
   val itemCol = new Param[String](this, "itemCol", "column name for item ids. Ids must be within " +
     "the integer value range.")
   def getItemCol: String = $(itemCol)
+}
+
+trait AlternatingLeastSquareParams
+  extends AlternatingLeastSquareModelParams
+    with HasPredictionCol
+    with HasMaxIter
+    with HasRegParam
+    with HasSeed
+    //end::params-def[]
+{
+  /**
+   * Param for rank of the matrix factorization (positive).
+   * Default: 10
+   * @group param
+   */
+  //tag::params-rank[]
+    val rank = new IntParam(this, "rank", "rank of the factorization", ParamValidators.gtEq(1))
+    def getRank: Int = $(rank)
+  //end::params-rank[]
 
   /**
    * Param for the column name for ratings.
@@ -116,25 +132,6 @@ trait AlternatingLeastSquareModelParams
   val numItemBlocks = new IntParam(this, "numItemBlocks", "number of item blocks",
     ParamValidators.gtEq(1))
   def getNumItemBlocks: Int = $(numItemBlocks)
-}
-
-trait AlternatingLeastSquareParams
-  extends AlternatingLeastSquareModelParams
-    with HasPredictionCol
-    with HasMaxIter
-    with HasRegParam
-    with HasSeed
-    //end::params-def[]
-{
-  /**
-   * Param for rank of the matrix factorization (positive).
-   * Default: 10
-   * @group param
-   */
-  //tag::params-rank[]
-    val rank = new IntParam(this, "rank", "rank of the factorization", ParamValidators.gtEq(1))
-    def getRank: Int = $(rank)
-  //end::params-rank[]
 
   setDefault(
     rank -> 10,
@@ -158,8 +155,8 @@ trait AlternatingLeastSquareParams
 class AlternatingLeastSquareModel(
     override val uid: String,
     val rank: Int,
-    val userFactors: DataFrame,
-    val itemFactors: DataFrame)
+    @transient val userFactors: DataFrame,
+    @transient val itemFactors: DataFrame)
   extends Model[AlternatingLeastSquareModel]
     with AlternatingLeastSquareModelParams
     with MLWritable
@@ -167,7 +164,10 @@ class AlternatingLeastSquareModel(
 {
   import AlternatingLeastSquareModel._
 
-  override def copy(extra: ParamMap): AlternatingLeastSquareModel = defaultCopy(extra)
+  override def copy(extra: ParamMap): AlternatingLeastSquareModel = {
+    val copied = new AlternatingLeastSquareModel(uid, rank, userFactors, itemFactors)
+    copyValues(copied, extra).setParent(parent)
+  }
 
   override def write: MLWriter = new AlternatingLeastSquareModelWriter(this)
 

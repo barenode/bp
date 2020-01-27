@@ -1,0 +1,128 @@
+﻿:stem: latexmath
+:imagesdir: images
+
+==== ALS
+
+ALS z anglického názvu **Alternating square roots** volně přeloženo jako *střídavá metoda nejmenších čtverců*. Definujme matici stem:[R_{m,n}] kde stem:[m] určuje počet uživatelů a stem:[n] počet položek v katalogu. Elementy stem:[r_{ij} \in \mathbb{R}] matice stem:[R] definují ohodnocení uživatele stem:[i] položky stem:[j]. Předpokládáme, že matice stem:[R] je rozsáhlá ale zároveň velice řídká, většinou méně než 1 % polí má přiřazenou hodnotu. 
+
+[stem]
+++++
+\begin{align*}
+R_{m,n} =
+ \begin{pmatrix}
+  r_{1,1} & r_{1,2} & \cdots & r_{1,n} \\
+  r_{2,1} & r_{2,2} & \cdots & r_{2,n} \\
+  \vdots  & \vdots  & \ddots & \vdots  \\
+  r_{m,1} & r_{m,2} & \cdots & r_{m,n}
+ \end{pmatrix}
+\end{align*}
+++++ 
+
+Matici stem:[R] rozložíme na 2 matice stem:[U_{k,m}] a stem:[V_{k,n}] tak, že stem:[U^TV \approx R]. Matice obsahují sloupce pro každého uživatele resp. produkt. Řádky mají pouze několik hodnot stem:[k]. Každá hodnota odpovída latentní vlastnosti modelu. Každá hodnota v řádku odpovídá tomu nakolik jsou uživatelé a produkty spjaty s touto skrytou vlastností <<aas>>. Na rozdíl od stem:[R] je vysledná matice stem:[U^TV] hustá, doplněné hodnoty obsahují odhad ohodnocení mezi uživateli a položkami. 
+Soustava rovnic daná stem:[U^TV = R] nemá pravděpodobně řešení. Důvodem je příliš mnoho rovnic stem:[m] pro stem:[U] resp. stem:[n] pro stem:[V] a pouze stem:[k] neznámých. Řešením je použít metodu nejmenších čtverců, kdy hledáme řešení s minimální chybou.
+
+[stem]
+++++
+\begin{align*}
+\lVert R-U^TV \rVert_{2}
+\end{align*} 
+++++
+
+Vyjádříme řešení pro stem:[U] a stem:[V] zvlášť. Pro stem:[V], stem:[V=(UU^T)^{-1}UR]
+
+[stem]
+++++
+\begin{align*}
+ R &= U^TV \\
+ UR &= UU^TV \\
+ (UU^T)^{-1}UR &= V
+\end{align*}
+++++
+
+Pro stem:[U], stem:[U=(VV^T)^{-1}VR^T]
+
+[stem]
+++++
+\begin{align*}
+ R &= U^TV \\
+ R^T &= V^TU \\
+ VR^T &= VV^TU \\
+ (VV^T)^{-1}VR^T &= U
+\end{align*}
+++++
+
+Na začátku nastavíme hodnoty matice stem:[U] na náhodná malá čísla a spočítáme stem:[V]. Následně střídavě počítáme stem:[U] a stem:[V] do té doby, než se stabilizuje hodnota stem:[\lVert R-U^TV \rVert_{2}].
+
+===== Případová studie
+
+Mejme matici stem:[R_{11,8}] 
+
+[stem]
+++++
+\begin{align*}
+ \begin{pmatrix}
+  1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+  3 & 4 & 4 & 5 & 5 & 6 & 7 & 9 \\
+  1 & 8 & 2 & 7 & 3 & 6 & 4 & 5 \\
+  9 & 8 & 7 & 6 & 5 & 4 & 3 & 2 \\
+  9 & 4 & 8 & 3 & 7 & 2 & 6 & 1 \\
+  2 & 3 & 2 & 4 & 2 & 5 & 2 & 6 \\
+  3 & 4 & 3 & 4 & 4 & 3 & 4 & 3 \\
+  3 & 2 & 4 & 3 & 2 & 4 & 3 & 2 \\
+  5 & 5 & 4 & 4 & 6 & 6 & 2 & 2 \\
+  2 & 3 & 6 & 5 & 4 & 6 & 7 & 2 \\
+  1 & 6 & 5 & 3 & 8 & 2 & 3 & 9
+  \end{pmatrix} 
+\end{align*}
+++++
+
+Experimentálně nastavíme stem:[k] na stem:[2] a střídavě počítáme matice stem:[U_{2,11}] a stem:[V_{2,8}]. Z <<als-rmse>>. je patrné, že po stem:[10] iteracích se hodnota chyby stabilizuje na hodnotě stem:[1.328].
+
+[[als-rmse]]
+image::../src/main/python/figpath.svg[title="ALS", pdfwidth="100%"]
+
+Výsledná faktorizce stem:[U^TV]
+
+[stem]
+++++
+\begin{align*}
+ \begin{pmatrix}
+    1.01 & -0.4 \\
+    1.07 & -0.13 \\
+    0.87 & -0.03 \\
+    0.43 & 1.66 \\
+    0.29 & 1.77 \\
+    0.67 & -0.16 \\
+    0.51 & 0.43 \\
+    0.37 & 0.47 \\
+    0.49 & 0.87 \\
+    0.65 & 0.52 \\
+    0.91 & -0.06
+ \end{pmatrix} 
+ \begin{pmatrix}  
+    2.32 & 5.18 & 4.25 & 5.44 & 5.47 & 6.05 & 5.71 & 7.57 \\
+    4.51 & 2.39 & 3.47 & 1.62 & 2.41 & 0.98 & 1.37 & -1.12
+ \end{pmatrix} 
+\end{align*}
+++++
+
+Výsledná aproximovaná matice stem:[\hat{R} \approx U^TV]
+
+[stem]
+++++
+\begin{align*}
+ \begin{pmatrix}
+    0.51 & 4.24 & 2.87 & 4.81 & 4.53 & 5.68 & 5.19 & 8.07 \\
+    1.88 & 5.21 & 4.07 & 5.59 & 5.52 & 6.33 & 5.92 & 8.23 \\
+    1.88 & 4.44 & 3.59 & 4.69 & 4.69 & 5.23 & 4.93 & 6.63 \\
+    8.46 & 6.17 & 7.57 & 5.01 & 6.32 & 4.21 & 4.72 & 1.39 \\
+    8.67 & 5.75 & 7.4  & 4.46 & 5.86 & 3.51 & 4.11 & 0.23 \\
+    0.82 & 3.1  & 2.29 & 3.4  & 3.29 & 3.91 & 3.62 & 5.28 \\
+    3.12 & 3.66 & 3.65 & 3.46 & 3.81 & 3.49 & 3.49 & 3.36 \\
+    2.96 & 3.04 & 3.2  & 2.78 & 3.15 & 2.7  & 2.76 & 2.29 \\
+    5.05 & 4.61 & 5.09 & 4.07 & 4.76 & 3.81 & 3.99 & 2.73 \\
+    3.82 & 4.58 & 4.53 & 4.35 & 4.77 & 4.41 & 4.4  & 4.32 \\
+    1.86 & 4.59 & 3.68 & 4.87 & 4.86 & 5.47 & 5.14 & 6.98
+ \end{pmatrix} 
+\end{align*}
+++++

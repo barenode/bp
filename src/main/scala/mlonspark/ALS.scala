@@ -53,7 +53,7 @@ import org.apache.spark.util.random.XORShiftRandom
 /**
  * Common params for ALS and ALSModel.
  */
-private[recommendation] trait ALSModelParams extends Params with HasPredictionCol {
+private[recommendation] trait XALSModelParams extends Params with HasPredictionCol {
   /**
    * Param for the column name for user ids. Ids must be integers. Other
    * numeric types are supported for this column, but will be cast to integers as long as they
@@ -118,18 +118,18 @@ private[recommendation] trait ALSModelParams extends Params with HasPredictionCo
     "strategy for dealing with unknown or new users/items at prediction time. This may be " +
     "useful in cross-validation or production scenarios, for handling user/item ids the model " +
     "has not seen in the training data. Supported values: " +
-    s"${ALSModel.supportedColdStartStrategies.mkString(",")}.",
+    s"${XALSModel.supportedColdStartStrategies.mkString(",")}.",
     (s: String) =>
-      ALSModel.supportedColdStartStrategies.contains(s.toLowerCase(Locale.ROOT)))
+      XALSModel.supportedColdStartStrategies.contains(s.toLowerCase(Locale.ROOT)))
 
   /** @group expertGetParam */
   def getColdStartStrategy: String = $(coldStartStrategy).toLowerCase(Locale.ROOT)
 }
 
 /**
- * Common params for ALS.
+ * Common params for XALS.
  */
-private[recommendation] trait ALSParams extends ALSModelParams with HasMaxIter with HasRegParam
+private[recommendation] trait XALSParams extends XALSModelParams with HasMaxIter with HasRegParam
   with HasPredictionCol with HasCheckpointInterval with HasSeed {
 
   /**
@@ -221,14 +221,14 @@ private[recommendation] trait ALSParams extends ALSModelParams with HasMaxIter w
   def getIntermediateStorageLevel: String = $(intermediateStorageLevel)
 
   /**
-   * Param for StorageLevel for ALS model factors. Pass in a string representation of
+   * Param for StorageLevel for XALS model factors. Pass in a string representation of
    * `StorageLevel`.
    * Default: "MEMORY_AND_DISK".
    *
    * @group expertParam
    */
   val finalStorageLevel = new Param[String](this, "finalStorageLevel",
-    "StorageLevel for ALS model factors.",
+    "StorageLevel for XALS model factors.",
     (s: String) => Try(StorageLevel.fromString(s)).isSuccess)
 
   /** @group expertGetParam */
@@ -264,12 +264,12 @@ private[recommendation] trait ALSParams extends ALSModelParams with HasMaxIter w
  * @param itemFactors a DataFrame that stores item factors in two columns: `id` and `features`
  */
 @Since("1.3.0")
-class ALSModel private[ml] (
+class XALSModel private[ml] (
     @Since("1.4.0") override val uid: String,
     @Since("1.4.0") val rank: Int,
     @transient val userFactors: DataFrame,
     @transient val itemFactors: DataFrame)
-  extends Model[ALSModel] with ALSModelParams with MLWritable {
+  extends Model[XALSModel] with XALSModelParams with MLWritable {
 
   /** @group setParam */
   @Since("1.4.0")
@@ -313,9 +313,9 @@ class ALSModel private[ml] (
       .select(dataset("*"),
         predict(userFactors("features"), itemFactors("features")).as($(predictionCol)))
     getColdStartStrategy match {
-      case ALSModel.Drop =>
+      case XALSModel.Drop =>
         predictions.na.drop("all", Seq($(predictionCol)))
-      case ALSModel.NaN =>
+      case XALSModel.NaN =>
         predictions
     }
   }
@@ -329,13 +329,13 @@ class ALSModel private[ml] (
   }
 
   @Since("1.5.0")
-  override def copy(extra: ParamMap): ALSModel = {
-    val copied = new ALSModel(uid, rank, userFactors, itemFactors)
+  override def copy(extra: ParamMap): XALSModel = {
+    val copied = new XALSModel(uid, rank, userFactors, itemFactors)
     copyValues(copied, extra).setParent(parent)
   }
 
   @Since("1.6.0")
-  override def write: MLWriter = new ALSModel.ALSModelWriter(this)
+  override def write: MLWriter = new XALSModel.XALSModelWriter(this)
 
   /**
    * Returns top `numItems` items recommended for each user, for all users.
@@ -489,19 +489,19 @@ class ALSModel private[ml] (
 }
 
 @Since("1.6.0")
-object ALSModel extends MLReadable[ALSModel] {
+object XALSModel extends MLReadable[XALSModel] {
 
   private val NaN = "nan"
   private val Drop = "drop"
   private[recommendation] final val supportedColdStartStrategies = Array(NaN, Drop)
 
   @Since("1.6.0")
-  override def read: MLReader[ALSModel] = new ALSModelReader
+  override def read: MLReader[XALSModel] = new XALSModelReader
 
   @Since("1.6.0")
-  override def load(path: String): ALSModel = super.load(path)
+  override def load(path: String): XALSModel = super.load(path)
 
-  private[ALSModel] class ALSModelWriter(instance: ALSModel) extends MLWriter {
+  private[XALSModel] class XALSModelWriter(instance: XALSModel) extends MLWriter {
 
     override protected def saveImpl(path: String): Unit = {
       val extraMetadata = "rank" -> instance.rank
@@ -513,12 +513,12 @@ object ALSModel extends MLReadable[ALSModel] {
     }
   }
 
-  private class ALSModelReader extends MLReader[ALSModel] {
+  private class XALSModelReader extends MLReader[XALSModel] {
 
     /** Checked against metadata when loading model */
-    private val className = classOf[ALSModel].getName
+    private val className = classOf[XALSModel].getName
 
-    override def load(path: String): ALSModel = {
+    override def load(path: String): XALSModel = {
       val metadata = DefaultParamsReader.loadMetadata(path, sc, className)
       implicit val format = DefaultFormats
       val rank = (metadata.metadata \ "rank").extract[Int]
@@ -527,7 +527,7 @@ object ALSModel extends MLReadable[ALSModel] {
       val itemPath = new Path(path, "itemFactors").toString
       val itemFactors = sparkSession.read.format("parquet").load(itemPath)
 
-      val model = new ALSModel(metadata.uid, rank, userFactors, itemFactors)
+      val model = new XALSModel(metadata.uid, rank, userFactors, itemFactors)
 
       DefaultParamsReader.getAndSetParams(model, metadata)
       model
@@ -565,10 +565,10 @@ object ALSModel extends MLReadable[ALSModel] {
  * preferences rather than explicit ratings given to items.
  */
 @Since("1.3.0")
-class ALS(@Since("1.4.0") override val uid: String) extends Estimator[ALSModel] with ALSParams
+class XALS(@Since("1.4.0") override val uid: String) extends Estimator[XALSModel] with XALSParams
   with DefaultParamsWritable {
 
-  import org.apache.spark.ml.recommendation.ALS.Rating
+  import org.apache.spark.ml.recommendation.XALS.Rating
 
   @Since("1.4.0")
   def this() = this(Identifiable.randomUID("als"))
@@ -654,7 +654,7 @@ class ALS(@Since("1.4.0") override val uid: String) extends Estimator[ALSModel] 
   }
 
   @Since("2.0.0")
-  override def fit(dataset: Dataset[_]): ALSModel = {
+  override def fit(dataset: Dataset[_]): XALSModel = {
     transformSchema(dataset.schema)
     import dataset.sparkSession.implicits._
 
@@ -671,7 +671,7 @@ class ALS(@Since("1.4.0") override val uid: String) extends Estimator[ALSModel] 
       itemCol, ratingCol, predictionCol, maxIter, regParam, nonnegative, checkpointInterval,
       seed, intermediateStorageLevel, finalStorageLevel)
 
-    val (userFactors, itemFactors) = ALS.train(ratings, rank = $(rank),
+    val (userFactors, itemFactors) = XALS.train(ratings, rank = $(rank),
       numUserBlocks = $(numUserBlocks), numItemBlocks = $(numItemBlocks),
       maxIter = $(maxIter), regParam = $(regParam), implicitPrefs = $(implicitPrefs),
       alpha = $(alpha), nonnegative = $(nonnegative),
@@ -680,7 +680,7 @@ class ALS(@Since("1.4.0") override val uid: String) extends Estimator[ALSModel] 
       checkpointInterval = $(checkpointInterval), seed = $(seed))
     val userDF = userFactors.toDF("id", "features")
     val itemDF = itemFactors.toDF("id", "features")
-    val model = new ALSModel(uid, $(rank), userDF, itemDF).setParent(this)
+    val model = new XALSModel(uid, $(rank), userDF, itemDF).setParent(this)
     instr.logSuccess(model)
     copyValues(model)
   }
@@ -691,7 +691,7 @@ class ALS(@Since("1.4.0") override val uid: String) extends Estimator[ALSModel] 
   }
 
   @Since("1.5.0")
-  override def copy(extra: ParamMap): ALS = defaultCopy(extra)
+  override def copy(extra: ParamMap): XALS = defaultCopy(extra)
 }
 
 
@@ -704,7 +704,7 @@ class ALS(@Since("1.4.0") override val uid: String) extends Estimator[ALSModel] 
  * than 2 billion.
  */
 @DeveloperApi
-object ALS extends DefaultParamsReadable[ALS] with Logging {
+object XALS extends DefaultParamsReadable[XALS] with Logging {
 
   /**
    * :: DeveloperApi ::
@@ -714,7 +714,7 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
   case class Rating[@specialized(Int, Long) ID](user: ID, item: ID, rating: Float)
 
   @Since("1.6.0")
-  override def load(path: String): ALS = super.load(path)
+  override def load(path: String): XALS = super.load(path)
 
   /** Trait for least squares solvers applied to the normal equation. */
   private[recommendation] trait LeastSquaresNESolver extends Serializable {
@@ -923,8 +923,8 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
     val sc = ratings.sparkContext
 
     // Precompute the rating dependencies of each partition
-    val userPart = new ALSPartitioner(numUserBlocks)
-    val itemPart = new ALSPartitioner(numItemBlocks)
+    val userPart = new XALSPartitioner(numUserBlocks)
+    val itemPart = new XALSPartitioner(numItemBlocks)
     val blockRatings = partitionRatings(ratings, userPart, itemPart)
       .persist(intermediateRDDStorageLevel)
     val (userInBlocks, userOutBlocks) =
@@ -983,7 +983,7 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
         userFactors = computeFactors(itemFactors, itemOutBlocks, userInBlocks, rank, regParam,
           itemLocalIndexEncoder, implicitPrefs, alpha, solver)
         if (shouldCheckpoint(iter)) {
-          ALS.cleanShuffleDependencies(sc, deps)
+          XALS.cleanShuffleDependencies(sc, deps)
           deletePreviousCheckpointFile()
           previousCheckpointFile = itemFactors.getCheckpointFile
         }
@@ -997,7 +997,7 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
           val deps = itemFactors.dependencies
           itemFactors.checkpoint()
           itemFactors.count() // checkpoint item factors and cut lineage
-          ALS.cleanShuffleDependencies(sc, deps)
+          XALS.cleanShuffleDependencies(sc, deps)
           deletePreviousCheckpointFile()
           previousCheckpointFile = itemFactors.getCheckpointFile
         }
@@ -1589,7 +1589,7 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
           "Converting to local indices took " + (System.nanoTime() - start) / 1e9 + " seconds.")
         val dstLocalIndices = dstIds.map(dstIdToLocalIndex.apply)
         (srcBlockId, (dstBlockId, srcIds, dstLocalIndices, ratings))
-    }.groupByKey(new ALSPartitioner(srcPart.numPartitions))
+    }.groupByKey(new XALSPartitioner(srcPart.numPartitions))
       .mapValues { iter =>
         val builder =
           new UncompressedInBlockBuilder[ID](new LocalIndexEncoder(dstPart.numPartitions))
@@ -1657,7 +1657,7 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
           (dstBlockId, (srcBlockId, activeIndices.map(idx => srcFactors(idx))))
         }
     }
-    val merged = srcOut.groupByKey(new ALSPartitioner(dstInBlocks.partitions.length))
+    val merged = srcOut.groupByKey(new XALSPartitioner(dstInBlocks.partitions.length))
     dstInBlocks.join(merged).mapValues {
       case (InBlock(dstIds, srcPtrs, srcEncodedIndices, ratings), srcFactors) =>
         val sortedSrcFactors = new Array[FactorBlock](numSrcBlocks)
@@ -1759,7 +1759,7 @@ object ALS extends DefaultParamsReadable[ALS] with Logging {
    * we have getPartition(getPartition(k)) = getPartition(k). Since the default HashPartitioner
    * satisfies this requirement, we simply use a type alias here.
    */
-  private[recommendation] type ALSPartitioner = org.apache.spark.HashPartitioner
+  private[recommendation] type XALSPartitioner = org.apache.spark.HashPartitioner
 
   /**
    * Private function to clean up all of the shuffles files from the dependencies and their parents.

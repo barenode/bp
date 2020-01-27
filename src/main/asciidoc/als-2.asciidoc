@@ -1,36 +1,63 @@
-Autori [X] rozšíøili popsanı algoritmus tak aby se vıpoèet del efektivnì distribuovat. Hodnoty jednotlivıch hodnocení r byly nahrazeny odvozenou binární promìnnou p tak, e platí"
+ï»¿
+Autori [X] rozÅ¡Ã­Å™ili popsanÃ½ algoritmus tak aby se vÃ½poÄet del efektivnÄ› distribuovat. Hodnoty jednotlivÃ½ch hodnocenÃ­ stem:[r_{ui}] byly nahrazeny odvozenou binÃ¡rnÃ­ promÄ›nnou stem:[p_{ui}] tak, Å¾e platÃ­:
 
-==
-p binary
-==
+[stem]
+++++
+\begin{align*}
+ \begin{equation}
+ p_{ui}=
+  \begin{cases}
+   0 & r_{ui}=0 \\
+   1 & r_{ui}>0
+  \end{cases}
+ \end{equation}
+\end{align*}
+++++
 
+Tedy pokud uzivatel dosud polozku 'nezkonzumoval' promenna nabÃ½vÃ¡ hodnotu v opeÄnÃ©m pÅ™ipadÄ› hodnotu stem:[1]. DÅ¯vÄ›ra v tuto hodnotu je vysoce promÄ›nlivÃ¡. Jak jiÅ¾ bylo Å™eÄeno pro nulovÃ© hodnoty to mÅ¯Å¾e znamenat, Å¾e uÅ¾ivatel o poloÅ¾ce zatÃ­m nevÃ­. Pro souPlatÃ­ tedy:
 
-Tedy pokud uzivatel dosud polozku 'nezkonzumoval' promenna nabıvá hodnotu v opeèném pøipadì hodnotu 1. Dùvìra v tuto hodnotu je vysoce promìnlivá. Jak ji bylo øeèeno pro nulové hodnoty to mùe znamenat, e uivatel o poloce zatím neví. Dále pokud èim je poèet konzumací vyšsí tím více narùstá dùvìra v hodnotu p=1. Autoøi èlánku vyjádøili dùvìru v hodnotu p následovnì:
+[stem]
+++++
+p_{ui}=x_{u}^Ty_{i}  
+++++
 
---
-cui = 1 + arui
---
+DÃ¡le pokud Äim je poÄet konzumacÃ­ vyÅ¡sÃ­ tÃ­m vÃ­ce narÅ¯stÃ¡ dÅ¯vÄ›ra v hodnotu stem:[p_{ui}=1]. AutoÅ™i ÄlÃ¡nku vyjÃ¡dÅ™ili dÅ¯vÄ›ru v hodnotu stem:[p_{ui}] nÃ¡sledovnÄ›:
 
-Existuje tedy minimální dùvìra 1 pro zatim nezkonzumované poloky. Hodnota promìnné lineárnì narùstá s poètem uití produktu. Pomìr nárustu je dán konstantou a, pøesná hodnota tohoto paramteru je specifická pro konkrétní dataset a bude odvozena pomocí køíove validace v rámci experimentální fáze této práce. Hodnotu promìnné c pro kombionaci konkrétního uivatele a produktu pøevedeme do diagonální matice nxn Cu. V rovnici bude tato matice figurovat jako váhy. Tedy:
+[stem]
+++++
+c_{ui} = 1 + \alpha r_{ui}
+++++
 
---
- CuYxu = Cupu 
---
+Existuje tedy minimÃ¡lnÃ­ dÅ¯vÄ›ra stem:[1] pro zatim nezkonzumovanÃ© poloÅ¾ky. Hodnota promÄ›nnÃ© lineÃ¡rnÄ› narÅ¯stÃ¡ s poÄtem uÅ¾itÃ­ produktu. PomÄ›r nÃ¡rustu je dÃ¡n konstantou stem:[\alpha], pÅ™esnÃ¡ hodnota tohoto paramteru je specifickÃ¡ pro konkrÃ©tnÃ­ dataset a bude odvozena v rÃ¡mci experimentÃ¡lnÃ­ fÃ¡ze. Pro kazdeho uÅ¾ivatele mÃ¡me k dispozici stem:[i] hodnotu stem:[c], jednu pro kazdou polozku. Tyto hodnoty prevedeme do diagonÃ¡lnÃ­ matice stem:[C_{u}] s rozmery stem:[ixi]. V rovnici bude tato matice figurovat jako vÃ¡hy. Tedy:
 
-Rovnici násobíme transpozicí polokové faktorové matice. Tímot rovnici pøevedem do normální váené formy. 
+[stem]
+++++
+ C_{u}Yx_{u} = C_{u}p_{u}
+++++
 
---
- YtCuYxu = YtCupu
---  
+Rovnici nÃ¡sobÃ­me transpozicÃ­ poloÅ¾kovÃ© faktorovÃ© matice. TÃ­mot rovnici pÅ™evedem do normÃ¡lnÃ­ vÃ¡Å¾enÃ© formy. 
 
-Osamostatníme vektor faktoru uivatele a pøidáme regulariza%cní parametr viz <<REGULACE>>. Vısledna rovnice, která vyjadøuje vıpoèet faktoru pro jediného uyivatele odpovida
+[stem]
+++++
+ Y^TC_{u}Yx_{u} = Y^TC_{u}p_{u}
+++++  
 
---
- xu = (YtCuY + lambdaI)-1YtCupu
---    
+OsamostatnÃ­me vektor faktoru uÅ¾ivatele a pÅ™idÃ¡me regulariza%cnÃ­ parametr viz <<REGULACE>>. VÃ½sledna rovnice, kterÃ¡ vyjadÅ™uje vÃ½poÄet faktoru pro jedinÃ©ho uyivatele odpovida
+
+[stem]
+++++
+ x_{u} = (Y^TC_{u}Y + \lambda I)^{-1}Y^TC_{u}p_{u}
+++++    
      
-Problem pri vypoctu je vyraz YtCuY. Zde by se muselo opakovane provadet nasobeni matic pro kazdeho uzivatele a kompletni matici faktorù produktù. Tato matice je v rámci distribuovaného vzpoètu tzpicky rozdìlena na více vŸpoèetních uzlù. Autori clanku vyresili problem elegantne, kdy vyraz YtCuY upravili na vyraz YtY+Yt(Cu-I)Y. Zde nejprev predpocitame YtY a nasledne pricitame pro kazdeho uzivatele Yt(Cu-I)Y. Zde nam ale z vypoctu vypadnou vsechny produkty, ktere nemaji pro daneho uzivatele zadne hodnoceni - tyot maji v diagonalni matici Cu hodnotu 1 (viz vyraz cui = 1 + arui) a odectenim jednotkove matice ziskame matici kde jsou v radku same nuly. Stejne se zjednodusi i vyraz YtCupu, kde take neresime chybejici hodnoceni pro ktere obsahuje vektor pu nulove hodnoty. V ramci distrubovaneho vypoctu muzeme drzet pri vypoctu hodnoceni a faktorove matice na jednom vypocetnim uzlu a provadet vypocty lokalne.    
+Problem pri vypoctu je vyraz stem:[Y^TC_{u}Y]. Zde by se muselo opakovane provadet pro kazdeho uzivatele nasobeni produktove fakrotove matice a diagonalni matice s preferencemi daneho uzivatele. Fakrotove matice je v rÃ¡mci distribuovanÃ©ho vzpoÄtu typicky rozdÄ›lena na vÃ­ce vypoÄetnÃ­ch uzlÅ¯ a jeji nasobenio vyzaduje vymeny bloku dat v ramci celeho vypocetniho clusteru. Autori clanku vyresili tento problem elegantne. Vyraz stem:[Y^TC_{u}Y] prevedli na vyraz: 
+
+[stem]
+++++
+Y^TY+Y^T(C_{u}-I)Y 
+++++
+  
+Zde nejprev predpocitame stem:[Y^TY] a nasledne pricitame pro kazdeho uzivatele stem:[Y^T(C_{u}-I)Y]. Zde nam z vypoctu vypadnou vsechny produkty, ktere nemaji pro daneho uzivatele zadne hodnoceni - tyot maji v diagonalni matici stem:[C_{u}] hodnotu stem:[1] (stem:[c_{ui} = 1 + \alpha r_{ui}]) a odectenim jednotkove matice ziskame matici kde jsou v prislusnych radcich same nuly. Stejne pripad je i vyraz stem:[Y^TC_{u}p_{u}], kde take neresime chybejici hodnoceni pro ktere obsahuje vektor pu nulove hodnoty. V ramci distrubovaneho vypoctu muzeme drzet pri vypoctu hodnoceni a faktorove matice na jednom vypocetnim uzlu a provadet vypocty lokalne.    
     
    
-konzumace = uití
+konzumace = uÅ¾itÃ­
 

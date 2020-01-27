@@ -10,5 +10,12 @@ include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=normal-eq-const
 ----
 
 
+.AlternatingLeastSquare.scala
+[source, scala, numbered]
+----
+include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=normal-eq-constructor]
+----
+
+
      
 
