@@ -1599,6 +1599,7 @@ object XALS extends DefaultParamsReadable[XALS] with Logging {
         builder.build().compress()
       }.setName(prefix + "InBlocks")
       .persist(storageLevel)
+
     val outBlocks = inBlocks.mapValues { case InBlock(srcIds, dstPtrs, dstEncodedIndices, _) =>
       val encoder = new LocalIndexEncoder(dstPart.numPartitions)
       val activeIds = Array.fill(dstPart.numPartitions)(mutable.ArrayBuilder.make[Int])

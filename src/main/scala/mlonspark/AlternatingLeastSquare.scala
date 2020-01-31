@@ -532,6 +532,7 @@ object AlternatingLeastSquare {
         }
     }
     val merged = srcOut.groupByKey(new ALSPartitioner(dstInBlocks.partitions.length))
+
     dstInBlocks.join(merged).mapValues {
       case (InBlock(dstIds, srcPtrs, srcEncodedIndices, ratings), srcFactors) =>
         val sortedSrcFactors = new Array[FactorBlock](numSrcBlocks)
@@ -669,32 +670,28 @@ object AlternatingLeastSquare {
         val tid = Thread.currentThread().getId
         System.out.println(tid + " BLOCK " + srcBlockId + "|" + dstBlockId)
         // The implementation is a faster version of
-        // val dstIdToLocalIndex = dstIds.toSet.toSeq.sorted.zipWithIndex.toMap
-        val start = System.nanoTime()
-        val dstIdSet = new OpenHashSet[Long](1 << 20)
-        dstIds.foreach(dstIdSet.add)
-        val sortedDstIds = new Array[Long](dstIdSet.size)
-        var i = 0
-        var pos = dstIdSet.nextPos(0)
-        while (pos != -1) {
-          sortedDstIds(i) = dstIdSet.getValue(pos)
-          pos = dstIdSet.nextPos(pos + 1)
-          i += 1
-        }
-        assert(i == dstIdSet.size)
-        Sorting.quickSort(sortedDstIds)
-        val dstIdToLocalIndex = new OpenHashMap[Long, Int](sortedDstIds.length)
-        i = 0
-        while (i < sortedDstIds.length) {
-          dstIdToLocalIndex.update(sortedDstIds(i), i)
-          i += 1
-        }
-        System.out.println(
-          "Converting to local indices took " + (System.nanoTime() - start) / 1e9 + " seconds.")
+        val dstIdToLocalIndex = dstIds.toSet.toSeq.sorted.zipWithIndex.toMap
+
+//        val start = System.nanoTime()
+//        val dstIdSet = new OpenHashSet[Long](1 << 20)
+//        dstIds.foreach(dstIdSet.add)
+//        val sortedDstIds = new Array[Long](dstIdSet.size)
+//        var i = 0
+//        var pos = dstIdSet.nextPos(0)
+//        while (pos != -1) {
+//          sortedDstIds(i) = dstIdSet.getValue(pos)
+//          pos = dstIdSet.nextPos(pos + 1)
+//          i += 1
+//        }
+//        assert(i == dstIdSet.size)
+//        Sorting.quickSort(sortedDstIds)
+//        val dstIdToLocalIndex = new OpenHashMap[Long, Int](sortedDstIds.length)
+//        i = 0
+//        while (i < sortedDstIds.length) {
+//          dstIdToLocalIndex.update(sortedDstIds(i), i)
+//          i += 1
+//        }
         val dstLocalIndices = dstIds.map(dstIdToLocalIndex.apply)
-        System.out.println(" " + tid + " dstIdSet " + dstIdSet.iterator.mkString(" "))
-        System.out.println(" " + tid + " srcIds " + srcIds.deep.mkString(" "))
-        System.out.println(" " + tid + " dstLocalIndices " + dstLocalIndices.deep.mkString(" "))
         (srcBlockId, (dstBlockId, srcIds, dstLocalIndices, ratings))
     }.groupByKey(new ALSPartitioner(srcPart.numPartitions))
       .mapValues { iter =>
@@ -744,7 +741,7 @@ object AlternatingLeastSquare {
     (inBlocks, outBlocks)
   }
 
-  private type ALSPartitioner = org.apache.spark.HashPartitioner
+  type ALSPartitioner = org.apache.spark.HashPartitioner
 
   private type OutBlock = Array[Array[Int]]
 
