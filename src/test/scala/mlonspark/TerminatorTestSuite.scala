@@ -5,8 +5,10 @@ import mlonspark.util.SortDataFormat
 import org.apache.spark.SparkFunSuite
 import org.apache.spark.ml.util.DefaultReadWriteTest
 import org.apache.spark.mllib.util.MLlibTestSparkContext
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.util.Utils
 
-class TerminatorTestSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest {
+class TerminatorTestSuite extends SparkFunSuite with CustomTestSparkContext with DefaultReadWriteTest {
 
   test("test") {
     val rdd = spark.sparkContext.parallelize(Seq(
