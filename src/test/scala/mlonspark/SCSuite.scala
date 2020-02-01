@@ -4,6 +4,7 @@ import org.apache.spark.SparkFunSuite
 import org.apache.spark.internal.Logging
 import org.apache.spark.ml.util.DefaultReadWriteTest
 import org.apache.spark.mllib.util.MLlibTestSparkContext
+import org.apache.spark.rdd.RDD
 
 class SCSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadWriteTest with Logging {
 
@@ -39,5 +40,44 @@ class SCSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadW
     rmd.foreach(f => {
       System.out.println("" + f);
     })
+  }
+
+  test("group") {
+    val seq = Seq(
+      (1, 1),
+      (1, 2),
+      (2, 2),
+      (3, 2),
+      (3, 1),
+      (4, 5)
+    )
+
+    val seq2 = Seq(
+      (1, 1),
+      (1, 2),
+      (2, 2),
+      (3, 2),
+      (3, 1),
+      (4, 5)
+    )
+    val rdd1 = spark.sparkContext.parallelize(seq)
+    val rdd2 = spark.sparkContext.parallelize(seq2)
+
+    var rdd = rdd1.join(rdd2)
+
+    print(rdd.collect().mkString("\n"))
+    println("---------------------------------------------")
+    print(
+      rdd.groupByKey()
+        .flatMap{
+          case(k, v)=>v
+        }
+        .collect()
+        .mkString("\n"))
+
+//    rdd.map {
+//      case (key, (v1, v2)) =>
+//        (key, v2)
+//    }
   }
 }
