@@ -26,6 +26,11 @@ Po dokonceni behu aplikace, je ridici proces ukoncen s vyslednym stavem,. Cluste
 
 === Spark API
 
+==== RDD
+
+RDD (Resilient Distributed Dataset) je zakladni konstrukt Spark API. Predstavuje nemennou kolekci zaznamu, rozdelelnou do casti, ktere mohou byt parallelne zpracovany. Tyto casti takzvane partitions jsou typicky rozlozene na vice uzlu v ramci vypocetniho clustru. Jednotlive zaznamy jsou klasicke Java, Python nebo Scala objekty. Pri operaci nad danym RDD je kazda partititon zpracovana prave jednim vykonym procesem.  
+
+
 ==== DataFrames
 
 DataFrame je konstrukt Spark API, ktery reprezentuje tabulku slozenou z radku a sloupcu. Tato tabulka se muze rozkladat na desitkach pocitacu v ramci clusteru. Duvod ulozeni dat na vice pocitacu je zrejmy, bud jsou data prilis velka aby je bylo mozne ulozit na jediny pocitac, nebo je k jejich zpracovani potrebny vetsi vykon. Toto API bylo pridano do Sparku v ramci druhe generace. Stejny koncept, ackoliv omezeny na jediny pocitac, pouzivaji API jako Python Pandas nebo R DataFrames. Toto usadnuje pouzivani Sparku se znalostmi techto API, napriklad jako doplmnujici nastroj pro praci s velkymi objemy dat.
