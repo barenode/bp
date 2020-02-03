@@ -381,9 +381,7 @@ class HashPartitioner(partitions: Int) extends org.apache.spark.Partitioner {
   override def numPartitions: Int = partitions
 
   override def getPartition(key: Any): Int = {
-    //tag::params-def[]
     Math.abs(key.hashCode % partitions)
-    //end::params-def[]
   }
 }
 
