@@ -28,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #default VM settings
     #tag::vm-settings[]
     config.vm.provider :virtualbox do |vb|
-        vb.customize ["modifyvm", :id, "--memory", 5120] 
+        vb.customize ["modifyvm", :id, "--memory", 6120] 
         vb.customize ["modifyvm", :id, "--cpus", 2] 
     end
     #end::vm-settings[]
@@ -44,6 +44,7 @@ if topology['topology'] == 'multinode'
     config.vm.define :c7202 do |c7202|
         c7202.vm.hostname = "c7202.barenode.org"
         c7202.vm.network :private_network, ip: "192.168.72.102"
+        c7202.vm.synced_folder '/data/2', '/hadoop/hdfs',        type: 'nfs' 
     end
     #end::c7202[]
 
@@ -51,12 +52,14 @@ if topology['topology'] == 'multinode'
     config.vm.define :c7203 do |c7203|
         c7203.vm.hostname = "c7203.barenode.org"
         c7203.vm.network :private_network, ip: "192.168.72.103"
+        c7203.vm.synced_folder '/data/3', '/hadoop/hdfs',        type: 'nfs' 
     end
 
     # c7204
     config.vm.define :c7204 do |c7204|
         c7204.vm.hostname = "c7204.barenode.org"
         c7204.vm.network :private_network, ip: "192.168.72.104"
+        c7204.vm.synced_folder '/data/4', '/hadoop/hdfs',        type: 'nfs'   
     end
 #=end
 end
@@ -65,12 +68,13 @@ end
     config.vm.define :c7201 do |c7201|       
         c7201.vm.network :private_network, ip: "192.168.72.101"
         c7201.vm.hostname = "c7201.barenode.org"
-        
+        c7201.vm.synced_folder '/data/1', '/hadoop/hdfs',        type: 'nfs'   
+                                             
         c7201.vm.provider :virtualbox do |vb|
-          vb.customize ["modifyvm", :id, "--memory", 26216] 
-          vb.customize ["modifyvm", :id, "--cpus", 12] 
-#            vb.customize ["modifyvm", :id, "--memory", 8216] 
-#            vb.customize ["modifyvm", :id, "--cpus", 3] 
+#          vb.customize ["modifyvm", :id, "--memory", 26216] 
+#          vb.customize ["modifyvm", :id, "--cpus", 12] 
+          vb.customize ["modifyvm", :id, "--memory", 6216] 
+          vb.customize ["modifyvm", :id, "--cpus", 3] 
         end        
         
         c7201.vm.provision "shell", path: "./shell/ambari-server.sh" 
@@ -80,8 +84,8 @@ end
             c7201.vm.provision "shell", path: "./shell/ambari-singlenode.sh"
         end 
         c7201.vm.provision "shell", path: "./shell/spark-env.sh"               
-        c7201.vm.provision "shell", path: "./shell/asciidoctor.sh"  
-        c7201.vm.provision "shell", path: "./shell/jupyter.sh"        
+#        c7201.vm.provision "shell", path: "./shell/asciidoctor.sh"  
+#        c7201.vm.provision "shell", path: "./shell/jupyter.sh"        
     end 
     
       

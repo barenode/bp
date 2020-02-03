@@ -280,13 +280,31 @@ class AlternatingLeastSquare(override val uid: String)
   override def fit(dataset: Dataset[_]): AlternatingLeastSquareModel = {
     import dataset.sparkSession.implicits._
 
+//    val ratings = dataset
+//      .select(col($(userCol)), col($(itemCol)), col($(ratingCol))).rdd
+//      .map { row =>
+//        Rating(row.getInt(0), row.getInt(1), row.getFloat(2))
+//      }
+
+//    val (userFactors, itemFactors) = AlternatingLeastSquare.train(
+//      ratings,
+//      rank = $(rank),
+//      numUserBlocks = $(numUserBlocks),
+//      numItemBlocks = $(numItemBlocks),
+//      maxIter = $(maxIter),
+//      regParam = $(regParam),
+//      alpha = $(alpha),
+//      intermediateRDDStorageLevel = StorageLevel.fromString($(intermediateStorageLevel)),
+//      finalRDDStorageLevel = StorageLevel.fromString($(finalStorageLevel)),
+//      seed = $(seed))
+
     val ratings = dataset
       .select(col($(userCol)), col($(itemCol)), col($(ratingCol))).rdd
       .map { row =>
-        Rating(row.getInt(0), row.getInt(1), row.getFloat(2))
+        (row.getInt(0), row.getInt(1), row.getFloat(2))
       }
 
-    val (userFactors, itemFactors) = AlternatingLeastSquare.train(
+    val (userFactors, itemFactors) = ALSEngine.train(
       ratings,
       rank = $(rank),
       numUserBlocks = $(numUserBlocks),
@@ -294,9 +312,10 @@ class AlternatingLeastSquare(override val uid: String)
       maxIter = $(maxIter),
       regParam = $(regParam),
       alpha = $(alpha),
-      intermediateRDDStorageLevel = StorageLevel.fromString($(intermediateStorageLevel)),
-      finalRDDStorageLevel = StorageLevel.fromString($(finalStorageLevel)),
-      seed = $(seed))
+      //intermediateRDDStorageLevel = StorageLevel.fromString($(intermediateStorageLevel)),
+      finalRDDStorageLevel = StorageLevel.fromString($(finalStorageLevel))
+      //seed = $(seed)
+    )
 
     val userDF = userFactors.toDF("id", "features")
     val itemDF = itemFactors.toDF("id", "features")

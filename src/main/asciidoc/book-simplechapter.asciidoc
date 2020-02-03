@@ -18,7 +18,5 @@
 :pygments-linenums-mode: inline
 :scala-dir: ../scala
  
-include::recommendation-implicit-als.asciidoc[]      
-include::als-2.asciidoc[]   
-include::development-regression.asciidoc[]
+include::development-als2.asciidoc[]
 

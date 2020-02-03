@@ -43,3 +43,7 @@ Partition je, cast dat ulozena na jednom fyzickem pocitaci. Ted pokudy mame Data
 
 Ve Sparku jsou zdrojova data typicky nemenna. Pokud chceme provest upravy nad DataFrame, definujeme jednu nebo vice takzvanych transformaci. Tyto transformace instruuji Spark jak ma zmenit zdrojova data. Dulezity je fakt, ze samotna transformace pouze definuje jak se maji data zmenit ale samotnou transaformaci neiniciuje.    
 
+
+==== Akce
+
+Akce jsou casti API sparku ktere spousti vypocet samotny. Typicky je pouzit RDD jako datovy zdroj, na nem se potenconalne definuje sada transfoirmaci a nakonec se tento vypocet 

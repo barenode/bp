@@ -14,6 +14,15 @@
           "hadoop.proxyuser.root.hosts": "*"
         }
       }
+    },
+    {
+      "yarn-site": {
+        "properties": {
+          "yarn.scheduler.minimum-allocation-mb" : "512",
+          "yarn.scheduler.maximum-allocation-mb" : "2048",
+          "yarn.scheduler.maximum-allocation-vcores" : "2"           
+        }
+      }
     },    
     {
       "hive-site" : {

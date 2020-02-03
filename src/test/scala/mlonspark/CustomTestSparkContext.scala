@@ -18,7 +18,7 @@ trait CustomTestSparkContext extends TempDirectory { self: Suite =>
   override def beforeAll() {
     super.beforeAll()
     spark = SparkSession.builder
-      .master("local[1]")
+      .master("local[3]")
       .appName("MLlibUnitTest")
       .getOrCreate()
     sc = spark.sparkContext

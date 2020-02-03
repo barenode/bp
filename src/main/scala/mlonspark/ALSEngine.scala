@@ -12,48 +12,59 @@ import org.apache.spark.storage.StorageLevel
 import scala.util.hashing.byteswap64
 import scala.collection.mutable
 
-object Terminator {
+object ALSEngine {
 
-  def process(
+
+  def train(
+    //tag::params-def[]
     rdd: RDD[(Int, Int, Float)],
+    //end::params-def[]
     rank: Int = 10,
     numUserBlocks: Int = 10,
     numItemBlocks: Int = 10,
     maxIter: Int = 10,
     regParam: Double = 0.1,
     alpha: Double = 1.0,
-    finalRDDStorageLevel: StorageLevel = StorageLevel.MEMORY_AND_DISK): (RDD[(Int, Array[Float])], RDD[(Int, Array[Float])]) =
-  {
+    intermediateRDDStorageLevel: StorageLevel = StorageLevel.MEMORY_AND_DISK,
+    finalRDDStorageLevel: StorageLevel = StorageLevel.MEMORY_AND_DISK)
+  : (RDD[(Int, Array[Float])], RDD[(Int, Array[Float])]) = {
+
+    println("TRAIN")
+
     val userPart = new HashPartitioner(numUserBlocks)
     val itemPart = new HashPartitioner(numItemBlocks)
 
     val (userBlocks, userMetaBlocks) = blockify(rdd, userPart, itemPart)
-    println(userBlocks.collect().mkString(""))
-    println(userMetaBlocks.collect().mkString(""))
+    println("BLOCKIFIED")
+    //println(userMetaBlocks.collect().mkString(""))
 
     val swappedRdd = rdd.map{case(userId, itemId, rating)=>
       (itemId, userId, rating)
     }
 
     val (itemBlocks, itemMetaBlocks) = blockify(swappedRdd, itemPart, userPart)
-    println(itemBlocks.collect().mkString(""))
-    println(itemMetaBlocks.collect().mkString(""))
+//    println(itemBlocks.collect().mkString(""))
+//    println(itemMetaBlocks.collect().mkString(""))
 
     val seedGen = new XORShiftRandom(0L)
     var userFactors = initialize(userBlocks, rank, seedGen.nextLong())
     var itemFactors = initialize(itemBlocks, rank, seedGen.nextLong())
 
-    userFactors.collect().foreach(v=>println(v._1 + " " + v._2))
-    itemFactors.collect().foreach(v=>println(v._1 + " " + v._2))
+//    userFactors.collect().foreach(v=>println(v._1 + " " + v._2))
+//    itemFactors.collect().foreach(v=>println(v._1 + " " + v._2))
 
     for (iter <- 1 to maxIter) {
-      println("ITEM FACTORS")
+      println(s"itemFactors-$iter")
+      val previousItemFactors = itemFactors
       itemFactors = computeFactors(userFactors, userMetaBlocks, itemBlocks, rank, regParam, alpha)
-      itemFactors.collect().foreach(v => println(v._1 + " " + v._2))
+      previousItemFactors.unpersist()
+      itemFactors.setName(s"itemFactors-$iter").persist(intermediateRDDStorageLevel)
 
-      println("USER FACTORS")
+      println(s"userFactors-$iter")
+      val previousUserFactors = userFactors
       userFactors = computeFactors(itemFactors, itemMetaBlocks, userBlocks, rank, regParam, alpha)
-      userFactors.collect().foreach(v => println(v._1 + " " + v._2))
+      previousUserFactors.unpersist()
+      userFactors.setName(s"userFactors-$iter").persist(intermediateRDDStorageLevel)
     }
 
     val userIdAndFactors = userBlocks
@@ -102,7 +113,6 @@ object Terminator {
     val merged = srcOut.groupByKey(dstBlocks.partitions.length)
     dstBlocks.join(merged).mapValues {
       case (Block(dstIds, srcPtrs, _, srcBlockIds, srcIds, srcLocalIndices, ratings), srcFactors) =>
-        println("============================================")
         val sortedSrcFactors = new Array[Array[Array[Float]]](numSrcBlocks)
         srcFactors.foreach { case (srcBlockId, factors) =>
           sortedSrcFactors(srcBlockId) = factors
@@ -112,21 +122,33 @@ object Terminator {
         for (j <- 0 to dstIds.length-1) {
           ls.reset()
           ls.merge(YtY.get)
-          println("---------------------------------------------")
           val dstId = dstIds(j)
+          var numExplicits = 0
           for (i <- srcPtrs(j) to srcPtrs(j + 1)-1) {
             val srcBlockId = srcBlockIds(i)
             val rating = ratings(i)
-            val srcId = srcIds(i)
+            val Compressed sparse column = srcIds(i)
             val srcLocalIndex = srcLocalIndices(i)
             //println("dstBlockId: " + dstBlockId + ", dstId: " + dstId + ", srcBlockId: " + srcBlockId + ", srcId: " + srcId + ", srcLocalIndex: " + srcLocalIndex + ", rating: " + rating)
             val srcFactor = sortedSrcFactors(srcBlockId)(srcLocalIndex)
             //println(FactorBlock(srcFactors))
+            if (rating > 0.0) {
+              numExplicits += 1
+            }
 
+            //exact mode ??
             val c1 = 1 + (alpha * rating)
             ls.add(srcFactor, if (rating > 0.0) c1 else 0.0, c1-1)
-            dstFactors(j) = solve(ls, regParam)
+
+            //spark mode
+//            val c1 = alpha * math.abs(rating)
+//            ls.add(srcFactor, if (rating > 0.0) 1.0 + c1 else 0.0, c1)
           }
+          //exact mode ??
+          //dstFactors(j) = solve(ls, regParam)
+
+          //spark mode
+          dstFactors(j) = solve(ls, numExplicits * regParam)
         }
         FactorBlock(dstFactors)
     }
@@ -164,12 +186,12 @@ object Terminator {
 
   def blockify(
     rdd: RDD[(Int, Int, Float)],
-    srcPart: Partitioner,
-    dstPart: Partitioner) : (RDD[(Int, Block)], RDD[(Int, MetaBlock)])  =
+    srcPartitioner: Partitioner,
+    dstPartitioner: Partitioner) : (RDD[(Int, Block)], RDD[(Int, MetaBlock)])  =
   {
     val blocks = rdd.map { case (srcId, dstId, rating) =>
-      val srcBlockId = srcPart.getPartition(srcId)
-      val dstBlockId = dstPart.getPartition(dstId)
+      val srcBlockId = srcPartitioner.getPartition(srcId)
+      val dstBlockId = dstPartitioner.getPartition(dstId)
       ((srcBlockId, dstBlockId), (srcId, dstId, rating))
     }.groupByKey().mapValues{ratings =>
       val builder = new RatingBlockBuilder
@@ -180,7 +202,7 @@ object Terminator {
       val dstIdToLocalIndex = dstIds.toSet.toSeq.sorted.zipWithIndex.toMap
       val dstLocalIndices = dstIds.map(dstIdToLocalIndex.apply)
       (srcBlockId, (dstBlockId, srcIds, dstIds, dstLocalIndices, ratings))
-    }.groupByKey(srcPart).mapValues{v=>
+    }.groupByKey(srcPartitioner).mapValues{v=>
       val builder = new BlockBuilder()
       v.foreach{case(dstBlockId, srcIds, dstIds, dstLocalIndices, ratings)=>
         val length = srcIds.length
@@ -202,8 +224,8 @@ object Terminator {
 //    }
 
     val metaBlocks = blocks.mapValues { case Block(srcIds, dstPtrs, _, dstBlockIds, _, _, _) =>
-      val activeIds = Array.fill(dstPart.numPartitions)(mutable.ArrayBuilder.make[Int])
-      val seen = new Array[Boolean](dstPart.numPartitions)
+      val activeIds = Array.fill(dstPartitioner.numPartitions)(mutable.ArrayBuilder.make[Int])
+      val seen = new Array[Boolean](dstPartitioner.numPartitions)
       for (i <- 0 to srcIds.length-1) {
         ju.Arrays.fill(seen, false)
         var j = dstPtrs(i)
@@ -359,7 +381,9 @@ class HashPartitioner(partitions: Int) extends org.apache.spark.Partitioner {
   override def numPartitions: Int = partitions
 
   override def getPartition(key: Any): Int = {
+    //tag::params-def[]
     Math.abs(key.hashCode % partitions)
+    //end::params-def[]
   }
 }
 

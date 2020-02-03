@@ -31,6 +31,7 @@ class AlternatingLeastSquareSuite extends SparkFunSuite with MLlibTestSparkConte
     )
     val rdd = spark.sparkContext.parallelize(seq)
     AlternatingLeastSquare.train(rdd, 2, 2, 2)
+
   }
 }
 

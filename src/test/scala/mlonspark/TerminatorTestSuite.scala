@@ -19,7 +19,20 @@ class TerminatorTestSuite extends SparkFunSuite with CustomTestSparkContext with
       (1, 5, 1f),
       (2, 3, 2f)
     ))
-    Terminator.process(rdd)
+    //Terminator.process(rdd)
 
+    val train = spark.read.format("parquet").load("./target/ratings-train.parquet")
+    train.printSchema()
+
+    val als = new AlternatingLeastSquare("test")
+      .setUserCol("userId")
+      .setItemCol("bookId")
+      .setRatingCol("rating")
+      .setNumItemBlocks(3)
+      .setNumUserBlocks(3)
+      .setMaxIter(3)
+
+    val model = als.fit(train)
+    print(model)
   }
 }
