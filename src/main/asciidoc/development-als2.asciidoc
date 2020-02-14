@@ -23,6 +23,17 @@ numItemBlocks::
 maxIter::
     POcet iteraci pri vypoctu. V kazde iteraci se provede vypocet uzivatelskych a polozkovych faktoru. Po danem poctu iteraci se jiz vysledne faktory nemeni a nema smysl ve vypoctu pokracovat. Presny pocet zjistime napriklad pomoci RMSE. Vychozi hodnota je 10.     
 
+Pomocne parametry identifikuji pozadovane sloupce v ramci vstupniho datasetu.
+
+userCol::
+    Jmeno sloupce ve vstupnim datasettu, ktery obsahuje identifikator uzivatele. Vsechny hodnoty v danem slopci by mely byt cele cislo.
+
+itemCol::
+    Jmeno sloupce ve vstupnim datasettu, ktery obsahuje identifikator polozky. Vsechny hodnoty v danem slopci by mely byt cele cislo.
+
+rating::
+    Jmeno sloupce ve vstupnim datasettu, ktery obsahuje hodnoceni. Hodnoceni mohou nabyvat realnych, nezapornych hodnot.
+        
 Hodnoceni nejprve rozdelime do jednotlivych bloku.  
 
 Pro praci s bloky zvolime rozdilnou terminologii nez rozdelenmi na uzivatele a polozky. Vzhledem k povaze algoritmu, kdy se stridave porvadi vypocet faktoru zvlast pro uzvatele a zvlast pro polozky, pouzijeme pro oba stejny algoritmus a vytvorime pro ne analogicke struktury. Jednou budou jako cil vypoctu uzivatelske faktory, ktere pouziji jako zdroj pro vypocet faktory polkozkove. Podruhe to bude naopak. Dale tedy budeme pro vysvetleni algoritmu pouzivat terminy zdroj a cil. 
@@ -51,17 +62,35 @@ image::als_block_connection02022020.jpg[title="Diagram propojeni bloku", pdfwidt
 Na obrazku <<als_block_connection>> je zobrazene propojeni mezi zdrojovymi a cilovymi bloky. POkud chceme spocitat zdrojovy faktor pro jedno zdrojove id (30)musime do linearniho systemu zahrnou vsechny cilove faktory (cilove id 5, 12) pro ktere existuje hodnoceni pro dane zdrojove a cilove id. Tyto mohou byt typicky v rozdilnych cilovych blocich (1, 4) ulozenych na rozdilnych uzlech v ramci clustru.
 
 
-Jako top level vstup do algoritmu pouzijeme strukturovane API jako preferrovany zpusob od druhe generace Sparku:
-
-
-
-Pro praci s hodnocenimi pouzijeme RDD Api. Toto api nizsi urovne nam, narozdil od doporucovaneho strukturovaneho API, dava moznost ridit rozlozeni dat v ramci clusteru. Jako vstup do casti algoritmu, ktery nam rozdeli hodnoceni do prislusnych bloku bude dataset usporadanych trojic. Tato trojice se sklada ze sdrojoveh id (srcId), ciloveho id (dstId) a hodnoceni. Zshledem k to mu ze budeme vytvaret analogicke blokove struktury pro uzivatele i polozky  
+Jako top level vstup do algoritmu pouzijeme strukturovane API jako preferrovany zpusob od druhe generace Sparku. Dataset muzi obsahovat slupce identifikovane vstpnumi parametry userCol, itemCol a rating. V ramci algoritmu samotneho ale praci s hodnocenimi pouzijeme RDD Api. Toto api nizsi urovne nam, narozdil od doporucovaneho strukturovaneho API, dava moznost ridit rozlozeni dat v ramci clusteru. Jako vstup do casti algoritmu, ktery nam rozdeli hodnoceni do prislusnych bloku, nejprve prevedeme vstupni dataset do RDD usporadanych trojic:
 
 [source, scala, numbered]
 ----
-include::{scala-dir}/mlonspark/ALSEngine.scala[tags=params-def]
+include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=dataset-to-rdd]
 ----
 
+Tato trojice se sklada ze sdrojoveh id (srcId), ciloveho id (dstId) a hodnoceni. 
+Nejprve vytvorime uzivatelske bloky, tj. jako zdrojove id pouzijeme id uzivatele a jako cilove id pouzijeme id polozky. Nejprve pro kazdou trojici urcime prislusny zdrojovy a cilovy blok. Toto je nutne z duvodu urceni vazeb mezi vsemi  bloky. Pro kazdou vstupni trojici tedy emitujeme klic, dvojici hodnot, identifikatory zdrojoveho a ciloveho bloku:
 
-Cilovy blok urcime na zaklade identifikatoru uzivatele resp. identifikatoru polozky dle zbytku po celosielnem delenim pozadovanym poctem bloku. Toto nam zajisti, ze kazde unikatni identifikator se vzdy priradi prave do jednoho konkretniho bloku. Vzhledem k tomu ze vypocet probiha stridave pro vypocet uzivatelskych i produktovych faktoru, pouzijeme pro oba stejny algoritmus a vytvorime pro ne analogicke struktury. Pri vypoctu uzivatelskych faktoru poslouzi polozkove bloky jako zdroj a naopak.      
+[source, scala, numbered]
+----
+include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-emit-key]
+----  
 
+Dale provedeme seskupovaci operaci. Tato nam seskupi vsechny hodnoceni pro danou kombinaci zdrojoveho a ciloveho bloku. Vystupem je tedy prislusny klic a kolekce odpovidajicich hodnoceni. Metoda mapValues, nam dovoli transformovat pouze hodnoty (druhou polozku ze vstupni dvojice), vystupem je tedy klic ze vstupu spolu s novou hodnotou. Zde je vstupni hodnotou kolekce hodnoceni kteru si prevedeme do pomocne struktry pro snazsi manipulaci s daty bloku. Tato struktura je v takzvane COO (Coordinate Format) forme. Obsahuje tri pole, kde hodnoty se stejnym indexem urcuji trojici zdrojoveho, ciloveho id a hodnoceni.:
+
+[source, scala, numbered]
+----
+include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-coo]
+----   
+
+Z pole cilovych id pro dany zdrojovy a cilovy blok vybereme unikatni hodnoty, tyto seradime a priradime jim index urcujici jejich poradi. Hodnoty cilovych id namapujeme na odpovidajici index. Tyto indexy slouzi k propjeni cilovych a zdrojovych bloku viz. <<als_block_connection>>. Vzhledem k tomu ze vytvarime cilove bloky, transformujeme klic pouze na zdrojove id:
+
+[source, scala, numbered]
+----
+include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-dstIdToLocalIndex]
+---- 
+
+V teto chvili mame ted RDD kde je klicem id zdrojoveho bloku a hodnotou blok hodnoceni. Pro jedno id zdrojoveho bloku muze byt v datasetu vice zaznamu, zhledem k tomu ze prislusny blok obsahuje hodnoceni pouze pro jeden cilovy blok. Dateset tedy seskupime dle klice, id zdrojoveho bloku. Jednotlive bloky hodnoceni spojime do jedineho bloku, obsahujiciho vsechny hodnoceni pro dany zdrojovy blok. Tento vysledny blok prevedeme do cilove formy tak jak je zobrazena v diagramu <<als_block_diagram>>. Dale na zaklade tohoto bloku vytvorime prislusny meta blok a blok faktoru, inicializovany na nahodne hodnoty.
+
+Tento postup nasledne opakujeme, pouze s tim rozdilem, ze je jako zdrojove id pouzito id polozky a jako cilove id, id uzivatele. V teto chvili mame tedy vstupni data rozdeleny dio prislusnych bloku a pripravenych pro vypocty. 

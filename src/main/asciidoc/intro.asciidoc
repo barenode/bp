@@ -416,7 +416,7 @@ plt.show()
 
 
 [[]]
-image::../intro_files/intro_12_0.png[title="", pdfwidth=80%]
+image::../intro_files/intro_12_0.png[title=""]
 
 [source, ipython3]
 ----

@@ -16,15 +16,24 @@
 :source-highlighter: pygments
 :pygments-style: manni
 :pygments-linenums-mode: inline
+:scala-dir: ../scala
           
 include::introduction.asciidoc[]
 include::recommendation.asciidoc[]
 include::recommendation-implicit.asciidoc[]
 include::recommendation-implicit-knn.asciidoc[]
 include::recommendation-implicit-als.asciidoc[]
+include::als-2.asciidoc[]
+
+include::spark-introduction.asciidoc[]
 
 include::development.asciidoc[]
 include::development-cluster.asciidoc[]
-include::development-project.asciidoc[]                                       
+include::development-project.asciidoc[]    
+include::development-regression.asciidoc[]                                   
+include::development-als2.asciidoc[]
+
+
+
 
 include::references.asciidoc[]

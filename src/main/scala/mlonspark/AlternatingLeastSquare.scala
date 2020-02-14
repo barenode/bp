@@ -298,11 +298,12 @@ class AlternatingLeastSquare(override val uid: String)
 //      finalRDDStorageLevel = StorageLevel.fromString($(finalStorageLevel)),
 //      seed = $(seed))
 
+    //tag::dataset-to-rdd[]
     val ratings = dataset
       .select(col($(userCol)), col($(itemCol)), col($(ratingCol))).rdd
       .map { row =>
-        (row.getInt(0), row.getInt(1), row.getFloat(2))
-      }
+        (row.getInt(0), row.getInt(1), row.getFloat(2))}
+    //end::dataset-to-rdd[]
 
     val (userFactors, itemFactors) = ALSEngine.train(
       ratings,

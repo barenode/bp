@@ -189,19 +189,25 @@ object ALSEngine {
     srcPartitioner: Partitioner,
     dstPartitioner: Partitioner) : (RDD[(Int, Block)], RDD[(Int, MetaBlock)])  =
   {
+    //tag::blockify-emit-key[]
     val blocks = rdd.map { case (srcId, dstId, rating) =>
       val srcBlockId = srcPartitioner.getPartition(srcId)
       val dstBlockId = dstPartitioner.getPartition(dstId)
       ((srcBlockId, dstBlockId), (srcId, dstId, rating))
+    //end::blockify-emit-key[]
+    //tag::blockify-coo[]
     }.groupByKey().mapValues{ratings =>
       val builder = new RatingBlockBuilder
       ratings.foreach{case(srcId, dstId, rating) =>
         builder.add(srcId, dstId, rating)}
       builder.build()
+    //end::blockify-coo[]
+    //tag::blockify-dstIdToLocalIndex[]
     }.map{case((srcBlockId, dstBlockId), RatingBlock(srcIds, dstIds, ratings))=>
       val dstIdToLocalIndex = dstIds.toSet.toSeq.sorted.zipWithIndex.toMap
       val dstLocalIndices = dstIds.map(dstIdToLocalIndex.apply)
       (srcBlockId, (dstBlockId, srcIds, dstIds, dstLocalIndices, ratings))
+    //end::blockify-dstIdToLocalIndex[]
     }.groupByKey(srcPartitioner).mapValues{v=>
       val builder = new BlockBuilder()
       v.foreach{case(dstBlockId, srcIds, dstIds, dstLocalIndices, ratings)=>
