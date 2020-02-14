@@ -51,10 +51,15 @@ image::als_block_connection02022020.jpg[title="Diagram propojeni bloku", pdfwidt
 Na obrazku <<als_block_connection>> je zobrazene propojeni mezi zdrojovymi a cilovymi bloky. POkud chceme spocitat zdrojovy faktor pro jedno zdrojove id (30)musime do linearniho systemu zahrnou vsechny cilove faktory (cilove id 5, 12) pro ktere existuje hodnoceni pro dane zdrojove a cilove id. Tyto mohou byt typicky v rozdilnych cilovych blocich (1, 4) ulozenych na rozdilnych uzlech v ramci clustru.
 
 
+Jako top level vstup do algoritmu pouzijeme strukturovane API jako preferrovany zpusob od druhe generace Sparku:
+
+
+
+Pro praci s hodnocenimi pouzijeme RDD Api. Toto api nizsi urovne nam, narozdil od doporucovaneho strukturovaneho API, dava moznost ridit rozlozeni dat v ramci clusteru. Jako vstup do casti algoritmu, ktery nam rozdeli hodnoceni do prislusnych bloku bude dataset usporadanych trojic. Tato trojice se sklada ze sdrojoveh id (srcId), ciloveho id (dstId) a hodnoceni. Zshledem k to mu ze budeme vytvaret analogicke blokove struktury pro uzivatele i polozky  
 
 [source, scala, numbered]
 ----
-include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=params-rank]
+include::{scala-dir}/mlonspark/ALSEngine.scala[tags=params-def]
 ----
 
 

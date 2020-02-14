@@ -30,6 +30,7 @@ target
 **/.vagrant
 
 vagrant/log/**/*
+vagrant/topology.json
 
 book/stem-*.png
 book/images/stem-*.png
