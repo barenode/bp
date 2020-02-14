@@ -127,7 +127,7 @@ object ALSEngine {
           for (i <- srcPtrs(j) to srcPtrs(j + 1)-1) {
             val srcBlockId = srcBlockIds(i)
             val rating = ratings(i)
-            val Compressed sparse column = srcIds(i)
+            //val Compressed sparse column = srcIds(i)
             val srcLocalIndex = srcLocalIndices(i)
             //println("dstBlockId: " + dstBlockId + ", dstId: " + dstId + ", srcBlockId: " + srcBlockId + ", srcId: " + srcId + ", srcLocalIndex: " + srcLocalIndex + ", rating: " + rating)
             val srcFactor = sortedSrcFactors(srcBlockId)(srcLocalIndex)

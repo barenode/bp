@@ -84,8 +84,8 @@ end
             c7201.vm.provision "shell", path: "./shell/ambari-singlenode.sh"
         end 
         c7201.vm.provision "shell", path: "./shell/spark-env.sh"               
-#        c7201.vm.provision "shell", path: "./shell/asciidoctor.sh"  
-#        c7201.vm.provision "shell", path: "./shell/jupyter.sh"        
+        c7201.vm.provision "shell", path: "./shell/asciidoctor.sh"  
+        c7201.vm.provision "shell", path: "./shell/jupyter.sh"        
     end 
     
       

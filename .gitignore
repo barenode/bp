@@ -42,4 +42,6 @@ lab/data/*
 
 **/.ipynb_checkpoints
 
-**/*.box
+**/*.box                
+*
+src/main/jupyter/data/**

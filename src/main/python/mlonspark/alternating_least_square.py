@@ -43,6 +43,8 @@ class AlternatingLeastSquare(JavaEstimator, JavaMLReadable, JavaMLWritable, HasM
     userCol = Param(Params._dummy(), "userCol", "userCol", typeConverter=TypeConverters.toString)
     itemCol = Param(Params._dummy(), "itemCol", "itemCol", typeConverter=TypeConverters.toString)
     ratingCol = Param(Params._dummy(), "ratingCol", "ratingCol", typeConverter=TypeConverters.toString)
+    numItemBlocks = Param(Params._dummy(), "numItemBlocks", "numItemBlocks", typeConverter=TypeConverters.toInt)
+    numUserBlocks = Param(Params._dummy(), "numUserBlocks", "numUserBlocks", typeConverter=TypeConverters.toInt)
 
     @keyword_only
     def __init__(self):
@@ -76,6 +78,24 @@ class AlternatingLeastSquare(JavaEstimator, JavaMLReadable, JavaMLWritable, HasM
 
     def getRatingCol(self):
         return self.getOrDefault(self.ratingCol)
+
+    def setAlpha(self, value):
+        return self._set(alpha=value)
+
+    def getAlpha(self):
+        return self.getOrDefault(self.alpha)
+
+    def setNumItemBlocks(self, value):
+        return self._set(numItemBlocks=value)
+
+    def getNumItemBlocks(self):
+        return self.getOrDefault(self.numItemBlocks)
+
+    def setNumUserBlocks(self, value):
+        return self._set(numUserBlocks=value)
+
+    def getNumUserBlocks(self):
+        return self.getOrDefault(self.numUserBlocks)
 
     def _create_model(self, java_model):
         return AlternatingLeastSquareModel(java_model)
