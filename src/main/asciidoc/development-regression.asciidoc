@@ -1,7 +1,37 @@
 
 ==== Lineární regrese
 
-Pro výpočet lineární regrese zavedeme pomocnou třídu. Tato bude udržovat lineární systém v takzvaném normálním váženém stavu stem:[\left(X^TWX\right)\hat {\beta}=X^TWy]. Konkrétně si bude udržovat dvě komponenty. První z nich odpovídající výrazu stem:[\left(X^TWX\right)] je symetrická a bude uložena jako horní trojúhelníková matice. Druhá komponenta bude vektor odpovídající výrazu stem:[X^TWy]. Pro obe komponenty inicializujeme potřebné struktury na základě celočíselného ranku matice stem:[X] vyžádaného v konstruktoru třidy:
+V ramci algoritmu jak uz sam nazev napovida je treba opakovane resit linearni system, kdy se soucin uzivatelzkych a produktovych faktoru musi co nejvice priblizit prislusnemu hodnoceni. Pocet rovnic v linearnim systemu odpovida poctu uzivatelu resp. poctu produktu a pocet neznamych odpovida zvolenemu ranku faktoru. Vzhledem k tomu ze je pocet rovnic mnohokrat vyssi nez pocet neznamych nebude mit dany lienarni system jedine presne reseni. Pro výpočet tedy pouzijeme lineární regresi, ktera nam nalezne vysledek s nejmensi moznou chybou. Lineární systém budeme udrzovat v takzvaném normálním stavu:
+
+[stem]
+++++
+\begin{align*}
+A^TAx = A^Tb
+\end{align*}
+++++ 
+ 
+Konkrétně si bude udržovat dvě komponenty. První z nich odpovídající výrazu stem:[A^TA] je ctvercova a symetrická matice. Vzheldem k tomu ze jako A pouzijeme stridave uzivatelske resp produktove faktory bude mit tato matice relativne male rozmery stem:[rxr] kde r odpovida zadanemu ranku. Druhá komponenta bude vektor odpovídající výrazu stem:[A^Ty]. kde se za promennou stem:[y] bude dosazovat odpovidajici hodnoceni. Tento vektor bude mit take dimenzi stem:[r]. 
+ 
+Do linearniho systemu bude mozne pridavat komponenty jednotlive, kdy budou jako argumenty radkovy vektor stem[a] a hodnoceni stem[b]. Nasledne pricteme k prvni komponente vyraz stem[a^Ta] a ke druhe vyraz stem[a^Tb].
+
+Spark interne pouziva pro linearni algebru knihvni JBLAS. Tato knihovna je pouze tenky java klient nad nativnimi knihovnami LAPACK a BLAS. Tyto knihovny, naporogramovane ve Fortranu 77, jsou pouzity v ramci siroce rozsirenych nastroju jako jsou MATLAB nebo RStudio. Pro reserni linearniho systemy pouzijeme funkci DPPSV. Tato funkce ja zalozena na Choleskeho faktorizaci.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .AlternatingLeastSquare.scala
 [source, scala, numbered]
