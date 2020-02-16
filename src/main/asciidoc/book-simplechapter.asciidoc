@@ -17,6 +17,6 @@
 :pygments-style: manni
 :pygments-linenums-mode: inline
 :scala-dir: ../scala
- 
-include::development-als2.asciidoc[]
 
+include::book-ml.asciidoc[] 
+include::test-and-validation.asciidoc[]

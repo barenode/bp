@@ -19,6 +19,8 @@
 :scala-dir: ../scala
           
 include::introduction.asciidoc[]
+include::book-ml.asciidoc[] 
+include::test-and-validation.asciidoc[]
 include::recommendation.asciidoc[]
 include::recommendation-implicit.asciidoc[]
 include::recommendation-implicit-knn.asciidoc[]

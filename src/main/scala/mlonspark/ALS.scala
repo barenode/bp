@@ -450,7 +450,7 @@ class XALSModel private[ml] (
         val pq = new BoundedPriorityQueue[(Int, Float)](num)(Ordering.by(_._2))
         srcIter.foreach { case (srcId, srcFactor) =>
           dstIter.foreach { case (dstId, dstFactor) =>
-            // We use F2jBLAS which is faster than a call to native BLAS for vector dot product
+            // We use F2jBLAS which is faster than a call to native BLAS for vector dot productTrainValidationSplitModel
             val score = BLAS.f2jBLAS.sdot(rank, srcFactor, 1, dstFactor, 1)
             pq += dstId -> score
           }

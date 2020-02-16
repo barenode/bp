@@ -61,6 +61,12 @@ class AlternatingLeastSquare(JavaEstimator, JavaMLReadable, JavaMLWritable, HasM
         kwargs = self._input_kwargs
         return self._set(**kwargs)
 
+    def setRank(self, value):
+        return self._set(rank=value)
+
+    def getRank(self):
+        return self.getOrDefault(self.rank)
+
     def setUserCol(self, value):
         return self._set(userCol=value)
 
