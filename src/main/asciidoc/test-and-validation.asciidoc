@@ -1,10 +1,11 @@
 ﻿
-==== Vyhodnoceni presnosti modelu
 
-Reálnou přesnost modelu je možné ověřit pouze na datech, které nebyla použita k jeho vytvoření resp. k jeho učení. Obvyklá metoda je rozdělit zdrojový dataset na dvě části, na takzvanou tréningovou a testovací sadu. Model se, jak už název napovídá, učí pouze na tréningove sade a jeho přesnost se následně ověří na sadě testovací. Obvyklý postup je použít na treningovou sadu 70-80% zdrojových dat. Samotné rozdělení nemusí být nicméně úplně triviální úkol, v obou sadách by měla být zastoupena data v celém rozsahu. Chyba naměřená na testovací sadě nám ukaže jak by se mohl náš model chovat v reálném nasazení. To, že je chyba naměřená na trenigove sade nizka a chyba na testovaci sade vysoka muze mit nekolik pricin. Nejpravdepodobnejsi je , ze je nas model preuceny. To znamena, ze je model prilis specilizovany na treningovou sadu a nereflektuje realitu. Tento problem lze resit nejakym zpusobem regularizace. kdy do modelu pridame takzvany regulaizacni parametr, ktery zabranuje preuceni modelu. Optimalni hodnotu tohoto parametru je nutne nasledne urcit pomoci experimentovani. Dalsim problem muze byt nespravne zvolena treningova a testovaci sada, kdy testovaci setu obsahuje dat, ktera nebyla zozhlednena v ramci uceni. Pro vyhodnoceni presnosti modelu se pouzije namerena hodnota a hodnota predpovezena modelelm pro toto mereni. Pokud tyto 2 hodnoty odecteme, rozdil bude obsahovat chybu v predpovedi pro dane mereni. Pumerna hodnota pres vsechny mereni nam nasledne ukaze chybu celkovou. Zakladni vzorce postavene na tomto pricnipu a pouzivane pro ohodnoceni modelu jsou nasledujici:
+==== Ohodnocení přesnosti modelu
+
+Reálnou přesnost modelu je možné ověřit pouze na datech, které nebyla použita k jeho vytvoření resp. k jeho učení. Obvyklá metoda je rozdělit zdrojový dataset na dvě části, na takzvanou tréningovou a testovací sadu. Model se, jak už název napovídá, učí pouze na tréningove sadě a jeho přesnost se následně ověří na sadě testovací. Obvyklý postup je použít na treningovou sadu 70-80% zdrojových dat. Chyba naměřená na testovací sadě nám ukáže jak by se mohl náš model chovat v reálném nasazení. To, že je chyba naměřená na tréningové sadě nízká a na testovací vysoká může mít několik příčin. Nejpravděpodobnější je, že je náš model takvaně přeučený. To znamená, že je model příliš specilizovaný na tréningovou sadu a nereflektuje realitu. Tento problém je možné eliminovat některým způsobem regularizace [REF REG]. Dalším problémem může být nesprávně zvolená tréningová a testovaci sada, kdy ta testovací obsahuje aspekt, který nebyl zozhledněn v rámci učení. Pro vyhodnocení přesnosti modelu pouzijeme naměřenou hodnotu stem:[y_{i}] a předpovězenou hodnotu modelelu pro dané měření stem:[\hat{y_{i}}]. Rozdíl těchto hodnot odpovídá chybě v předpovědi pro dané měření. Průměrná hodnota přes chyby všech měření nám následně ukáže chybu celkovou. Základní metodiky postavené na tomto pricnipu a pouzívané pro ohodnocení modelu jsou následující:
 
 RMSE (Root Mean Squared Error)::
-    Ze díčích chyb jednotlivých měření nejprve spočítáme druhou mocninu a jejich sumu zprůměrujeme. Výsledná chyba odpovídá druhé odmocnině z této sumy:
+    Z chyb jednotlivých měření spočítáme druhou mocninu a jejich sumu zprůměrujeme. Celková chyba odpovídá druhé odmocnině z této sumy:
 
 [stem]
 ++++
@@ -14,7 +15,7 @@ RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{(y_{i} - \hat{y_{i}})^2}}
 ++++ 
  
 MAE (Mean Absolute Error)::  
-  Prumer ze sumy absolutnich hodnot chyb mereni:
+  Celková chyba odpovídá průměru ze sumy absolutních hodnot chyb jednotlivých měření:
 
 [stem]  
 ++++
@@ -23,11 +24,11 @@ MAE = \frac{1}{n}\sum_{i=1}^{n}\left|y_{i} - \hat{y_{i}}\right|
 \end{align*}
 ++++ 
 
-RMSE a MAE jsou si dost podone kdy ukazuji prumernou chybu nehlede na jeji orientaci. To znamena, ze nezalezi na tom zda je rozdil predpovidane a namerene hodnoty kladny nebo zaporny, oba rozdily se agreguji do vysledne chyby. RMSE ktera se zda aktualne prefreovanejsi metodikou [ISL, SDG, HANDSON], vice penalizuje velke chyby nez MAE. 
+RMSE a MAE jsou si dost podobné kdy ukazují průměrnou chybu nehledě na její orientaci. To znamená, že nezáleži na tom zda je chyba měření kladná nebo zaporná, v obou případech se agreguje do výsledné chyby. RMSE která se zdá v odborné literatuře preferovanější metodikou [ISL, SDG, HANDSON], více penalizuje velké chyby než MAE. 
 
 ==== Hyperparametry
 
-Ve vetsine pripadu model obsahuje dodatecne parametry ovlivnuji jeho vysledne chovani, takzvane hyperparametry. Optimalni hodnota techto parametru neni predem znama a typicky je zavisla na podstate vstupnich dat. Optimalni hondotu tedy musime urcit behem treningove faze, zde se ale opakuje stejny problem jako pri vycleneni testovaciho datasetu. Pri urceni hodnoty pouze na jedne sade date, neni jiste zda je tato hodnota optimalni pouze pro testovaci sadu nebo obecne. Jednim z postupu jak obejtit tento problem je vyclenit dalsi cast z treningove sady, takzvanou validacni sadu a hodnoty parametru overovat na teto sade. Zde ale muze dochazet k degradaci modelu z duvodu nedostatecnosti trenovacich dat, kdy jsem se realne poloviny techto dat vedome zbavili pro dodatecne overovani spravnosti modelu. Dalsi casto pouzivana metodika je takzvana krizova validace. Treningova sada je nejprve rozdelena na sadu stem[n] stejnych casti. Nasledne provadime n krat trenovaci fazi, kdy pouzijeme n-1 casti jako trenigovou sadu a jednu cat pouzijeme pro validaci. Vyslednou prumerna chyba ze vsech mereni nam da duveryhodnejsi vyslednou hodnotu. Nevyhodouteto metodiky je jeji velka vypocetni narocnost. Vzores pro krizovou validaci (KV) s pouzitim RMSE pro ohodnoceni modelu :
+Ve většině případů model obsahuje dodatečné parametry ovlivňující jeho výsledné chování, takzvané hyperparametry. Optimalni hodnota techto parametru neni predem znama a typicky je zavisla na podstate vstupnich dat. Optimalni hondotu tedy musime urcit behem treningove faze, zde se ale opakuje stejny problem jako pri vycleneni testovaciho datasetu. Pri urceni hodnoty pouze na jedne sade date, neni jiste zda je tato hodnota optimalni pouze pro testovaci sadu nebo obecne. Jednim z postupu jak obejtit tento problem je vyclenit dalsi cast z treningove sady, takzvanou validacni sadu a hodnoty parametru overovat na teto sade. Zde ale muze dochazet k degradaci modelu z duvodu nedostatecnosti trenovacich dat, kdy jsem se realne poloviny techto dat vedome zbavili pro dodatecne overovani spravnosti modelu. Dalsi casto pouzivana metodika je takzvana krizova validace. Treningova sada je nejprve rozdelena na sadu stem[n] stejnych casti. Nasledne provadime n krat trenovaci fazi, kdy pouzijeme n-1 casti jako trenigovou sadu a jednu cat pouzijeme pro validaci. Vyslednou prumerna chyba ze vsech mereni nam da duveryhodnejsi vyslednou hodnotu. Nevyhodouteto metodiky je jeji velka vypocetni narocnost. Vzores pro krizovou validaci (KV) s pouzitim RMSE pro ohodnoceni modelu :
 
 [stem]  
 ++++
