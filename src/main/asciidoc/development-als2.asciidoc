@@ -1,7 +1,6 @@
 
-=== Alternating Least Square (ALS)
+==== Estimator
 
-Algoritmus se sklada ze dvou hlavnich komponent. Tyto komponenty pouzivaji standartni nastroje strandartni knihovny Spark MLlib.     
 
 Hyper paramtery maji vliv na vysledne hodnoty, jejich optimalni hodnoty jsou zavisle na datasetu, pro ktery vyvarime model. Presne hodnoty odvodime pri experimentovani pomoci krizove validace. NAs Algoritmus bude podporovat nasledujici vstupni hyper parametry:
 

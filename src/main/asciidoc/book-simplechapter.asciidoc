@@ -18,5 +18,5 @@
 :pygments-linenums-mode: inline
 :scala-dir: ../scala
 
-include::book-ml.asciidoc[] 
-include::test-and-validation.asciidoc[]
+include::spark-introduction.asciidoc[]
+include::spark-ml.asciidoc[]

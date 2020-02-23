@@ -1,9 +1,22 @@
-
+﻿
 ==  Apache Spark
 
-Apache Spark je unifikovany vypocetni system pro paralelni zpracovani dat na pocitacovych clusterech. Spark ma zabudovanou podporu pro radu siroce pouzivanych programovacich jazyku jako jsou Java, Python, C# a R. Spark dale nabizi jednotne, konzistentni API pro reseni rady rozdilnych ukolu jako je transformace dat, zpracovani datovych proudu, strojove uceni. Spark je dale schopny automaticky optimalizovat spustene programy tak aby se dosahlo maximalniho vykonu. V dobe tvorby teto prace je Apache Spark nejaktivneji vyvijenym open source projektem v teto oblasti s vice nez tisicem aktivnich vyvojaru. 
+Apache Spark je unifikovaný výpočetní systém pro paralelní zpracování dat na počítačových clustrech. Spark nabízí bohaté API pro datové operace jako je filtrování, spojováni (join), seskupování a agregace. Toto API je dostupné pro řadu populárních programovacích jazyků jako jsou Java, Python, C# a R. Spark je aktuálně nejaktivněji vyvíjeným open source projektem v této oblasti s vice nez tisícem aktivních vývojářů.
 
-Filozofie Sparku je rozdilna od predchazejicich platform pro zpracovani velkych objemu dat jako je napriklad Apache Hadoop. Apache Hadoop zahrnuje jak vypocetni system (MapReduce) tak i uloziste dat (HDFS). Obe tyto casti jsou spolu uzce provazane a je obtizne provozovat jednu cast bez te druhe. Ackoliv je mozne Spark bez problemu provozovat na HDFS neni na tomto uloznem systemu nijak zavisly a je mozne ho pouzivat spolu s sirokou paletou ruznych zdroju dat. Hlavni motivaci tohoto pristupu je, ze data, ktere je potreba analyzovat jsou jiz ulozena v ruznych formatech v ruznych uloznych systemech. Presouvani techto dat muze byt zejmena pri vyssich objemech financne narocne. Spark je proto postaven tak aby byl pristup k datum co nejvice trsnaparentni.
+Filozofie Sparku je rozdílná od předcházejících platforem pro zpracovávání velkých objemů dat jako je například Hadoop, tento zahrnuje jak výpočetní systém (MapReduce) tak i úložiště dat (HDFS). Obě tyto části jsou spolu úzce provázané a je obtižné provozovat jednu část bez té druhé. Ačkoliv je možné Spark bez problémů provozovat nad HDFS není na tomto úložném systému nijak závislý a je možné ho používat i spolu s jinými zdroji dat. Jednou z motivací tohoto přístupu je, že data které je potřeba analyzovat, jsou typicky již uložena v rozdílných formátech v řadě různých úložných systémů. Přesouvání těchto dat pro analytické účely může byt zejména při vyšších objemech nepraktické. Spark je proto postaven tak aby byl přístup k datům co nejvíce transparentní.
+
+Klíčovou vlastností Sparku je, že samotné provedení sekvence datových operací je nejprve optimalizováno. Tato optimalizace zajistí co možná nejefektivnější řetězec zpracování s využítím operační paměti pro mezivýsledky. To je velkou výhodou v rychlosti výpočtu oproti MapReduce kde se v každém kroku výsledky persistují a je nutné je v následujícím kroku řetězce znovu načíst.    
+
+V diagramu <<spark-structure>> je zobrazena základní struktura Sparku. Základem je nízkoúrovňové API pro práci s datasety, RDD (Resilient Distributed Dataset) volně přeloženo jako pružný distribuovaný dataset. Dalšim patrem je strukturované API přidané v druhé generaci Sparku. Na RDD a strukturovaném API je postavena řada specifických modulů, které jsou součástí standartní distribuce Sparku. Mezi tyto moduly patří:
+
+MLlib pro strojove uceni, 
+Structured Spark Streaming pro datove proudy a 
+GraphX pro analyzu grafu     
+
+[[spark-structure]]
+image::spark-structure.png[title="Struktura Sparku", pdfwidth="75%"]
+
+
 
 Dalsi soucasti Sparku vedle jeho jadra je rada knihoven specializovanyvh pro ruzne aspekty analyzy dat. Tyto knihovny jsou jak standartni, distribuovane spolu se Sparkem, tak i knihovny vyvijene tretimi stranami v ramci open source komunit. Hlavnimi standartnimi knihovnami Apache Spark jsou Spark SQL pro podporu SQL dotazu a strukturovanych dat, MLlib pro strojove uceni, Structured Spark Streaming pro datove proudy a GraphX pro analyzu grafu [SDG].
 
