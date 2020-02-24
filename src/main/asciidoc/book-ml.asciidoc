@@ -1,0 +1,43 @@
+﻿
+== Strojové učení
+
+Strojové učení je trochu mlhavý pojem, obecně ale můžeme říct, že strojové učení je věda o programování počítačů tak, aby se byly schopné učit z dat. Aplikace strojového učení již pronikla do našeho každodeního života, jedním z viditelnějších případů je například filtrování spamu. Při tvorbě takového systému tradičním přístupem by programátor nadefinoval sadu pravidel, která by na základě obsahu daného emailu rozhodovala zda se jedné o spam nebo ne. Takový systém by ale zdaleka nebyl triviální a musel by se průběžně přizpůsobovat měnícím se podmínkám. Sada vestavěných pravidel by se stávala čím dál tím více komplexnější s narůstajícími požadavky na údržbu. Spam filtr založený na strojovém učení používá rozdílný přístup. Automaticky se naučí, která slova a fráze spam typicky obsahuje. Zřejmý problém je zde fráze 'automaticky se naučí'. Učícímu algoritmu je nutné poskytnout podmínky za kterých se bude schopný sám učit. V případe spam filtru učícímu algoritmu poskytneme databázi historických emailů. Emaily samotné nám ale nestačí, pro potřeby učícího algoritmu ještě potřebujeme označení zda se je daný historický email spam nebo ne. Obecně můžeme říct, že se snažíme vytvořit abstraktní model, který nám  na základě zadaného, předem nepoznaného, vstupu poskytne nějakou formu výstupu. Skupinu postupů, kdy k učení použijeme data obsahující vstup a požadovaný výstup, nazýváme učení s učitelem. Učeni s učitelem je pouze jednou z kategorií v rámci technik strojového učení. Účelem této práce není poskytnout kompletní přehled všech těchto technik, tento je možné dohledat například zde [ISL ESL HANDSON]. Pro aplikaci strojového učení aktuálně existuje celá řada nástrojů. Mezi nejpoužívanější patří MATLAB, knihova Scikit-Learn pro Python nebo RStudio.
+
+Vytvoření funkčního modelu na základě vstupních dat je komplexní postup, který není specifický pro žádnou konkrétní platformu. Tento postup je možné rozdělit do několika základních kroků:
+
+1. Zkoumání a příprava dat
+2. Výběr modelu
+3. Vytvoření a vyhodnocení modelu 
+    
+=== Zkoumání a příprava dat 
+
+Vstupní data nemusí a obvykle nebudou připravená pro strojové zpracování. Toto platí zejména pro případ implicitních dat, která mohou byt v podobě různých logovacích souborů, obsahujících dalši nerelevantní údaje, nebo v podobě databázových tabulek. Z takových zdrojů je třeba extrahovat potřebná data do struktur vhodnějších pro další zpracování. Dále je nutné vstupní data prozkoumat a porozumět jejich zakladním charakteristikám. K tomu slouží různe vizualizační a dotazovací nástroje, které nám umožní porozumět distribucím hodnot jednotlivých vlastností, korelacím mezi vlastnostmi atd. Obecně se tato fáze v odborné literatuře uvádí pod zkratkou EDA (Exploratory Data Analysis). V rámci této fáze by se měly objevit nedostatky a chyby ve vstupních datech, které by měly za následek pokřiveni vysledneho modelu. Dále je třeba upravit vlastnosti vstupních dat tak aby jejich hodnoty byly vhodné pro strojové zpracovaní. Typicky převodem vlastností na numerické hodnoty a úpravou škály jejich hodnot. Dva základní postupy pro úpravu škály numerických hodnot jsou normalizce a standardizace. U normalizace odečteme minimum a dělíme rozsahem. Toto nám převede hodnoty do intervalu <0, 1>. Normalizaci definujeme jako:
+
+[stem]  
+++++
+\begin{align*}
+x_{norm} = \frac{x - x_{min}}{x_{max}-x_{min}}
+\end{align*}
+++++   
+
+Standardizace, někdy též nazývaná z-score převede hodnoty tak aby měly nulový průmer a směrodatnou odchylku rovnou 1. Nejprve od jednotlivých hodnot odečteme jejich průměr stem:[\overline{x}] a tímto je vycentrujeme kolem nuly, následně tyto hodnoty dělíme směrodatnou odchylkou. Směrodatná odchylka stem:[\sigma] odpovídá odmocnině z rozptylu hodnot, rozptyl stem:[Var] definujeme jako stem:[\frac{1}{n}\sum_{i=1}^{n}{(x_{i} - \overline{x})^2}]. Výsledný vzorec pro standardizaci (z-score) je tedy:
+
+[stem]  
+++++
+\begin{align*}
+x_{zscore} = \frac{x_{i}-\overline{x}}{\sqrt{\frac{1}{n}\sum_{i=1}^{n}{(x_{i} - \overline{x})^2}}}
+\end{align*}
+++++  
+
+Obecně se preferuje standardizace před normalizací. Normalizace je citlivější na extrémní hodnoty, které potom tlačí majoritní část hodnot směrem k nule.        
+
+===  Výběr modelu
+
+Jaký typ modelu zvolit je plně zavislé na zvoleném úkolu. Pro některé úlohy bude vhodnější lineární model a pro jiné neuronová síť. A priori není žádný typ modelu nevýhodnější [LACK HADSON ]. Typickým postupem je vytvořit model pro několik nejvhodnějších kandidátů a následně vyhodnotit ten nejúspěšnější. 
+
+=== Vytvoření a vyhodnocení modelu 
+
+V této fázi máme připravená data pro dany úkol a vybraný typ modelu, na jejichž základě vytvoříme či vytrénujeme cílový model. Tento model by měl být schopný předpovídat výstupný hodnoty na základě vstupních hodnot, které nebyly použity pro jeho vytvoření. To nám ovšem nestačí, potřebujeme nějak zjistit nakolik je náš model přesný. Jestli se můžeme na jeho předpovědi spolehnout například pro důležitá obchodní rozhodnutí. Potřebujeme tedy nějakou metodiku jak změřit jeho přesnost. Dále pokud model obsahuje nějeké parametry, které ovlivňují jeho chování, je nutné nalézt jejich optimální hodnoty. 
+
+   
+     

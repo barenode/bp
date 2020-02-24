@@ -1,0 +1,49 @@
+
+==  Apache Spark
+
+Apache Spark je unifikovaný výpoèetní systém pro paralelní zpracování dat na poèítaèových clustrech. Spark nabízí bohaté API pro datové operace jako je filtrování, spojováni (join), seskupování a agregace. Toto API je dostupné pro øadu populárních programovacích jazykù jako jsou Java, Python, C# a R. Apache Spark je aktálnì nejaktivnìji vyvíjeným open source projektem v této oblasti s vice nez tisícem aktivních vývojáøù.
+
+Filozofie Sparku je rozdilna od predchazejicich platform pro zpracovani velkych objemu dat jako je napriklad Apache Hadoop. Apache Hadoop zahrnuje jak vypocetni system (MapReduce) tak i uloziste dat (HDFS). Obe tyto casti jsou spolu uzce provazane a je obtizne provozovat jednu cast bez te druhe. Ackoliv je mozne Spark bez problemu provozovat na HDFS neni na tomto uloznem systemu nijak zavisly a je mozne ho pouzivat spolu s sirokou paletou ruznych zdroju dat. Hlavni motivaci tohoto pristupu je, ze data, ktere je potreba analyzovat jsou jiz ulozena v ruznych formatech v ruznych uloznych systemech. Presouvani techto dat muze byt zejmena pri vyssich objemech financne narocne. Spark je proto postaven tak aby byl pristup k datum co nejvice trsnaparentni.
+
+Dalsi soucasti Sparku vedle jeho jadra je rada knihoven specializovanyvh pro ruzne aspekty analyzy dat. Tyto knihovny jsou jak standartni, distribuovane spolu se Sparkem, tak i knihovny vyvijene tretimi stranami v ramci open source komunit. Hlavnimi standartnimi knihovnami Apache Spark jsou Spark SQL pro podporu SQL dotazu a strukturovanych dat, MLlib pro strojove uceni, Structured Spark Streaming pro datove proudy a GraphX pro analyzu grafu [SDG].
+
+
+=== Spark Aplikace
+
+Spark aplikace se sklada z ridiciho procesu a sady vykonnych procesu. Ridici proces ja srdcem cele aplikace. Je zodpovedny za analyzu a distribuci ukolu jednotlivym vykonnych procesum. Dale udrzuje veskere spjate s danou apliaci. Vykonne procesy jsou zodpovedne za zpracovani ukolu, ktery jim priradi ridici proces a za reportovani stavu tohoto ukolu zpet ridicimu processu. Cluster pocitacu, ktere Spark vyuzije pro vykonani dane aplikace je rizeny cluster managerem. Tento manager ridi pristup k prostredkum clusteru a prirazuje jeho zdroje jednotlivym aplikacim. V ramci jednoho clusteru muze tedy bezet vice Spark aplikaci zaroven. Spark neni zavisly na jednom konkretnim cluster manageru, v dobe psani prace podporoval YARN, Mesos a vlastni takzvany Spark standalone cluster manager. Vyvojar Spark aplikace je odstineny od toho na jake ukoly bude aplikace rozdelena nebo na kterych pocitacich v ramci clustru budou tyto ukolly vykonany. O vse se transparente postara Spark spolu s pouzitym cluster manazerem.                                  
+
+
+==== Odeslani aplikace
+
+Aplikace samotna je typicky zkompilovana java knihovna obsahujici spustitelnou tridu. Zpusobu jak spustit aplikaci je mnoho, zakladni z nich je pouzit utilitu spark-submit z prikazove radky. V teto chvili spoustime proces na klientskem pocitaci, tento proces kontaktuje prislusny cluster manager a zazada si o prostredky pro ridici proces. Cluste manager umisti ridici proces samotny na nektery z dostupnych pocitacu. Proces spusteny z prikazove radky na klientskem pocitaci je dokoncen a aplikace je spustena. Prubezny stav aplikace je mozne sledovat pomoci dodatecnych dotazu na prislusny cluster mamanazer. 
+
+V teto fazi je ridici proces umisteny na nekterem uzlu v clusteru. Ridici proces nasledne spusti uzivatelsky kod (spustitelna trida v ramci odeslane JARu). Tento kod musi obsahovat incializaci tridy SparkSession. SparkSession nasledne komunikuje s cluster manazerem a vazada si spusteni jednotlivych vykonnych procesu. Po inicializaci a spusteni jednotlivych vykonnych procesu odesle cluster manazer relevantni informace o jejich umisteni zpet ridicimu procesu.
+
+V teto chvili mame inicializovany Spark cluster slozeny z jednoho ridiciho procesu a sady vykonnych procesu. Ridici proces prideluje jednotlive ukoly vykonnym procesum. Vykonne procesy komunikuji mezi sebou, vykonavaji ukoly a vymenuji is potrebna data. o dokonceni prideleneho ukolu reportuji vysledny status pzet ridicimu procesu.
+
+Po dokonceni behu aplikace, je ridici proces ukoncen s vyslednym stavem,. Cluster manager nasledne ukonci vsechny pridelene vykonne procesy. V teto chvili je mozne zjistit vysledny status dotazem na prislusny cluster manager.
+
+
+=== Spark API
+
+==== RDD
+
+RDD (Resilient Distributed Dataset) je zakladni konstrukt Spark API. Predstavuje nemennou kolekci zaznamu, rozdelelnou do casti, ktere mohou byt parallelne zpracovany. Tyto casti takzvane partitions jsou typicky rozlozene na vice uzlu v ramci vypocetniho clustru. Jednotlive zaznamy jsou klasicke Java, Python nebo Scala objekty. Pri operaci nad danym RDD je kazda partititon zpracovana prave jednim vykonym procesem.  
+
+
+==== DataFrames
+
+DataFrame je konstrukt Spark API, ktery reprezentuje tabulku slozenou z radku a sloupcu. Tato tabulka se muze rozkladat na desitkach pocitacu v ramci clusteru. Duvod ulozeni dat na vice pocitacu je zrejmy, bud jsou data prilis velka aby je bylo mozne ulozit na jediny pocitac, nebo je k jejich zpracovani potrebny vetsi vykon. Toto API bylo pridano do Sparku v ramci druhe generace. Stejny koncept, ackoliv omezeny na jediny pocitac, pouzivaji API jako Python Pandas nebo R DataFrames. Toto usadnuje pouzivani Sparku se znalostmi techto API, napriklad jako doplmnujici nastroj pro praci s velkymi objemy dat.
+
+==== Partitions
+
+Partition je, cast dat ulozena na jednom fyzickem pocitaci. Ted pokudy mame DataFrame tabulku, ktera se rozpina pres mnoho dilcich pocitacu, partition je podmonozina radku ktera ulozena na jenom z techto pocitacu. Toto umozne Sparku pracovat paralelne nad jednim zdrojem dat v ramci vypocetniho clusteru. Pokud pracujeme primo s DataFrame API, Spark nad od odstini od manualniho rozdelovani dat avse automaticky provede na pozadi. Nicmene pokud je potreba mit primou kontrolu nad tim jak jsou data fyzicky distribuovana v ramci clusteru je mozne prejit na API nizsi urovne (RDD), ktere nam takovy pristup umoznuji.  
+
+==== Transformace
+
+Ve Sparku jsou zdrojova data typicky nemenna. Pokud chceme provest upravy nad DataFrame, definujeme jednu nebo vice takzvanych transformaci. Tyto transformace instruuji Spark jak ma zmenit zdrojova data. Dulezity je fakt, ze samotna transformace pouze definuje jak se maji data zmenit ale samotnou transaformaci neiniciuje.    
+
+
+==== Akce
+
+Akce jsou casti API sparku ktere spousti vypocet samotny. Typicky je pouzit RDD jako datovy zdroj, na nem se potenconalne definuje sada transfoirmaci a nakonec se tento vypocet 

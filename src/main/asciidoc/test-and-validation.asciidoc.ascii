@@ -1,0 +1,50 @@
+
+==== Vyhodnoceni presnosti modelu
+
+Reálnou pøesnost modelu je možné ovìøit pouze na datech, které nebyla použita k jeho vytvoøení resp. k jeho uèení. Obvyklá metoda je rozdìlit zdrojový dataset na dvì èásti, na takzvanou tréningovou a testovací sadu. Model se, jak už název napovídá, uèí pouze na tréningove sade a jeho pøesnost se následnì ovìøí na sadì testovací. Obvyklý postup je použít na treningovou sadu 70-80% zdrojových dat. Samotné rozdìlení nemusí být nicménì úplnì triviální úkol, v obou sadách by mìla být zastoupena data v celém rozsahu. Chyba namìøená na testovací sadì nám ukaže jak by se mohl náš model chovat v reálném nasazení. To, že je chyba namìøená na trenigove sade nizka a chyba na testovaci sade vysoka muze mit nekolik pricin. Nejpravdepodobnejsi je , ze je nas model preuceny. To znamena, ze je model prilis specilizovany na treningovou sadu a nereflektuje realitu. Tento problem lze resit nejakym zpusobem regularizace. kdy do modelu pridame takzvany regulaizacni parametr, ktery zabranuje preuceni modelu. Optimalni hodnotu tohoto parametru je nutne nasledne urcit pomoci experimentovani. Dalsim problem muze byt nespravne zvolena treningova a testovaci sada, kdy testovaci setu obsahuje dat, ktera nebyla zozhlednena v ramci uceni. Pro vyhodnoceni presnosti modelu se pouzije namerena hodnota a hodnota predpovezena modelelm pro toto mereni. Pokud tyto 2 hodnoty odecteme, rozdil bude obsahovat chybu v predpovedi pro dane mereni. Pumerna hodnota pres vsechny mereni nam nasledne ukaze chybu celkovou. Zakladni vzorce postavene na tomto pricnipu a pouzivane pro ohodnoceni modelu jsou nasledujici:
+
+MSE (Mean Squared Error)::
+  Jedna se o prumer ze sumy druhych mocnin chyb mereni:
+  
+[stem]
+++++
+\begin{align*}
+   MSE = \frac{1}{n}\Sigma_{i=1}^{n}{(y_{i} - y_{i}^hat)^2}}
+\end{align*}
+++++ 
+
+::RMSE (Root Mean Squared Error)
+    Jedna se druhou odmocninmu z MAE. Tato hodnota lepe ukazuje delku chyby nez MSE samotne.
+
+[stem]
+++++
+\begin{align*}
+ RMSE = \sqrt{MSE} = \sqrt{\frac{1}{n}\Sigma_{i=1}^{n}{(y_{i} - y_{i}^hat)^2}}}
+\end{align*}
+++++ 
+ 
+::MAE (Mean absolute error)  
+  Prumer ze sumy absolutnich hodnot chyb mereni:
+
+[stem]  
+++++
+\begin{align*}
+MAE = (\frac{1}{n})\sum_{i=1}^{n}\left | y_{i} - x_{i} \right |
+\end{align*}
+++++ 
+
+RMSE a MAE jsou si dost podone kdy ukazuji prumernou chybu nehlede na jeji orientaci. To znamena, ze nezalezi na tom zda je rozdil predpovidane a namerene hodnoty kladny nebo zaporny, oba rozdily se agreguji do vysledne chyby. RMSE ktera se zda aktualne prefreovanejsi metodikou [ISL, SDG, HANDSON], vice penalizuje velke chyby nez MAE. 
+
+==== Parametry modelu
+
+Ve vetsine pripadu model obsahuje dodatecne parametry ovlivnuji jeho vysledne chovani, takzvane hyperparametry. Optimalni hodnota techto parametru neni predem znama a typicky je zavisla na podstate vstupnich dat. Optimalni hondotu tedy musime urcit behem treningove faze, zde se ale opakuje stejny problem jako pri vycleneni testovaciho datasetu. Pri urceni hodnoty pouze na jedne sade date, neni jiste zda je tato hodnota optimalni pouze pro testovaci sadu nebo obecne. Jednim z postupu jak obejtit tento problem je vyclenit dalsi cast z treningove sady, takzvanou validacni sadu a hodnoty parametru overovat na teto sade. Zde ale muze dochazet k degradaci modelu z duvodu nedostatecnosti trenovacich dat, kdy jsem se realne poloviny techto dat vedome zbavili pro dodatecne overovani spravnosti modelu. Dalsi casto pouzivana metodika je takzvana krizova validace. Treningova sada je nejprve rozdelena na sadu stem[n] stejnych casti. Nasledne provadime n krat trenovaci fazi, kdy pouzijeme n-1 casti jako trenigovou sadu a jednu cat pouzijeme pro validaci. Vyslednou prumerna chyba ze vsech mereni nam da duveryhodnejsi vyslednou hodnotu. Nevyhodouteto metodiky je jeji velka vypocetni narocnost. Vzores pro krizovou validaci (KV) s pouzitim RMSE pro ohodnoceni modelu :
+
+[stem]  
+++++
+\begin{align*}
+KV_{n} = (\frac{1}{n})\sum_{i=1}^{n}RMSE_{i}
+\end{align*}
+++++   
+
+
+ 

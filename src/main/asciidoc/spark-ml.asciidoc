@@ -1,0 +1,16 @@
+
+==== Spark a strojove uceni
+
+Zakladnim kamenem pro strojove urceni pro Apache Spark je jeho standartni knihovna MLlib. Tato knihovna obsahuje sirokou podporu postupu strojoveho ucineni a jeho jednotlivych fazi viz. REF[CH1 ML]. Dale knihovna nabizi konzistentni API s praktickou podporou pro retezeni. Vyvojar se sustredi pouze na implementaci konkretniho algoritmu a nasledne ho propoji do treningoveho retzce s dostupnymi komponentami pro skalkovani hodnot, ladeni hyperparamteru, ohodnocovani presnosti atd [SDG]. Knihovna obsahuje tyto zakladni prvky:
+
+Model::
+    Model je komponenta ktera dokaze nejakym zpusobem tranformovat vstupni data. Obsahuje jedinou metodu *transform* se vstupnim parametrem typu Dataset [REF SPARK STRUCT]. Model dale obsahuje podporu pro definici parametru, napriklad jmeno vystupniho parametru a podporu presistence. Vytvorenio model muze byt vypocetne narocne, je tedy potreba mit moznost takovy model ulozit a pozdeji znovu nacist pro opakovane pouziti.
+    
+Estimator::
+    Estimator ma jedinou metodu *fit* se vstupnim parametrem typu Dataset a navratovym parametrem typu Model. Estimator provede analyzu vsupnich data a n a jejich zaklade incializuje prislusny Model.  
+    
+    
+[OBR]   
+
+V diagramu [DIAG] Estimator nejprve na zaklade treningove sady inicializuje Model. Model nasledne prida do datasetu dalsi sloupec ve kterem jsou predpovezene hodnoty pro nova data.
+
