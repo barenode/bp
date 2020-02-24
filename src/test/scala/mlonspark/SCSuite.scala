@@ -12,13 +12,14 @@ class SCSuite extends SparkFunSuite with MLlibTestSparkContext with DefaultReadW
 
   test("sc") {
     val spark = this.spark
-    //tag::model-transform[]
+    //tag::spark-example-1[]
     val seq = Seq(1, 2, 3, 4, 5, 6, 7, 8, 9)
     val rdd = spark.sparkContext.parallelize(seq)
-    val rmd = rdd.map(v=> {
-      (v%2, v)
-    }).groupByKey().mapValues(v=>v.size)
-    //end::model-transform[]
+    val rmd = rdd
+      .map(v => (v%2, v))
+      .groupByKey()
+      .mapValues(v=>v.size)
+    //end::spark-example-1[]
     System.out.println(rmd.toDebugString)
     rmd.foreach(f => {
       System.out.println(f);

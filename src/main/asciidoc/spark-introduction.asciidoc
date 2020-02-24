@@ -28,17 +28,18 @@ Transformace::
 
 Akce::
     Akce jsou metody RDD API, které spouští samotný výpočet, při kterém se aplikují definované transformace na zdrojový RDD. 
- 
+
+.TransformationExample1.scala 
 [source, scala, numbered]
 ----
 include::{scala-test-dir}/mlonspark/SCSuite.scala[tags=spark-example-1]
 ----
    
 ---- 
-(2) MapPartitionsRDD[3] at mapValues at SCSuite.scala:20 []
- |  ShuffledRDD[2] at groupByKey at SCSuite.scala:20 []
- +-(2) MapPartitionsRDD[1] at map at SCSuite.scala:18 []
-    |  ParallelCollectionRDD[0] at parallelize at SCSuite.scala:17 []
+(2) MapPartitionsRDD[3] at mapValues at TransformationExample1:20 []
+ |  ShuffledRDD[2] at groupByKey at TransformationExample1:20 []
+ +-(2) MapPartitionsRDD[1] at map at TransformationExample1:18 []
+    |  ParallelCollectionRDD[0] at parallelize at TransformationExample1:2 []
 ----
     
 ----
