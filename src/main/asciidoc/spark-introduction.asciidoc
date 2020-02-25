@@ -49,10 +49,8 @@ include::{scala-test-dir}/mlonspark/SCSuite.scala[tags=spark-example-1]
 
 ==== Strukturované API
 
-DataFrame je konstrukt Spark API, ktery reprezentuje tabulku slozenou z radku a sloupcu. Tato tabulka se muze rozkladat na desitkach pocitacu v ramci clusteru. Duvod ulozeni dat na vice pocitacu je zrejmy, bud jsou data prilis velka aby je bylo mozne ulozit na jediny pocitac, nebo je k jejich zpracovani potrebny vetsi vykon. Stejny koncept, ackoliv omezeny na jediny pocitac, pouzivaji API jako Python Pandas nebo R DataFrames. Toto usadnuje pouzivani Sparku se znalostmi techto API, napriklad jako doplmnujici nastroj pro praci s velkymi objemy dat.
-Partitions::
-    Partition je, cast dat ulozena na jednom fyzickem pocitaci. Ted pokudy mame DataFrame tabulku, ktera se rozpina pres mnoho dilcich pocitacu, partition je podmonozina radku ktera ulozena na jenom z techto pocitacu. Toto umozne Sparku pracovat paralelne nad jednim zdrojem dat v ramci vypocetniho clusteru. Pokud pracujeme primo s DataFrame API, Spark nad od odstini od manualniho rozdelovani dat avse automaticky provede na pozadi. Nicmene pokud je potreba mit primou kontrolu nad tim jak jsou data fyzicky distribuovana v ramci clusteru je mozne prejit na API nizsi urovne (RDD), ktere nam takovy pristup umoznuji. 
-
+Do duhé generace přidali autoři Sparku takzvané strukturované API. Základním konstruktem tohoto API je DataFrame. DataFrame reprezentuje tabulku složenou z řádků a sloupců, tato tabulka se ale, stejně jako RDD, může rozkládat na mnoha počítačích v rámci výpočetního clustru. DataFrame také jako RDD používá pro operace s daty akce a transformace. Strukturované API by mělo být preferovaným způsobem používání Sparku, je uživatelsky přívětívější, vysoce optimalizované a odstiňuje uživatele od náročnějších detailů. Nicméně pokud je třeba mít přímou kontrolu nad tím, jak jsou data fyzicky uložena v rámci clustru, je nutné použít RDD API.
+Stejný koncept jako DataFrame, omezený na jediný počítač, používajá API jako Python Pandas nebo R DataFrames. Toto usnadňuje používání Sparku uživatelům se znalostmi těchto nástrojů, například jako doplňující nástroj pro práci s velkými objemy dat. 
 
 
 === Spark Aplikace
