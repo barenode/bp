@@ -1,4 +1,4 @@
-﻿
+
 ==  Apache Spark
 
 Apache Spark je unifikovaný výpočetní systém pro paralelní zpracování dat na počítačových clustrech. Spark nabízí bohaté API pro datové operace jako je filtrování, spojováni (join), seskupování a agregace. Toto API je dostupné pro řadu populárních programovacích jazyků jako jsou Java, Python, C# a R. Spark je aktuálně nejaktivněji vyvíjeným open source projektem v této oblasti s vice nez tisícem aktivních vývojářů.
@@ -59,12 +59,12 @@ Spark aplikace se skládá z řídícího procesu a sady výkonných procesů. �
 
 
 Inicializace::
-    Aplikace samotná je typicky java knihovna obsahující spustitelnou tridu. Zpusobu jak spustit aplikaci je mnoho, zakladni z nich je pouzit utilitu spark-submit z prikazove radky. V teto chvili spoustime proces na klientskem pocitaci, tento proces kontaktuje prislusny cluster manager a zazada si o prostredky pro ridici proces. Cluste manager umisti ridici proces samotny na nektery z dostupnych pocitacu. Proces spusteny z prikazove radky na klientskem pocitaci je dokoncen a aplikace je spustena. Prubezny stav aplikace je mozne sledovat pomoci dodatecnych dotazu na prislusny cluster mamanazer. V teto chvili je ridici proces umisteny na nekterem uzlu v clusteru. Ridici proces nasledne spusti uzivatelsky kod (spustitelna trida v ramci odeslane JARu). Tento kod musi obsahovat incializaci tridy SparkSession. SparkSession nasledne komunikuje s cluster manazerem a vazada si spusteni jednotlivych vykonnych procesu. Po inicializaci a spusteni jednotlivych vykonnych procesu odesle cluster manazer relevantni informace o jejich umisteni zpet ridicimu procesu.
+    Aplikace samotná je typicky java knihovna obsahující spustitelnou třídu. Způsobů jak spustit aplikaci je více, základní z nich je použít utilitu spark-submit z příkazové řádky. V této chvíli spouštíme proces na klientském počítači, tento proces kontaktuje příslušný clustr manažer a zažádá si o prostředky pro řídící proces. Clustr manažer umístí řídící proces samotný na některý z dostupných pocitačů clustru. Proces spuštěný z příkazové řádky na klientském počítači je ukončen a aplikace je spusťěna. Průběžný stav aplikace je možné sledovat pomocí dodatečných dotazů na příšlusný clustr manažer. V této chvíli je tedy řídící proces umístěn na některém počítači v clusteru, řidící proces následně aktivuje uživatelský kód (spustitelná třída v rámci odeslaného JARu). Tento kod musí obsahovat incializaci třídy *SparkSession*. SparkSession následně komunikuje s clustr manažerem a vyžádá si spuštění jednotlivých výkonných procesů. Po inicializaci a startu těchto výkonných procesů odešle clustr manažer relevantní informace o jejich umístění zpět řídícímu procesu.
 
 Vykonání::
-    V teto chvili mame inicializovany Spark cluster slozeny z jednoho ridiciho procesu a sady vykonnych procesu. Ridici proces prideluje jednotlive ukoly vykonnym procesum. Vykonne procesy komunikuji mezi sebou, vykonavaji ukoly a vymenuji is potrebna data. o dokonceni prideleneho ukolu reportuji vysledny status pzet ridicimu procesu.
+    V této chvíli máme inicializovaný Spark clustr složený z jednoho řídícího procesu a sady výkonných procesů. Řádící proces přiděluje jednotlivé úkoly výkonným procesům. Vykonné procesy komunikují mezi sebou, vykonávají přidělené úkoly a vyměňují si potřebná data. Po dokončení přiděleného úkolu reportují výsledný status zpět řídícímu procesu.
 
 Dokončení::
-    Po dokonceni behu aplikace, je ridici proces ukoncen s vyslednym stavem,. Cluster manager nasledne ukonci vsechny pridelene vykonne procesy. V teto chvili je mozne zjistit vysledny status dotazem na prislusny cluster manager.
+    Po dokonceni běhu aplikace, je řídící proces ukončen s výsledným stavem. Cluster manager následně ukončí všechny přidělené výkonné procesy. V této chvíli je možné zjistit konečný status aplikace dotazem na příslušný cluster manažer.
 
 
