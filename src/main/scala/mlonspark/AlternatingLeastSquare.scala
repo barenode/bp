@@ -191,7 +191,9 @@ class AlternatingLeastSquareModel(
       dataset
       .join(userFactors, dataset($(userCol)) === userFactors("id"), "left")
       .join(itemFactors, dataset($(itemCol)) === itemFactors("id"), "left")
-      .select(dataset("*"), predict(userFactors("features"), itemFactors("features")).as($(predictionCol)))
+      .select(
+        dataset("*"),
+        predict(userFactors("features"), itemFactors("features")).as($(predictionCol)))
     //end::model-transform[]
     predictions.na.drop("all", Seq($(predictionCol)))
   }
