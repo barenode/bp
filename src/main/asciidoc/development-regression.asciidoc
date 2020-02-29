@@ -1,5 +1,5 @@
 
-==== Lineární regrese
+==== Lineární systém
 
 V rámci algoritmu, jak uz sám název napovídá, je třeba opakovaně řešit lineární systém, kdy vektorový součin uživatelských a produktových faktorů odpovídá příslušnému hodnocení. Pro výpočet výpočet faktorového vektoru stem:[x] pro jednoho uživatele tedy platí, že součin matice produktových faktorů stem:[A] a vektoru stem:[x] odpovídá vektoru hodnocení daného uživatele pro všechny produkty: 
 

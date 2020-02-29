@@ -94,3 +94,10 @@ include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-dstIdToLocalIndex]
 V této chvíli máme tedy RDD kde je klíčem id zdrojového bloku a hodnotou blok hodnocení. Pro jedno id zdrojového bloku může být v datasetu více záznamů, zhledem k tomu, že příslušný blok obsahuje hodnocení pouze pro jediný cílový blok. Dateset tedy seskupíme dle klíče, id zdrojového bloku. Jednotlive bloky hodnocení spojíme do jediného bloku, obsahujícího všechny hodnocení pro daný zdrojový blok. Tento výsledný blok převedeme do cílové formy tak jak je zobrazena v diagramu <<als_block_diagram>>. Dále na základě tohoto bloku vytvoříme příslušný meta blok a blok faktorů, inicializovaný na náhodné hodnoty.
 
 Tento postup následně opakujeme, pouze s tím rozdílem, že je jako zdrojové id použito id produktu a jako cílove id, id uživatele. V této chvíli máme tedy vstupní data rozdělena do příslušných bloků, připravených pro výpočet samotný. 
+
+
+=====  Výpočet faktorů
+
+Po rozdělení hodnocení do bloků je možné provést výpočet samotných faktorů. Tento výpočet probíhá iterativně, celkový počet iterací je určen vstupním parametrem maxIter. V každé iteraci nejprve proběhne výpočet uživatelských a následně produktových faktorů, pro oba výpočy se použije identický algoritmus vysvětlený v <<REC ALS>>. Do lineárního systému nejprve postupně vložíme všechny vektory z matice zdrojových faktorů stem:[Y], ten tedy bude následně obsahovat matici odpovídající výrazu stem:[Y^TY]. Tato operace vyžaduje přeskládání v rámci výpočetního clustru, kdy je do lineárního systému nutné zahrnout všechny zdrojové faktorové bloky. Výslednou čtvercovou matici, obsahující pouze stem:[rxr] elementů, kde stem:[r] odpovídá zadanému ranku, následně použijeme pro výpočet cílových faktorů. Tento výpočet již provádíme paralelně na úrovni jednotlivých cílových bloků, kde v cyklu spočítame jedotlivé cílové faktory. Zde je nutné do lineárního systému přidat všechny zdrojové faktory a příslušné hodnocení, které existují pro daný cílový faktor. Řešeni lineárního systému odpovídá hledanému cílovemu faktoru.  
+
+  
