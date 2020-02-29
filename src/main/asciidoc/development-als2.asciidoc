@@ -1,96 +1,96 @@
-
+ï»¿
 ==== Estimator
 
-Hyper paramtery mají vliv na vısledné predikce hodnocení, jejich optimální hodnoty jsou závislé na datasetu, pro kterı vyváøíme model. Pøesné hodnoty odvodíme a pøi experimentování, typicky pomocí køíové validace <<CH ML>>. Algoritmus bude podporovat následující vstupní hyper parametry:
+Hyper paramtery majÃ­ vliv na vÃ½slednÃ© predikce hodnocenÃ­, jejich optimÃ¡lnÃ­ hodnoty jsou zÃ¡vislÃ© na datasetu, pro kterÃ½ vyvÃ¡Å™Ã­me model. PÅ™esnÃ© hodnoty odvodÃ­me aÅ¾ pÅ™i experimentovÃ¡nÃ­, typicky pomocÃ­ kÅ™Ã­Å¾ovÃ© validace <<CH ML>>. Algoritmus bude podporovat nÃ¡sledujÃ­cÃ­ vstupnÃ­ hyper parametry:
 
 rank::
-    Rank urèuje dimenzi faktorovıch vektorù. Tato dimenze je vdy stejná jak pro uivatele tak i pro produkty. Pokud je velikost faktorovıch vektorù pøíliš nízkı, model bude také pøíliš zjedndušenı a nebudé podávat optimalní predikce. Na druhou stranu pokud bude tento poèet pøíliš velkı, mùe dojít k takzvanému pøeuèení, kdy model bude pøíliš spjatı s trénovacími daty. Vıhozí hodnota je 10.
+    Rank urÄuje dimenzi faktorovÃ½ch vektorÅ¯. Tato dimenze je vÅ¾dy stejnÃ¡ jak pro uÅ¾ivatele tak i pro produkty. Pokud je velikost faktorovÃ½ch vektorÅ¯ pÅ™Ã­liÅ¡ nÃ­zkÃ½, model bude takÃ© pÅ™Ã­liÅ¡ zjednduÅ¡enÃ½ a nebudÃ© podÃ¡vat optimalnÃ­ predikce. Na druhou stranu pokud bude tento poÄet pÅ™Ã­liÅ¡ velkÃ½, mÅ¯Å¾e dojÃ­t k takzvanÃ©mu pÅ™euÄenÃ­, kdy model bude pÅ™Ã­liÅ¡ spjatÃ½ s trÃ©novacÃ­mi daty. VÃ½hozÃ­ hodnota je 10.
     
 alpha::
-    Alpha nastavuje pomìr nárùstu dùvìry v hodnocení, viz <<CH ALS>>. Vıchozí hodnota je 0.1.
+    Alpha nastavuje pomÄ›r nÃ¡rÅ¯stu dÅ¯vÄ›ry v hodnocenÃ­, viz <<CH ALS>>. VÃ½chozÃ­ hodnota je 0.1.
     
 regParam::
-    Regularizaèní parametr zabraòuje pøeuèení modelu. Hodnota 0 má za následek, e se pøi vıpoètu regularizace neaplikuje. Vıchozí hodnota je 0.1.  
+    RegularizaÄnÃ­ parametr zabraÅˆuje pÅ™euÄenÃ­ modelu. Hodnota 0 mÃ¡ za nÃ¡sledek, Å¾e se pÅ™i vÃ½poÄtu regularizace neaplikuje. VÃ½chozÃ­ hodnota je 0.1.  
     
-Tréningové parametry nemají pøímo vliv na nastavení vıpoètu ale mùeme pomocí nich kontrolovat jak budou data distribuována v rámci vıpoèetního clustru. Data jsou pøed vıpoètem samotnım rozdìlìna do blokù. Tyto bloky jsou vlastnì partition a jsou následnì zpracovávány paralelnì. Zvolenı poèet blokù spoilu s kapacitou vıpoèetního clustru mají zásadní dopad na to, jak dlouho zabere vytvoøení modelu. Dle <<HDG>> je optimalní velikost bloku mezi jedním a pìti miliony hodnocení. Náš algoritmus bude podporovat následující trénovací parametry:
+TrÃ©ningovÃ© parametry nemajÃ­ pÅ™Ã­mo vliv na nastavenÃ­ vÃ½poÄtu ale mÅ¯Å¾eme pomocÃ­ nich kontrolovat jak budou data distribuovÃ¡na v rÃ¡mci vÃ½poÄetnÃ­ho clustru. Data jsou pÅ™ed vÃ½poÄtem samotnÃ½m rozdÄ›lÄ›na do blokÅ¯. Tyto bloky jsou vlastnÄ› partition a jsou nÃ¡slednÄ› zpracovÃ¡vÃ¡ny paralelnÄ›. ZvolenÃ½ poÄet blokÅ¯ spoilu s kapacitou vÃ½poÄetnÃ­ho clustru majÃ­ zÃ¡sadnÃ­ dopad na to, jak dlouho zabere vytvoÅ™enÃ­ modelu. Dle <<HDG>> je optimalnÃ­ velikost bloku mezi jednÃ­m aÅ¾ pÄ›ti miliony hodnocenÃ­. NÃ¡Å¡ algoritmus bude podporovat nÃ¡sledujÃ­cÃ­ trÃ©novacÃ­ parametry:
 
 numUserBlocks::
-    Poèet blokù do kterıch budou rozdìleni uivatelé, vıchozí hodnota je 10. 
+    PoÄet blokÅ¯ do kterÃ½ch budou rozdÄ›leni uÅ¾ivatelÃ©, vÃ½chozÃ­ hodnota je 10. 
 
 numItemBlocks::
-    Poèet blokù do kterıch budou rozdìlené produkty, vıchozí hodnota je 10.
+    PoÄet blokÅ¯ do kterÃ½ch budou rozdÄ›lenÃ© produkty, vÃ½chozÃ­ hodnota je 10.
     
 maxIter::
-    Poèet iterací pøi vıpoètu. V kadé iteraci se provede vıpoèet uivatelskıch a produktovıch faktorù. Po urèitém poètu iterací se ji vısledné faktory nemìní a nemá smysl ve vıpoètu pokraèovat. Optimální poèet iterací zjistíme napøíklad pomocí RMSE. Vıchozí hodnota je 10.     
+    PoÄet iteracÃ­ pÅ™i vÃ½poÄtu. V kaÅ¾dÃ© iteraci se provede vÃ½poÄet uÅ¾ivatelskÃ½ch a produktovÃ½ch faktorÅ¯. Po urÄitÃ©m poÄtu iteracÃ­ se jiÅ¾ vÃ½slednÃ© faktory nemÄ›nÃ­ a nemÃ¡ smysl ve vÃ½poÄtu pokraÄovat. OptimÃ¡lnÃ­ poÄet iteracÃ­ zjistÃ­me napÅ™Ã­klad pomocÃ­ RMSE. VÃ½chozÃ­ hodnota je 10.     
 
-Další, pomocné parametry identifikují sloupce poadované pro vıpoèet v rámci vstupního datasetu:
+DalÅ¡Ã­, pomocnÃ© parametry identifikujÃ­ sloupce poÅ¾adovanÃ© pro vÃ½poÄet v rÃ¡mci vstupnÃ­ho datasetu:
 
 userCol::
-    Jméno sloupce ve vstupním datasetu, kterı obsahuje numerickı identifikátor uivatele.
+    JmÃ©no sloupce ve vstupnÃ­m datasetu, kterÃ½ obsahuje numerickÃ½ identifikÃ¡tor uÅ¾ivatele.
 
 itemCol::
-    Jméno sloupce ve vstupním datasetu, kterı obsahuje numerickı identifikátor produktu. 
+    JmÃ©no sloupce ve vstupnÃ­m datasetu, kterÃ½ obsahuje numerickÃ½ identifikÃ¡tor produktu. 
 
 rating::
-    Jméno sloupce ve vstupním datasetu, kterı obsahuje hodnocení. Hodnocení mohou nabıvat reálnıch, nezápornıch hodnot.
+    JmÃ©no sloupce ve vstupnÃ­m datasetu, kterÃ½ obsahuje hodnocenÃ­. HodnocenÃ­ mohou nabÃ½vat reÃ¡lnÃ½ch, nezÃ¡pornÃ½ch hodnot.
         
         
-=====  Struktura blokù  
+=====  Struktura blokÅ¯  
 
-Pro práci s bloky zvolíme rozdílnou terminologii ne rozdìlení na uivatele a produkty. Vzhledem k povaze algoritmu, kdy se støídavì provádí vıpoèet faktorù zvlaš pro uivatele a zvlaš pro proukty, pouijeme pro oba stejnı algoritmus a vytvoøíme pro nì analogické struktury. Jednou budou jako cíl vıpoètu uivatelské faktory, které pouijí jako zdroj pro vıpoèet faktory produktové. Podruhé to bude naopak. Dále tedy budeme pro vysvìtlení algoritmu pouívat termíny zdroj a cíl. 
+Pro prÃ¡ci s bloky zvolÃ­me rozdÃ­lnou terminologii neÅ¾ rozdÄ›lenÃ­ na uÅ¾ivatele a produkty. Vzhledem k povaze algoritmu, kdy se stÅ™Ã­davÄ› provÃ¡dÃ­ vÃ½poÄet faktorÅ¯ zvlaÅ¡Å¥ pro uÅ¾ivatele a zvlaÅ¡Å¥ pro proukty, pouÅ¾ijeme pro oba stejnÃ½ algoritmus a vytvoÅ™Ã­me pro nÄ› analogickÃ© struktury. Jednou budou jako cÃ­l vÃ½poÄtu uÅ¾ivatelskÃ© faktory, kterÃ© pouÅ¾ijÃ­ jako zdroj pro vÃ½poÄet faktory produktovÃ©. PodruhÃ© to bude naopak. DÃ¡le tedy budeme pro vysvÄ›tlenÃ­ algoritmu pouÅ¾Ã­vat termÃ­ny zdroj a cÃ­l. 
 
 Pro vyhodnoceni ciloveho bloku vytvorime jednoduchou hashovaci funkci. Tato rozdeli hodnoceni rovnomerne dle zvoleneho celkove poctu bloku. Kazdemu uzivateli resp polozce prideli cilovy blok na zaklade jejich celociselneho identifikatoru. Vysleden cislo bloku bude take cele cislo v rade zacinajici nulou. Id bloku tedy take zaroven jeho indexem v sade prislusnych bloku. 
 
 [[als_block_diagram]]
 image::als_block_diagram02022020.jpg[title="Diagram bloku hodnoceni", pdfwidth="75%"]
 
-V diagramu <<als_block_diagram>> je zobrazena struktura bloku hodncení. Pro kadı blok vzniknou tøi nezávislé struktury:
+V diagramu <<als_block_diagram>> je zobrazena struktura bloku hodncenÃ­. Pro kaÅ¾dÃ½ blok vzniknou tÅ™i nezÃ¡vislÃ© struktury:
 
 Blok::
-    Základní struktura, obsahující pøíslušná hodnocení. Tyto bloky se inicializují na zaèátku vıpoètu na základì vstupních dat. Data v nich zùstávají konstantní pøes všechny iterace vıpoètu. Vıpoèet se provádí lokálnì na poèítaèi kde jsou tyto data uloena, není tedy tøeba tyto bloky v prùbehu vıpoètu opakovanì pøenášet po síti v rámci vıpoèetního clustru. V tìchto blocích je jeden z identifikátorù zvolen jak zdrojovı a druhı jako cílovı. Hodnocení jsou seøazena dle zdrojového identifikátoru (vzestupnì). Data v bloku jsou  zkomprimována do takzvané CSC (compressed sparse column) struktury. Vzhledem k tomu, e jeden zdrojovı identifikátor mùe bıt v datech zastoupenı nìkolikrát, vybereme nejprve unikátní zdrojové identifikátory viz. (Zdrojové ID) <<als_block_diagram>>. K tìmto identifikátorùm pøiøadíme ukazatel do bloku hodnocení. Tento ukazatel urèuje ke kterım hodnocením pøíslušné zdrojové ID patøí. Cílovı identifikátor nahradíme v datech identifikátorem cílového bloku a lokálním indexem. Lokální index urèuje index seøazenıch unikatních cílovıch id pro dany zdrojovı a cílovı blok. Tyto idenitifikátory provazují zdrojovı blok a cílovı meta blok.
+    ZÃ¡kladnÃ­ struktura, obsahujÃ­cÃ­ pÅ™Ã­sluÅ¡nÃ¡ hodnocenÃ­. Tyto bloky se inicializujÃ­ na zaÄÃ¡tku vÃ½poÄtu na zÃ¡kladÄ› vstupnÃ­ch dat. Data v nich zÅ¯stÃ¡vajÃ­ konstantnÃ­ pÅ™es vÅ¡echny iterace vÃ½poÄtu. VÃ½poÄet se provÃ¡dÃ­ lokÃ¡lnÄ› na poÄÃ­taÄi kde jsou tyto data uloÅ¾ena, nenÃ­ tedy tÅ™eba tyto bloky v prÅ¯behu vÃ½poÄtu opakovanÄ› pÅ™enÃ¡Å¡et po sÃ­ti v rÃ¡mci vÃ½poÄetnÃ­ho clustru. V tÄ›chto blocÃ­ch je jeden z identifikÃ¡torÅ¯ zvolen jak zdrojovÃ½ a druhÃ½ jako cÃ­lovÃ½. HodnocenÃ­ jsou seÅ™azena dle zdrojovÃ©ho identifikÃ¡toru (vzestupnÄ›). Data v bloku jsou  zkomprimovÃ¡na do takzvanÃ© CSC (compressed sparse column) struktury. Vzhledem k tomu, Å¾e jeden zdrojovÃ½ identifikÃ¡tor mÅ¯Å¾e bÃ½t v datech zastoupenÃ½ nÄ›kolikrÃ¡t, vybereme nejprve unikÃ¡tnÃ­ zdrojovÃ© identifikÃ¡tory viz. (ZdrojovÃ© ID) <<als_block_diagram>>. K tÄ›mto identifikÃ¡torÅ¯m pÅ™iÅ™adÃ­me ukazatel do bloku hodnocenÃ­. Tento ukazatel urÄuje ke kterÃ½m hodnocenÃ­m pÅ™Ã­sluÅ¡nÃ© zdrojovÃ© ID patÅ™Ã­. CÃ­lovÃ½ identifikÃ¡tor nahradÃ­me v datech identifikÃ¡torem cÃ­lovÃ©ho bloku a lokÃ¡lnÃ­m indexem. LokÃ¡lnÃ­ index urÄuje index seÅ™azenÃ½ch unikatnÃ­ch cÃ­lovÃ½ch id pro dany zdrojovÃ½ a cÃ­lovÃ½ blok. Tyto idenitifikÃ¡tory provazujÃ­ zdrojovÃ½ blok a cÃ­lovÃ½ meta blok.
     
-Blok faktorù::
-    Pro kadé unikátní zdrojové id v rámci propojeného bloku bude v tomto bloku právì jeden faktorovı vektor. Dimenze tìchto vektorù je dána zvolenım rankem, typicky se jedná o relativnì nízkou hodnotu, viz. vıchozí hodnota 10. Tyto faktory se pøepoèítávají v rámci kadé iterace a jsou následnì pouity jako zdroj pro vıpoèet cílovıch faktorù. Tyto bloky je tedy nutné v prùbìhu vıpoètu distribuovat v rámci clustru. Blok faktorù inicializujeme na zaèátku vıpoètu a jednotlivım faktorùm pøiøadíme náhodná reálná èísla.
+Blok faktorÅ¯::
+    Pro kaÅ¾dÃ© unikÃ¡tnÃ­ zdrojovÃ© id v rÃ¡mci propojenÃ©ho bloku bude v tomto bloku prÃ¡vÄ› jeden faktorovÃ½ vektor. Dimenze tÄ›chto vektorÅ¯ je dÃ¡na zvolenÃ½m rankem, typicky se jednÃ¡ o relativnÄ› nÃ­zkou hodnotu, viz. vÃ½chozÃ­ hodnota 10. Tyto faktory se pÅ™epoÄÃ­tÃ¡vajÃ­ v rÃ¡mci kaÅ¾dÃ© iterace a jsou nÃ¡slednÄ› pouÅ¾ity jako zdroj pro vÃ½poÄet cÃ­lovÃ½ch faktorÅ¯. Tyto bloky je tedy nutnÃ© v prÅ¯bÄ›hu vÃ½poÄtu distribuovat v rÃ¡mci clustru. Blok faktorÅ¯ inicializujeme na zaÄÃ¡tku vÃ½poÄtu a jednotlivÃ½m faktorÅ¯m pÅ™iÅ™adÃ­me nÃ¡hodnÃ¡ reÃ¡lnÃ¡ ÄÃ­sla.
     
 Meta blok::
-    Na základì dat v bloku vytvoøíme takzvanı metablok. Metabloky mezi sebou provazují zdrojové a cílové bloky. Reálnì se jedná o dvourozmìrné pole kde je záznam pro kadı cílovı blok. V tìchto záznamech jsou zdrojová id, pro které existuje hodnocení v daném zdrojovém a cílovém bloku. 
+    Na zÃ¡kladÄ› dat v bloku vytvoÅ™Ã­me takzvanÃ½ metablok. Metabloky mezi sebou provazujÃ­ zdrojovÃ© a cÃ­lovÃ© bloky. ReÃ¡lnÄ› se jednÃ¡ o dvourozmÄ›rnÃ© pole kde je zÃ¡znam pro kaÅ¾dÃ½ cÃ­lovÃ½ blok. V tÄ›chto zÃ¡znamech jsou zdrojovÃ¡ id, pro kterÃ© existuje hodnocenÃ­ v danÃ©m zdrojovÃ©m a cÃ­lovÃ©m bloku. 
        
 [[als_block_connection]]
 image::als_block_connection02022020.jpg[title="Diagram propojeni bloku", pdfwidth="75%"]
 
-V diagramu <<als_block_connection>> je zobrazené propojené mezi zdrojovımi a cílovımi bloky. Pokud chceme spoèítat zdrojovı faktor pro jedno zdrojové id (30)musíme do lineárního systému zahrnout vèechny cílové faktory (cílové id 5, 12) pro které existuje hodnocení pro dané zdrojové a cílové id. Tyto mohou bıt typicky v rozdílnıch cílovıch blocích (1, 4) uloenıch na rozdílnıch poèítaèích v rámci clustru.
+V diagramu <<als_block_connection>> je zobrazenÃ© propojenÃ© mezi zdrojovÃ½mi a cÃ­lovÃ½mi bloky. Pokud chceme spoÄÃ­tat zdrojovÃ½ faktor pro jedno zdrojovÃ© id (30)musÃ­me do lineÃ¡rnÃ­ho systÃ©mu zahrnout vÄechny cÃ­lovÃ© faktory (cÃ­lovÃ© id 5, 12) pro kterÃ© existuje hodnocenÃ­ pro danÃ© zdrojovÃ© a cÃ­lovÃ© id. Tyto mohou bÃ½t typicky v rozdÃ­lnÃ½ch cÃ­lovÃ½ch blocÃ­ch (1, 4) uloÅ¾enÃ½ch na rozdÃ­lnÃ½ch poÄÃ­taÄÃ­ch v rÃ¡mci clustru.
 
 
-=====  Rozdìlení hodnoceni do blokù 
+=====  RozdÄ›lenÃ­ hodnoceni do blokÅ¯ 
 
-Jako top level vstup do algoritmu pouijeme strukturované API jako preferovanı zpùsob od druhé generace Sparku. Dataset musí obsahovat sloupce identifikované vstupními parametry userCol, itemCol a rating. V rámci algoritmu samotného ale pro práci s hodnoceními pouijeme RDD API. Toto API niší úrovnì nám, narozdíl od doporuèovaného, strukturovaného API, dává monost øídit rozloení dat v rámci clustru. Jako vstup do èásti algoritmu, kterı nám rozdìlí hodnocení do pøíslušnıch blokù, nejprve pøevedeme vstupní dataset do RDD uspoøádanıch trojic:
+Jako top level vstup do algoritmu pouÅ¾ijeme strukturovanÃ© API jako preferovanÃ½ zpÅ¯sob od druhÃ© generace Sparku. Dataset musÃ­ obsahovat sloupce identifikovanÃ© vstupnÃ­mi parametry userCol, itemCol a rating. V rÃ¡mci algoritmu samotnÃ©ho ale pro prÃ¡ci s hodnocenÃ­mi pouÅ¾ijeme RDD API. Toto API niÅ¾Å¡Ã­ ÃºrovnÄ› nÃ¡m, narozdÃ­l od doporuÄovanÃ©ho, strukturovanÃ©ho API, dÃ¡vÃ¡ moÅ¾nost Å™Ã­dit rozloÅ¾enÃ­ dat v rÃ¡mci clustru. Jako vstup do ÄÃ¡sti algoritmu, kterÃ½ nÃ¡m rozdÄ›lÃ­ hodnocenÃ­ do pÅ™Ã­sluÅ¡nÃ½ch blokÅ¯, nejprve pÅ™evedeme vstupnÃ­ dataset do RDD uspoÅ™Ã¡danÃ½ch trojic:
 
 [source, scala, numbered]
 ----
 include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=dataset-to-rdd]
 ----
 
-Tato trojice se skládá ze zdrojového id (srcId), ciloveho id (dstId) a hodnocení. Nejprve vytvoøíme uivatelské bloky, tj. jako zdrojové id pouijeme id uivatele a jako cílové id pouijeme id produktu. Nejprve pro kadou trojici urèíme pøíslušnı zdrojovı a cílovı blok. Toto je nutné z dùvodu urèení vazeb mezi všemi bloky. Pro kadou vstupní trojici tedy emitujeme klíè, dvojici hodnot obsahující identifikátory zdrojového a cíloveho bloku:
+Tato trojice se sklÃ¡dÃ¡ ze zdrojovÃ©ho id (srcId), ciloveho id (dstId) a hodnocenÃ­. Nejprve vytvoÅ™Ã­me uÅ¾ivatelskÃ© bloky, tj. jako zdrojovÃ© id pouÅ¾ijeme id uÅ¾ivatele a jako cÃ­lovÃ© id pouÅ¾ijeme id produktu. Nejprve pro kaÅ¾dou trojici urÄÃ­me pÅ™Ã­sluÅ¡nÃ½ zdrojovÃ½ a cÃ­lovÃ½ blok. Toto je nutnÃ© z dÅ¯vodu urÄenÃ­ vazeb mezi vÅ¡emi bloky. Pro kaÅ¾dou vstupnÃ­ trojici tedy emitujeme klÃ­Ä, dvojici hodnot obsahujÃ­cÃ­ identifikÃ¡tory zdrojovÃ©ho a cÃ­loveho bloku:
 
 [source, scala, numbered]
 ----
 include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-emit-key]
 ----  
 
-Dále provedeme seskupovací operaci. Tato nam seskupí všechny hodnocení pro danou kombinaci zdrojového a cílového bloku. Vıstupem je tedy pøíslušnı klíè a kolekce odpovídajících hodnocení. Metoda RDD mapValues, nám dovolí transformovat pouze hodnoty (druhou poloku ze vstupní dvojice), vıstupem je tedy klíè ze vstupu spolu s novou hodnotou. Zde je vstupní hodnotou kolekce hodnocení kterou pøevedeme do pomocné struktry pro snaší manipulaci s daty bloku. Tato struktura je v takzvané COO (Coordinate Format) formì. Obsahuje tøi pole, kde hodnoty se stejnym indexem urcuji trojici zdrojoveho, ciloveho id a hodnoceni.:
+DÃ¡le provedeme seskupovacÃ­ operaci. Tato nam seskupÃ­ vÅ¡echny hodnocenÃ­ pro danou kombinaci zdrojovÃ©ho a cÃ­lovÃ©ho bloku. VÃ½stupem je tedy pÅ™Ã­sluÅ¡nÃ½ klÃ­Ä a kolekce odpovÃ­dajÃ­cÃ­ch hodnocenÃ­. Metoda RDD mapValues, nÃ¡m dovolÃ­ transformovat pouze hodnoty (druhou poloÅ¾ku ze vstupnÃ­ dvojice), vÃ½stupem je tedy klÃ­Ä ze vstupu spolu s novou hodnotou. Zde je vstupnÃ­ hodnotou kolekce hodnocenÃ­ kterou pÅ™evedeme do pomocnÃ© struktry pro snaÅ¾Å¡Ã­ manipulaci s daty bloku. Tato struktura je v takzvanÃ© COO (Coordinate Format) formÄ›. Obsahuje tÅ™i pole, kde hodnoty se stejnÃ½m indexem urÄujÃ­ trojici zdrojovÃ©ho resp. cÃ­lovÃ©ho id a pÅ™Ã­sluÅ¡nÃ©ho hodnocenÃ­:
 
 [source, scala, numbered]
 ----
 include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-coo]
 ----   
 
-Z pole cilovych id pro dany zdrojovy a cilovy blok vybereme unikatni hodnoty, tyto seradime a priradime jim index urcujici jejich poradi. Hodnoty cilovych id namapujeme na odpovidajici index. Tyto indexy slouzi k propjeni cilovych a zdrojovych bloku viz. <<als_block_connection>>. Vzhledem k tomu ze vytvarime cilove bloky, transformujeme klic pouze na zdrojove id:
+Z pole cÃ­lovÃ½ch id pro danÃ½ zdrojovÃ½ a cÃ­lovÃ½ blok vybereme unikÃ¡tnÃ­ hodnoty, tyto seÅ™adÃ­me a pÅ™iÅ™adÃ­me jim index urÄujÃ­ci jejich poÅ™adÃ­. Hodnoty cÃ­lovÃ½ch id namapujeme na odpovidajÃ­cÃ­ index. Tyto indexy slouÅ¾Ã­ k propojenÃ­ cÃ­lovÃ½ch a zdrojovÃ½ch blokÅ¯ viz. <<als_block_connection>>. Vzhledem k tomu, Å¾e vytvÃ¡Å™Ã­me cÃ­lovÃ© bloky, transformujeme klÃ­Ä pouze na zdrojovÃ© id:
 
 [source, scala, numbered]
 ----
 include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-dstIdToLocalIndex]
 ---- 
 
-V teto chvili mame ted RDD kde je klicem id zdrojoveho bloku a hodnotou blok hodnoceni. Pro jedno id zdrojoveho bloku muze byt v datasetu vice zaznamu, zhledem k tomu ze prislusny blok obsahuje hodnoceni pouze pro jeden cilovy blok. Dateset tedy seskupime dle klice, id zdrojoveho bloku. Jednotlive bloky hodnoceni spojime do jedineho bloku, obsahujiciho vsechny hodnoceni pro dany zdrojovy blok. Tento vysledny blok prevedeme do cilove formy tak jak je zobrazena v diagramu <<als_block_diagram>>. Dale na zaklade tohoto bloku vytvorime prislusny meta blok a blok faktoru, inicializovany na nahodne hodnoty.
+V tÃ©to chvÃ­li mÃ¡me tedy RDD kde je klÃ­Äem id zdrojovÃ©ho bloku a hodnotou blok hodnocenÃ­. Pro jedno id zdrojovÃ©ho bloku mÅ¯Å¾e bÃ½t v datasetu vÃ­ce zÃ¡znamÅ¯, zhledem k tomu, Å¾e pÅ™Ã­sluÅ¡nÃ½ blok obsahuje hodnocenÃ­ pouze pro jedinÃ½ cÃ­lovÃ½ blok. Dateset tedy seskupÃ­me dle klÃ­Äe, id zdrojovÃ©ho bloku. Jednotlive bloky hodnocenÃ­ spojÃ­me do jedinÃ©ho bloku, obsahujÃ­cÃ­ho vÅ¡echny hodnocenÃ­ pro danÃ½ zdrojovÃ½ blok. Tento vÃ½slednÃ½ blok pÅ™evedeme do cÃ­lovÃ© formy tak jak je zobrazena v diagramu <<als_block_diagram>>. DÃ¡le na zÃ¡kladÄ› tohoto bloku vytvoÅ™Ã­me pÅ™Ã­sluÅ¡nÃ½ meta blok a blok faktorÅ¯, inicializovanÃ½ na nÃ¡hodnÃ© hodnoty.
 
-Tento postup nasledne opakujeme, pouze s tim rozdilem, ze je jako zdrojove id pouzito id polozky a jako cilove id, id uzivatele. V teto chvili mame tedy vstupni data rozdeleny dio prislusnych bloku a pripravenych pro vypocty. 
+Tento postup nÃ¡slednÄ› opakujeme, pouze s tÃ­m rozdÃ­lem, Å¾e je jako zdrojovÃ© id pouÅ¾ito id produktu a jako cÃ­love id, id uÅ¾ivatele. V tÃ©to chvÃ­li mÃ¡me tedy vstupnÃ­ data rozdÄ›lena do pÅ™Ã­sluÅ¡nÃ½ch blokÅ¯, pÅ™ipravenÃ½ch pro vÃ½poÄet samotnÃ½. 

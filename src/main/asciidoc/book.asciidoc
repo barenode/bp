@@ -28,14 +28,14 @@ include::recommendation-implicit-als.asciidoc[]
 include::als-2.asciidoc[]
 
 include::spark-introduction.asciidoc[]
+include::spark-ml.asciidoc[]
 
 include::development.asciidoc[]
 include::development-cluster.asciidoc[]
 include::development-project.asciidoc[]    
-include::development-regression.asciidoc[]                                   
+ 
+include::development-als-model.asciidoc[]                             
 include::development-als2.asciidoc[]
-
-
-
+include::development-regression.asciidoc[]  
 
 include::references.asciidoc[]

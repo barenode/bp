@@ -19,5 +19,4 @@
 :scala-dir: ../scala
 :scala-test-dir: ../../test/scala
 
-include::development-als-model.asciidoc[]
-include::development-als2.asciidoc[]
+include::development.asciidoc[]
