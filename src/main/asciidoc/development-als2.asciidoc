@@ -1,28 +1,27 @@
 
 ==== Estimator
 
-
-Hyper paramtery maji vliv na vysledne hodnoty, jejich optimalni hodnoty jsou zavisle na datasetu, pro ktery vyvarime model. Presne hodnoty odvodime pri experimentovani pomoci krizove validace. NAs Algoritmus bude podporovat nasledujici vstupni hyper parametry:
+Hyper paramtery mají vliv na výsledné predikce hodnocení, jejich optimální hodnoty jsou závislé na datasetu, pro který vyváøíme model. Pøesné hodnoty odvodíme až pøi experimentování, typicky pomocí køížové validace <<CH ML>>. Algoritmus bude podporovat následující vstupní hyper parametry:
 
 rank::
-    Rank urcuje dimenzi faktorovych vektoru. Tato dimenze je stejna jak pro uzivatele tak i pro polozky. Pokud je velikost faktorovych veektoru prilis nizka, model bude prilis zjednduseny a nebude podavat optimalni vykon. Na druhou stranu pokud bude jejich velikost prilis velka, muze dojit k takzvanemu preuceni kdy model bude prilis spjaty s trenovacimi daty. Vyhozi hodnota je 10.
+    Rank urèuje dimenzi faktorových vektorù. Tato dimenze je vždy stejná jak pro uživatele tak i pro produkty. Pokud je velikost faktorových vektorù pøíliš nízký, model bude také pøíliš zjedndušený a nebudé podávat optimalní predikce. Na druhou stranu pokud bude tento poèet pøíliš velký, mùže dojít k takzvanému pøeuèení, kdy model bude pøíliš spjatý s trénovacími daty. Výhozí hodnota je 10.
     
 alpha::
-    Alpha nastavuje pomer narustu duvery v hodnoceni, viz <<ALS>>. Vychozi hodnota je 0.1.
+    Alpha nastavuje pomìr nárùstu dùvìry v hodnocení, viz <<CH ALS>>. Výchozí hodnota je 0.1.
     
 regParam::
-    Regularizacni parametr zabranuje preuceni modelu, viz <<REGULARIZATION>>. Hodnota 0 ma za nasledek, ze se pri vypoctu regulaizace neaplikuje. Vychopzi hodnota je 0.1.  
+    Regularizaèní parametr zabraòuje pøeuèení modelu. Hodnota 0 má za následek, že se pøi výpoètu regularizace neaplikuje. Výchozí hodnota je 0.1.  
     
-Trenovaci parametry nemaji primo vliv na nastaveni vypoctu ale muzeme pomoci nich kontrolovat jak budou data distribuovana v ramci vypocetniho klusteru. Data jsou pred vypoctem samotnym rozdeleny do bloku. Tyto bloky jsou vlastne partition a jsou nasledne zpracovavany parallelne. Zvoleny pocet bloku ma zasadni dopad na to, jak dlouho zabere vytvoreni modelu. Dle <<HDG>> je optimalni velikost bloku mezi jednim az peti miliony hodnoceni. Nas algoritmus bude podporovat nasledujici trenovaci parametry:
+Tréningové parametry nemají pøímo vliv na nastavení výpoètu ale mùžeme pomocí nich kontrolovat jak budou data distribuována v rámci výpoèetního clustru. Data jsou pøed výpoètem samotným rozdìlìna do blokù. Tyto bloky jsou vlastnì partition a jsou následnì zpracovávány paralelnì. Zvolený poèet blokù spoilu s kapacitou výpoèetního clustru mají zásadní dopad na to, jak dlouho zabere vytvoøení modelu. Dle <<HDG>> je optimalní velikost bloku mezi jedním až pìti miliony hodnocení. Náš algoritmus bude podporovat následující trénovací parametry:
 
 numUserBlocks::
-    POcet bloku do kterych budou rozdeleleni uzivatele, vychozi hodnota je 10. 
+    Poèet blokù do kterých budou rozdìleni uživatelé, výchozí hodnota je 10. 
 
 numItemBlocks::
-    POcet bloku do kterych budou rozdelelene polozky, vychozi hodnota je 10.
+    Poèet blokù do kterých budou rozdìlené produkty, výchozí hodnota je 10.
     
 maxIter::
-    POcet iteraci pri vypoctu. V kazde iteraci se provede vypocet uzivatelskych a polozkovych faktoru. Po danem poctu iteraci se jiz vysledne faktory nemeni a nema smysl ve vypoctu pokracovat. Presny pocet zjistime napriklad pomoci RMSE. Vychozi hodnota je 10.     
+    Poèet iterací pøi výpoètu. V každé iteraci se provede výpoèet uživatelských a produktových faktorù. Po urèitém poètu iterací se již výsledné faktory nemìní a nemá smysl ve výpoètu pokraèovat. Optimální poèet iterací zjistíme napøíklad pomocí RMSE. Výchozí hodnota je 10.     
 
 Pomocne parametry identifikuji pozadovane sloupce v ramci vstupniho datasetu.
 
