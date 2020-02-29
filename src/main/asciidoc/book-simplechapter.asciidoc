@@ -19,4 +19,4 @@
 :scala-dir: ../scala
 :scala-test-dir: ../../test/scala
 
-include::development.asciidoc[]
+include::development-cluster.asciidoc[]
