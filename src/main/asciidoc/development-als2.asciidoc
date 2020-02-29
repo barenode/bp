@@ -39,7 +39,7 @@ rating::
 
 Pro práci s bloky zvolíme rozdílnou terminologii než rozdělení na uživatele a produkty. Vzhledem k povaze algoritmu, kdy se střídavě provádí výpočet faktorů zvlašť pro uživatele a zvlašť pro proukty, použijeme pro oba stejný algoritmus a vytvoříme pro ně analogické struktury. Jednou budou jako cíl výpočtu uživatelské faktory, které použijí jako zdroj pro výpočet faktory produktové. Podruhé to bude naopak. Dále tedy budeme pro vysvětlení algoritmu používat termíny zdroj a cíl. 
 
-Pro vyhodnoceni ciloveho bloku vytvorime jednoduchou hashovaci funkci. Tato rozdeli hodnoceni rovnomerne dle zvoleneho celkove poctu bloku. Kazdemu uzivateli resp polozce prideli cilovy blok na zaklade jejich celociselneho identifikatoru. Vysleden cislo bloku bude take cele cislo v rade zacinajici nulou. Id bloku tedy take zaroven jeho indexem v sade prislusnych bloku. 
+Pro vyhodnocení cílového bloku vytvoříme jednoduchou hašovací funkci. Tato rozdělí hodnocení rovnoměrně dle zvoléného celkového počtu bloků. Každému uživateli resp. produktu přidělí cílový blok na základě jejich celočíselného identifikátoru. Výsledné id bloku bude také celé číslo v řadě začínající nulou, bude tedy také zároveň jeho indexem v sadě příslušných bloků. 
 
 [[als_block_diagram]]
 image::als_block_diagram02022020.jpg[title="Diagram bloku hodnoceni", pdfwidth="75%"]
