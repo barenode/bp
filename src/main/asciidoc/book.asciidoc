@@ -3,6 +3,7 @@
 :toc-title: Obsah
 :numbered:
 :chapter-label:
+:section-refsig: viz.
 :table-caption: tab.
 :figure-caption: obr.
 :math:
@@ -18,7 +19,8 @@
 :pygments-linenums-mode: inline
 :scala-dir: ../scala
 :scala-test-dir: ../../test/scala
-
+:bibtex-file: /opt/dev/src/main/asciidoc/library.bib
+:bibtex-style: ieee-with-url
           
 include::introduction.asciidoc[]
 include::book-ml.asciidoc[] 

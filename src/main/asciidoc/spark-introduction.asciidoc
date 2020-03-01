@@ -32,7 +32,7 @@ Akce::
 .TransformationExample1.scala 
 [source, scala, numbered]
 ----
-include::{scala-test-dir}/mlonspark/SCSuite.scala[tags=spark-example-1]
+include::/opt/dev/src/test/scala/mlonspark/SCSuite.scala[tags=spark-example-1]
 ----
    
 ---- 
@@ -47,7 +47,7 @@ include::{scala-test-dir}/mlonspark/SCSuite.scala[tags=spark-example-1]
 (0,4)
 ----
 
-==== Strukturované API
+==== Strukturované API [[spark-struct-api]]
 
 Do duhé generace přidali autoři Sparku takzvané strukturované API. Základním konstruktem tohoto API je DataFrame. DataFrame reprezentuje tabulku složenou z řádků a sloupců, tato tabulka se ale, stejně jako RDD, může rozkládat na mnoha počítačích v rámci výpočetního clustru. DataFrame také jako RDD používá pro operace s daty akce a transformace. Strukturované API by mělo být preferovaným způsobem používání Sparku, je uživatelsky přívětívější, vysoce optimalizované a odstiňuje uživatele od náročnějších detailů. Nicméně pokud je třeba mít přímou kontrolu nad tím, jak jsou data fyzicky uložena v rámci clustru, je nutné použít RDD API.
 Stejný koncept jako DataFrame, omezený na jediný počítač, používají API jako Python Pandas nebo R DataFrames. Toto usnadňuje používání Sparku uživatelům se znalostmi těchto nástrojů, například jako doplňující nástroj pro práci s velkými objemy dat. 

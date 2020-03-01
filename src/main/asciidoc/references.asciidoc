@@ -1,8 +1,4 @@
 ﻿
 == Seznam použité literatury
 
-[bibliography]
-- [[[cfi, 1]]] Yifan Hu, Yehuda Koren, Chris Volinsky. Collaborative Filtering for Implicit Feedback Datasets. IEEE. 2008 Eighth IEEE International Conference on Data Mining. 15-19 Prosinec 2008. http://yifanhu.net/PUB/cf.pdf
-- [[[netflix_prize, 2]]] Zhou Y., Wilkinson D., Schreiber R., Pan R. (2008) Large-Scale Parallel Collaborative Filtering for the Netflix Prize. In: Fleischer R., Xu J. (eds) Algorithmic Aspects in Information and Management. AAIM 2008. Lecture Notes in Computer Science, vol 5034. Springer, Berlin, Heidelberg
-- [[[aas, 3]]] Uri Laserson, Sandy Ryza, Sean Owen, Josh Wills. Advanced Analytics with Spark, 2nd Edition. O'Reilly Media, Inc. Červen 2017. ISBN: 9781491972946
-- [[[knn, 4]]] Kevin Liao. Prototyping a Recommender System Step by Step Part 1: KNN Item-Based Collaborative Filtering. Nov 10, 2018 https://towardsdatascience.com/prototyping-a-recommender-system-step-by-step-part-1-knn-item-based-collaborative-filtering-637969614ea 
+bibliography::[] 

@@ -1,0 +1,140 @@
+% Encoding: UTF-8
+
+@Book{Kunigk2019,
+  author    = {Kunigk, J. and Buss, I. and George, L. and Wilkinson, P.},
+  title     = {Architecting Modern Data Platforms: A Guide to Enterprise Hadoop at Scale},
+  year      = {2019},
+  publisher = {O'Reilly Media, Incorporated},
+  isbn      = {9781491969274},
+  url       = {https://books.google.cz/books?id=ErAFMQAACAAJ},
+  lccn      = {2018277261},
+}
+
+@Book{S,
+  author    = {Chambers, B. and Zaharia, M.},
+  title     = {Spark: The Definitive Guide: Big Data Processing Made Simple},
+  year      = {2018},
+  publisher = {O'Reilly Media},
+  isbn      = {9781491912300},
+  url       = {https://books.google.cz/books?id=oitLDwAAQBAJ},
+  lccn      = {2017278927},
+}
+
+@Book{Ryza2015,
+  author    = {Ryza, S. and Laserson, U. and Owen, S. and Wills, J.},
+  title     = {Advanced Analytics with Spark: Patterns for Learning from Data at Scale},
+  year      = {2015},
+  publisher = {O'Reilly Media},
+  isbn      = {9781491912737},
+  url       = {https://books.google.cz/books?id=WE\_GBwAAQBAJ},
+  lccn      = {2015472823},
+}
+
+@Book{ISL,
+  author    = {James, G. and Witten, D. and Hastie, T. and Tibshirani, R.},
+  title     = {An Introduction to Statistical Learning: with Applications in R},
+  year      = {2013},
+  series    = {Springer Texts in Statistics},
+  publisher = {Springer New York},
+  isbn      = {9781461471387},
+  url       = {https://books.google.cz/books?id=qcI\_AAAAQBAJ},
+  lccn      = {13936251},
+}
+
+@Book{HANDSON,
+  author    = {G{\'e}ron, A.},
+  title     = {Hands-On Machine Learning with Scikit-Learn and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems},
+  year      = {2017},
+  publisher = {O'Reilly Media},
+  isbn      = {9781491962268},
+  url       = {https://books.google.cz/books?id=khpYDgAAQBAJ},
+}
+
+@InProceedings{Hu2008,
+  author    = {Hu, Yifan and Koren, Yehuda and Volinsky, Chris},
+  title     = {Collaborative Filtering for Implicit Feedback Datasets},
+  booktitle = {Proceedings of the 2008 Eighth IEEE International Conference on Data Mining},
+  year      = {2008},
+  series    = {ICDM ’08},
+  publisher = {IEEE Computer Society},
+  isbn      = {9780769535029},
+  pages     = {263–272},
+  doi       = {10.1109/ICDM.2008.22},
+  url       = {https://doi.org/10.1109/ICDM.2008.22},
+  address   = {USA},
+  keywords  = {implicit feedback, Collaborative filtering, recommender system},
+  numpages  = {10},
+}
+
+@InProceedings{Zhou2008,
+  author    = {Zhou, Yunhong and Wilkinson, Dennis and Schreiber, Robert and Pan, Rong},
+  title     = {Large-Scale Parallel Collaborative Filtering for the Netflix Prize},
+  booktitle = {Proceedings of the 4th International Conference on Algorithmic Aspects in Information and Management},
+  year      = {2008},
+  series    = {AAIM ’08},
+  publisher = {Springer-Verlag},
+  location  = {Shanghai, China},
+  isbn      = {9783540688655},
+  pages     = {337–348},
+  doi       = {10.1007/978-3-540-68880-8_32},
+  url       = {https://doi.org/10.1007/978-3-540-68880-8_32},
+  address   = {Berlin, Heidelberg},
+  numpages  = {12},
+}
+
+@Article{GFS,
+  author     = {Ghemawat, Sanjay and Gobioff, Howard and Leung, Shun-Tak},
+  title      = {The Google File System},
+  journal    = {SIGOPS Oper. Syst. Rev.},
+  year       = {2003},
+  volume     = {37},
+  number     = {5},
+  month      = oct,
+  pages      = {29–43},
+  issn       = {0163-5980},
+  doi        = {10.1145/1165389.945450},
+  url        = {https://doi.org/10.1145/1165389.945450},
+  address    = {New York, NY, USA},
+  issue_date = {December 2003},
+  keywords   = {clustered storage, scalability, fault tolerance, data storage},
+  numpages   = {15},
+  publisher  = {Association for Computing Machinery},
+}
+
+@InProceedings{MAPRED,
+  author    = {Jeffrey Dean and Sanjay Ghemawat},
+  title     = {MapReduce: Simplified Data Processing on Large Clusters},
+  booktitle = {OSDI'04: Sixth Symposium on Operating System Design and Implementation},
+  year      = {2004},
+  pages     = {137--150},
+  address   = {San Francisco, CA},
+}
+
+@Online{HADOOP,
+  title = {Apache Hadoop},
+  year  = {2020},
+  url   = {http://hadoop.apache.org/},
+}
+
+@Online{SPARK,
+  title         = {Apache Spark},
+  year          = {2020},
+  url           = {https://spark.apache.org/},
+  __markedentry = {[Frantisek:]},
+  owner         = {hylmar},
+  timestamp     = {2020.03.01},
+}
+
+@Book{ESL,
+  author        = {Hastie, T. and Tibshirani, R. and Friedman, J.},
+  title         = {The Elements of Statistical Learning: Data Mining, Inference, and Prediction},
+  year          = {2013},
+  series        = {Springer Series in Statistics},
+  publisher     = {Springer New York},
+  isbn          = {9780387216065},
+  url           = {https://books.google.cz/books?id=yPfZBwAAQBAJ},
+  __markedentry = {[Frantisek:6]},
+  lccn          = {2001031433},
+}
+
+@Comment{jabref-meta: databaseType:biblatex;}

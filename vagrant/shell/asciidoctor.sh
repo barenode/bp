@@ -52,6 +52,7 @@ gem install --no-document rouge
 gem install --no-document pygments.rb
 gem install --no-document coderay
 gem install --no-document asciidoctor-mathematical
+gem install --no-document asciidoctor-bibtex
 
 wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -O /tmp/epel-release-latest-7.noarch.rpm
 rpm -Uvh /tmp/epel-release-latest-7.noarch.rpm
