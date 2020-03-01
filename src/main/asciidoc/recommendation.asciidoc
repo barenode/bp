@@ -1,7 +1,7 @@
 
 == Doporučovací systémy
 
-Doporučovací systémy jsou příkladem strojového učení s jehož aplikací se setala naprostá většina lidí. Tyto systémy mají dnes široké spektrum použití od socialních sítí přes streamovací služby až po online prodejce. Nasazení těchto systémů sahá daleko do minulosti. Průkopníky v této oblasti jsou komerčně ůspěšné společnosti jako Amazon, Spotify nebo Netflix. Vzhledem k dlouhé historii existuje mnoho různých, kvalitně zdokumentovaných přístupů. Doporučovací systémy jsou založeny na dvou základních strategiích. Jedná se o obsahově zaměřené systémy a systémy kolaborativního filtrování. Viz. <<rec-systems>>. 
+Doporučovací systémy jsou příkladem strojového učení s jehož aplikací se setkala naprostá většina lidí. Tyto systémy mají dnes široké spektrum použití od socialních sítí přes streamovací služby až po online prodejce. Nasazení těchto systémů sahá daleko do minulosti. Průkopníky v této oblasti jsou komerčně ůspěšné společnosti jako Amazon, Spotify nebo Netflix. Vzhledem k dlouhé historii existuje mnoho různých, kvalitně zdokumentovaných přístupů. Doporučovací systémy jsou založeny na dvou základních strategiích. Jedná se o obsahově zaměřené systémy a systémy kolaborativního filtrování. Viz. <<rec-systems>>. 
 
 [[rec-systems]]
 image::rec-systems.png[title="Doporučovací systémy", pdfwidth="75%"]

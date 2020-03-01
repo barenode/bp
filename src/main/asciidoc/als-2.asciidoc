@@ -1,5 +1,5 @@
 ﻿
-Autori [X] rozšířili popsaný algoritmus tak aby se výpočet del efektivně distribuovat. Hodnoty jednotlivých hodnocení stem:[r_{ui}] byly nahrazeny odvozenou binární proměnnou stem:[p_{ui}] tak, že platí:
+Autori cite:[CFI] rozšířili popsaný algoritmus tak aby se výpočet del efektivně distribuovat. Hodnoty jednotlivých hodnocení stem:[r_{ui}] byly nahrazeny odvozenou binární proměnnou stem:[p_{ui}] tak, že platí:
 
 [stem]
 ++++
@@ -14,7 +14,7 @@ Autori [X] rozšířili popsaný algoritmus tak aby se výpočet del efektivně 
 \end{align*}
 ++++
 
-Tedy pokud uzivatel dosud polozku 'nezkonzumoval' promenna nabývá hodnotu v opečném připadě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o položce zatím neví. Pro souPlatí tedy:
+Tedy pokud uživatel dosud položku 'nezkonzumoval' proměná nabývá hodnotu stem:[0] v opečném připadě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o položce zatím neví. Pro souPlatí tedy:
 
 [stem]
 ++++

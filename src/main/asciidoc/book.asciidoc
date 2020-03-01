@@ -4,8 +4,8 @@
 :numbered:
 :chapter-label:
 :section-refsig: viz.
-:table-caption: tab.
-:figure-caption: obr.
+:table-caption: Tab.
+:figure-caption: Obr.
 :math:
 :imagesoutdir: generated_images
 :imagesdir: images

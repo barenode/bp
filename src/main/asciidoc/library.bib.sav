@@ -1,6 +1,6 @@
 % Encoding: UTF-8
 
-@Book{Kunigk2019,
+@Book{A,
   author    = {Kunigk, J. and Buss, I. and George, L. and Wilkinson, P.},
   title     = {Architecting Modern Data Platforms: A Guide to Enterprise Hadoop at Scale},
   year      = {2019},
@@ -10,7 +10,7 @@
   lccn      = {2018277261},
 }
 
-@Book{S,
+@Book{SDG,
   author    = {Chambers, B. and Zaharia, M.},
   title     = {Spark: The Definitive Guide: Big Data Processing Made Simple},
   year      = {2018},
@@ -20,7 +20,7 @@
   lccn      = {2017278927},
 }
 
-@Book{Ryza2015,
+@Book{AAS,
   author    = {Ryza, S. and Laserson, U. and Owen, S. and Wills, J.},
   title     = {Advanced Analytics with Spark: Patterns for Learning from Data at Scale},
   year      = {2015},
@@ -50,7 +50,7 @@
   url       = {https://books.google.cz/books?id=khpYDgAAQBAJ},
 }
 
-@InProceedings{Hu2008,
+@InProceedings{CFI,
   author    = {Hu, Yifan and Koren, Yehuda and Volinsky, Chris},
   title     = {Collaborative Filtering for Implicit Feedback Datasets},
   booktitle = {Proceedings of the 2008 Eighth IEEE International Conference on Data Mining},
@@ -66,7 +66,7 @@
   numpages  = {10},
 }
 
-@InProceedings{Zhou2008,
+@InProceedings{NETFLIX_PRIZE,
   author    = {Zhou, Yunhong and Wilkinson, Dennis and Schreiber, Robert and Pan, Rong},
   title     = {Large-Scale Parallel Collaborative Filtering for the Netflix Prize},
   booktitle = {Proceedings of the 4th International Conference on Algorithmic Aspects in Information and Management},
@@ -135,6 +135,13 @@
   url           = {https://books.google.cz/books?id=yPfZBwAAQBAJ},
   __markedentry = {[Frantisek:6]},
   lccn          = {2001031433},
+}
+
+@Online{KNN,
+  author = {Kevin Liao},
+  title  = {Prototyping a Recommender System Step by Step Part 1: KNN Item-Based Collaborative Filtering},
+  year   = {2018},
+  url    = {http://towardsdatascience.com/prototyping-a-recommender-system-step-by-step-part-1-knn-item-based-collaborative-filtering-637969614ea},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

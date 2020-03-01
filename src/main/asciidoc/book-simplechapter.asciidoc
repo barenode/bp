@@ -5,7 +5,7 @@
 :chapter-label:
 :section-refsig: viz.
 :table-caption: tab.
-:figure-caption: obr.
+:figure-caption: Obr.
 :math:
 :imagesoutdir: generated_images
 :imagesdir: images
@@ -22,6 +22,6 @@
 :bibtex-file: /opt/dev/src/main/asciidoc/library.bib
 :bibtex-style: ieee-with-url
 
-include::test-and-validation.asciidoc[]
+include::spark-hadoop.asciidoc[]
 
 include::references.asciidoc[]
