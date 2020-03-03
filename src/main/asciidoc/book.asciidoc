@@ -33,6 +33,7 @@ include::als-2.asciidoc[]
 
 include::spark-introduction.asciidoc[]
 include::spark-ml.asciidoc[]
+include::spark-hadoop.asciidoc[]
 
 include::development.asciidoc[]
 include::development-cluster.asciidoc[]
