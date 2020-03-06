@@ -1,0 +1,26 @@
+
+==== Fakorizace matic [[matrix_factorization]]
+
+V Systémech založených na fakorizaci matic je interakce uzivatelů s produkty definována jako matice, ve ktere radky obsahuji vsechny uzivatele a sloupce vsechny produkty v katalogu. Jednotlive bunky obsahuji ohodnocení produktu uživately. Tato matice je typicky velmi řídká, většina možných kombinací uživatele s produktem v datasetu chybí. Algoritmus faktorizuje matici na iyovatelskou a produktovou faktorovou matici s omezenym počtem rozměrů. Tyto rozměry reprezentují takzvané latentní faktory, které odpovídají například žánrům v daném datasetu. Úkolem algoritmů je odhadnout chybějíci hodnoty v matici, proto jsou také někdy nazývány jako algoritmy pro doplňování matic. Narozdíl od ydrojove matice kde většina hodnot chzbi je matice, která vznikne jako produkt faktorovzch matic husta. Tato matice už obsahuje odhadnuté nenulové hodnoty pro kombinace uživatele s produktem, které ve zdrojové matici chyběly resp. byly nastaveny na stem:[0] cite:[AAS(46)]. 
+
+[[matfac_1]]
+image::matfac_1.png[title="Doporučovací systémy", pdfwidth="75%"]
+
+Na <<matfac_1>> jsou zobrazeny hodnoceni pro ctyri uzivatele, kde kazdy hodnotil dvakrat, dohromady ctyri filmy. Z prehledu jse patrne, ze Eliska ma rada komedie ale nema rada akcni filmy. Jan ma rad komedie i akcni filmy. Jakub ma rad pouze akcni filmy a Tereza nema rada nic.
+
+[[matfac_2]]
+image::matfac_1.png[title="Doporučovací systémy", pdfwidth="75%"]
+
+Na <<matfac_2>> jsou tyto hodnoceni zapsany v maticovem tvaru, kde je radek pro kazdeho uzivatele a sloupec pro kazdy film. Tato matice ma vyplnenych 50% hodnot, v realnem pouziti by tato matice obsahovala stovky tisic radku slopcu a byla by daleko ridsi (obvykle mene nez 5%). 
+
+[[matfac_3]]
+image::matfac_1.png[title="Doporučovací systémy", pdfwidth="75%"]
+
+Na <<matfac_3>> jsou zobrazeny vysledne faktorove matice pro dva faktory. V tomto pripade byl kazdemu faktoru prirazen konkretni vyznam, jeden pro komedie a druhy pro akcni filmy. Pri realnem pouziti nas konkretni vyznamz faktoru nezajimaji a jsou skryte. Matice s uzivatelskymi faktory obsahuje pro kazdeho uzivatele hodnotu nakolik je v danych faktorech zastoupen. Stejne tak i matice s produvymi faktory obsahuje pro kazdy produkt hondnotu stejnych faktoru. Vysledkem maticoveho soucinu techto dvou faktorovych matic je doplnena matice obsahujici predikci pro vsechny uzivatele a produkty. 
+
+Singular value decomposition (SVD) je vhodný algoritmus, který odebere šum ze zdrojové matice stem:[R] a zároveň  přesně odhadne chybějící hodnoty. Další algoritmus, popularizovaný během slavné Netflix výzvy, je Alternating Square Roots (ALS) cite:[NETFLIX_PRIZE]. 
+
+
+
+
+
