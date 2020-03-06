@@ -22,6 +22,6 @@
 :bibtex-file: /opt/dev/src/main/asciidoc/library.bib
 :bibtex-style: ieee-with-url
 
-include::spark-hadoop.asciidoc[]
+include::recommendation-implicit-matfac.asciidoc[]
 
 include::references.asciidoc[]

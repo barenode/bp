@@ -15,9 +15,6 @@ Tato práce pokrývá dva základní přístupy kolaborativního filtrování pr
 
 Systémy založené na nacházení nejbližších sousedů se snaží na základě vypočtené vzdálenosti doporučit nejblíže položené položky. Tyto systémy jsou uživatelsky nebo produktově orientované. V prvním případě se vypočítává vzdálenost mezi uživateli ve druhém mezi produkty. Produktově zalozený přístup je obvykle preferován před uživatelským, podstata produktů se obvykle příliš nemění takže model může být předpočítán a následně použit bez kostantního přepočítávání.
 
-==== Fakorizace matic [[matrix_factorization]]
-
-V Systémech založených na fakorizaci matic je interakce uzivatelů s produkty definována jako matice stem:[R_{m,n}] kde stem:[m] určuje počet uzivatelů a stem:[n] počet produktů v katalogu. Skalár stem:[R_{ij}] reprezentuje ohodnocení položky stem:[i] uživatelem stem:[j]. Tato matice je typicky velmi řídká, většina možných kombinací uživatele s produktem v datasetu chybí a je interpretována jako stem:[0]. Algoritmus faktorizuje matici stem:[R] na matice stem:[U] a stem:[V] s malým počtem rozměrů. Tyto rozměry reprezentují takzvané latentní faktory, které odpovídají například žánrům v daném datasetu. Úkolem algoritmů je odhadnout chybějíci hodnoty v matici, proto jsou také někdy nazývány jako algoritmy pro doplňování matic. Narozdíl od matice stem:[R] kde je většina hodnot stem:[0] je matice stem:[\hat{R}], která vznikne jako produkt matic stem:[U] a stem:[V] hustá. Tato matice už obsahuje odhadnuté nenulové hodnoty pro kombinace uživatele s produktem, které ve zdrojové matici stem:[R] chyběly resp. byly nastaveny na stem:[0] cite:[AAS(46)]. Singular value decomposition (SVD) je vhodný algoritmus, který odebere šum ze zdrojové matice stem:[R] a zároveň  přesně odhadne chybějící hodnoty. Další algoritmus, popularizovaný během slavné Netflix výzvy, je Alternating Square Roots (ALS) cite:[NETFLIX_PRIZE]. 
 
 
 
