@@ -11,7 +11,7 @@ Na <<matfac_1>> jsou zobrazeny hodnocení pro čtyři uživatele, kde každý ho
 [[matfac_2]]
 image::matfac_2.png[title="Zdrojová matice", pdfwidth="75%"]
 
-Na <<matfac_2>> jsou tyto hodnocení zapsány v maticovém tvaru, kde je řádek pro každého uživatele a sloupec pro každý film. Tato matice má vyplněných 50% hodnot, v reálném použití by tato matice obsahovala stovky tisíc řádků a sloupců a byla by daleko řídší (obvykle méně než 5%). 
+Na <<matfac_2>> jsou tyto hodnocení zapsány v maticovém tvaru, kde je řádek pro každého uživatele a sloupec pro každý film. Tato matice má vyplněných 50% hodnot, v reálném použití by tato matice obsahovala stovky tisíc řádků a sloupců a byla by daleko řídší (obvykle méně než 1%). 
 
 [[matfac_3]]
 image::matfac_3.png[title="Faktorové matice", pdfwidth="100%"]

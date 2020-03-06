@@ -29,19 +29,33 @@ Transformace::
 Akce::
     Akce jsou metody RDD API, které spouští samotný výpočet, při kterém se aplikují definované transformace na zdrojový RDD. 
 
-.TransformationExample1.scala 
+ 
+V nasledujici jednoduchem priklade spocitame kolik je lichych a sudych cisel v intervalu <1, 9>:
+
 [source, scala, numbered]
 ----
 include::/opt/dev/src/test/scala/mlonspark/SCSuite.scala[tags=spark-example-1]
 ----
-   
+  
+Pro tento priklad vyhodnoti Spark nasledujici retezec zpracovani:
+
 ---- 
-(2) MapPartitionsRDD[3] at mapValues at TransformationExample1:20 []
- |  ShuffledRDD[2] at groupByKey at TransformationExample1:20 []
- +-(2) MapPartitionsRDD[1] at map at TransformationExample1:18 []
-    |  ParallelCollectionRDD[0] at parallelize at TransformationExample1:2 []
+(2) MapPartitionsRDD[3] at mapValues at 4 <4>
+ |  ShuffledRDD[2] at groupByKey at 3 <3>
+ +-(2) MapPartitionsRDD[1] at map at 2 <2>
+    |  ParallelCollectionRDD[0] at parallelize at 1 <1>
 ----
-    
+<1> Na radku 1 nejprvnoze vytvorime zdrojovy dataset. Ten v tomto pripade inicializujeme primo v kodu ackoliv typickym pouzitim je nacist zdrojova data z persistetniho uloziste. 
+
+<2> Na radku 2. pouzijeme RDD metodu *map*, tato metoda ma jako argument funkci, ktera trasnsformuje jednu z hodnot zdrojoveho RDD. V retezci zpracovani je jako vysledek tohotyo kroku MapPartitionsRDD, to znamena, ze se transformace provede  lokalne na urovni jednotlivych partition. Jako vysledek transformace je RDD dvojic kde je prvni hodnota zbytek po celociselnem deleni dvema. POkud jsou v RDD dvojice Spark automaticky bere prvni hodnotu jako klic.  
+
+<3> Na radku 3. pomoci RDD metody groupByKey seskupime hodnoty se stejnym klicem. Vysledkem tedy bude RDD dvojice s prislusnym klicem kde jako hodnota bude kolekce vsechn hodnot odpovidajici, ktere maji ve zdrojovem RDD dany klic. V retezci zpracovani je jako vysledek tohotyo kroku ShuffledRDD, to znamena, ze
+je treba provest preskladani v ramci vypocetniho clustru a seskupit hodnoty se stejnym klicem.
+
+<4> Na radku 3. pomoci RDD mapValues transformujeme pouze hodnoty, klic ve dojici zustava nezmenen. Zde je jako hodnota kolekce cisel odpovidajici danemu zbytku po celociselnem deleni. V teto operaci tuto kolekci prevdeme na celel cislo odpovidajici poctu clenu teto kolekce. V retezci zpracovani je jako vysledek tohotyo kroku MapPartitionsRDD, transformace se take provede  lokalne na urovni jednotlivych partition. 
+
+Vysledkem je 5 lichych hodnot (klic 1) a 4 sude hodnoty (klic 0):  
+  
 ----
 (1,5)
 (0,4)
