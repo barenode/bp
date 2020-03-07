@@ -1,0 +1,166 @@
+﻿
+== Experimentani faze
+
+=== Ziskani dat
+
+Pro test algoritmu byl vybran implicitni dataset volne dostupny presdd API spolecnosti Last.fm. Last.fm je hudební web založený ve Velké Británii v roce 2002. Pomocí systému hudebních doporučení s názvem „Audioscrobbler“ vytváří Last.fm podrobný profil hudebního vkusu každého uživatele zaznamenáním podrobností o skladbách, které uživatel poslouchá, a to buď z Internetové rozhlasové stanice, počítače uživatele nebo pomoci přenosneho hudebního zařízení. Tyto informace jsou přenášeny do databáze Last.fm buď prostřednictvím samotného hudebního přehrávače (mimo jiné včetně Spotify, Deezer, Tidal a MusicBee) nebo prostřednictvím plug-in nainstalovaného do hudebního přehrávače uživatele. Data se poté zobrazí na stránce profilu uživatele.
+
+=== Příprava dat
+
+Dataset je distribuován v archivu obsahujícím několik souborů. Relevantní data jsou uložena v jediném textovém souboru usersha1-artmbid-artname-plays.tsv. Data nejprve zkopírujeme z lokálního souborového systému do HDFS. V dalším kroku namapujeme soubor do datasetu, pomocí metody *show* zobrazíme první dva řádky :
+
+[source, python, numbered]
+---- 
+rawData = spark.read.format('text').load("usersha1-artmbid-artname-plays.tsv")
+rawData.show(2, False)
+---- 
+
+Dataset obsahuje jediný sloupec nazvaný value, obsah buněk odpovídá jednotlivým řádkům ze zdrojového souboru. Kazdy radek obsahuje ctyri udaje. Identifikator uzivatele, identifikator interpreta, nazev interpreta a pocet prehrani:
+ 
+[%autofit]
+----
++---------------------------------------------------------------------------------------------------------+
+|value                                                                                                    |
++---------------------------------------------------------------------------------------------------------+
+|00000c289a1829a808ac09c00daf10bc3c4e223b	3bd73256-3905-4f3a-97e2-8b341527f805	betty blowtorch	2137  |
+|00000c289a1829a808ac09c00daf10bc3c4e223b	f2fb0ff0-5679-42ec-a55c-15109ce6e320	die Ärzte	1099      |
++---------------------------------------------------------------------------------------------------------+
+----
+
+Dalsim krokem je zprasovat jednotlive radky do struktury vhodnejsi pro dalsi vypocty. Zde nadefinujeme vlastni funkci parseLine, krera rozdeli radek dle tabulatoru. Zde pouzijeme metodu flatMap RDD API, kreta nam umozni transformovat vstupni hodnotu na pole vystupnich hodnot. Vstupni radek, ktere neobsahuji presne 4 retezce z dalsiho zpracovani vyradime. Sloupoce datasetu prejmenujeme na smysluplne nazvy:
+
+[source, python, numbered]
+---- 
+def parseLine(line) :
+    splits = line.value.split("\t")
+    if (len(splits) == 4):
+        return [splits]
+    else:
+        return []      
+
+parsedData = rawData.rdd.flatMap(parseLine).toDF()\
+    .withColumnRenamed("_1", "userHash")\
+    .withColumnRenamed("_2", "artistMBID")\
+    .withColumnRenamed("_3", "artistName")\
+    .withColumnRenamed("_4", "listenCount")
+    
+parsedData.show(2, False)
+---- 
+
+Vystupme je dataset obsahujici 4 sloupce odpovidajici udajum ve zdrojovych datech:
+[%autofit]
+----
++----------------------------------------+------------------------------------+-----------------------+-----------+
+|userHash                                |artistMBID                          |artistName             |listenCount|
++----------------------------------------+------------------------------------+-----------------------+-----------+
+|00000c289a1829a808ac09c00daf10bc3c4e223b|3bd73256-3905-4f3a-97e2-8b341527f805|betty blowtorch        |2137       |
+|00000c289a1829a808ac09c00daf10bc3c4e223b|f2fb0ff0-5679-42ec-a55c-15109ce6e320|die Ärzte              |1099       |
++----------------------------------------+------------------------------------+-----------------------+-----------+
+----
+
+Dalsim problemem jsou typy jednotlivych sloupcu, pokud nechame Spark vypsat schema naseho datasetu:
+
+[%autofit]
+----
+root
+ |-- userHash: string (nullable = true)
+ |-- artistMBID: string (nullable = true)
+ |-- artistName: string (nullable = true)
+ |-- listenCount: string (nullable = true)
+----
+
+Vsechny sloupce jsou retezce, nas algoritmus ale vyzaduje aby identikatory uzivatelu resp. produktu byla cela cisla a hodnoceni cisla realna. Ze zdrojoveho datasetu vytvorime novy dataset obsahujici pouze unikatni identifikatory uzivatelu. Kazdemu uzivateli priradime pomoci funkce zipWithIndex unikatni celociselny identifikator odpovidajici indexu prislusneho radku v datasetu. Vysledny dataset obsahujici unikatni uzivatele spolku s jejich celociselnymi identifikatory nakonec ulozime do souboru prp dalsi pouziti:
+
+[source, python, numbered]
+---- 
+users = parsedData\
+    .select(parsedData['userHash'])\
+    .dropDuplicates(['userHash'])
+users = users.rdd.zipWithIndex().map(lambda row: [row[0][0], row[1]]).toDF()
+users = users.select(\
+    users["_2"].alias('userId').cast("integer"),\
+    users["_1"].alias('userHash')\
+)
+users.write.mode("overwrite").save("/data/lastfm-dataset-360K/users.parquet") 
+---- 
+
+Analogickou operaci jako s uzivateli opakujeme i s inteprety a vytvorime dalsi dataset artists obsahujici unikatni inteprety spolku s jejich celociselnymi identifikatory. Tyto dva datasety spojime se zdorojovym dataset a kazdemu hodnoceni priradime celociselnymi identifikatory uzivatele a intepreta:
+
+[source, python, numbered]
+----
+ratings = parsedData\
+    .join(users, parsedData["userHash"]==users["userHash"], 'inner')\
+    .join(artists, parsedData["artistName"]==artists["artistName"], 'inner')\
+    .select(users["userId"], artists["artistId"], parsedData["listenCount"].cast("float"))
+----
+
+Pokud nechame Spark vypsat pomoci metody printSchmea schema vysledneho datasetu, overime ze vysledny dataset ratings obsahuje tri slupce,  userId obsahujici celocisleny identifikator uzivcatele, artistId obsahujici celocisleny identifikator interpreta a listenCount obsahujci realne cislo odpovidajici poctu poslechu. V teto podobe je datset priparveny pro strojove zpracovani nasim algoritmem:  
+
+[%autofit]
+----
+root
+ |-- userId: integer (nullable = true)
+ |-- artistId: integer (nullable = true)
+ |-- listenCount: float (nullable = true)
+----
+
+=== Pruzkum dat
+
+Dalsi fazi je ziskat povedoimi o datech z kterych se nasledne pokusime vytrenovat prislusny model. V teto chvili tedy mame tri datasety, dataset ratings obsahuje vsechna hodnoceni, dataset users obsahuje seznam uzivatelu a dataset artists obsahuje seznam interpretu. 
+
+
+=== Vytvoreni treningoveho a testovaciho datasetu
+
+Pred samotnym vytovirenim modelu je treba vyclenit cast dat tak aby nebyla zahrnuta v treningove fazi. Tento takzvany testovaci dataset bude pouzit pro overeni presnosti modelu <<>>. Zdrojovy dataset tedy rozdelime do dvou casti v pomeru 70% pro trenovaci dataset a zbylych 30% pro dataset testovaci: 
+
+[source, python, numbered]
+----
+train, test = ratings.randomSplit([0.7, 0.3])
+----
+
+=== Vytvoreni modelu
+
+Prvni model bude opbsahovat vychozi hodnoty pro vsechny paramtery algoritmu tak jak jsou uvedeny v <<>>. Model bude vytvoren pouze na zaklade treningovych dat:
+
+[source, python, numbered]
+----
+from mlonspark.alternating_least_square import AlternatingLeastSquare
+alg = AlternatingLeastSquare()\
+    .setUserCol("userId")\
+    .setItemCol("artistId")\
+    .setRatingCol("listenCount")
+
+model = alg.fit(train)
+----
+
+Po vytvoreni modelu vyhodnotime jeho presnost. Na trenigovych i testovacich datech spocitame RMSE. Nejprve model pomoci metody transform aplikujeme na testovaci i trenovaci data. V teto fazi mame v bou datasetetch novy sloupce prediction ktery obsahuje predikci poslechu:
+
+[source, python, numbered]
+----
+trainPredictions = model.transform(train)
+testPredictions = model.transform(test)
+----
+
+Nasledne pomoci vestevene Spark tridy RegressionEvaluator spocitame RMSE na zaklade zmerenych poslechu ve sloupci listenCount a tech predikovanych ve sloupci prediction:
+
+[source, python, numbered]
+----
+evaluator = RegressionEvaluator()\
+    .setMetricName("rmse")\
+    .setLabelCol("listenCount")\
+    .setPredictionCol("prediction")
+    
+trainRmse = evaluator.evaluate(trainPredictions)
+testRmse = evaluator.evaluate(testPredictions)
+----
+
+Ve vysledku vidime obrovsky rozdil mezi RMSE pro trenovaci  a testovaci data. Model poskytuje mnohem horsi vysledky nad daty, ktere nebyly pouzity pro jeho trening: 
+
+----
+train RMSE = 224.674909
+test RMSE = 1583.331258
+----
+
+
+
+

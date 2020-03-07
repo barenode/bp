@@ -14,21 +14,21 @@ Autori cite:[CFI] rozšířili popsaný algoritmus tak aby se výpočet del efek
 \end{align*}
 ++++
 
-Tedy pokud uživatel dosud položku 'nezkonzumoval' proměná nabývá hodnotu stem:[0] v opečném připadě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o položce zatím neví. Pro souPlatí tedy:
+Pokud uživatel dosud položku 'nezkonzumoval' proměná nabývá hodnotu stem:[0] v opačném případě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o položce zatím neví. Pro každého uživatele a produkt tedy platí, že součin příslušných faktorových vektorů stem:[x_{u}] a stem:[y_{i}] odpovídá této binární proměnné:
 
 [stem]
 ++++
 p_{ui}=x_{u}^Ty_{i}  
 ++++
 
-Dále pokud čim je počet konzumací vyšsí tím více narůstá důvěra v hodnotu stem:[p_{ui}=1]. Autoři článku vyjádřili důvěru v hodnotu stem:[p_{ui}] následovně:
+Čím je počet konzumací vyšsí tím více narůstá důvěra v hodnotu stem:[p_{ui}=1]. Autoři článku vyjádřili důvěru v hodnotu stem:[p_{ui}] následovně:
 
 [stem]
 ++++
 c_{ui} = 1 + \alpha r_{ui}
 ++++
 
-Existuje tedy minimální důvěra stem:[1] pro zatim nezkonzumované položky. Hodnota proměnné lineárně narůstá s počtem užití produktu. Poměr nárustu je dán konstantou stem:[\alpha], přesná hodnota tohoto paramteru je specifická pro konkrétní dataset a bude odvozena v rámci experimentální fáze. Pro kazdeho uživatele máme k dispozici stem:[i] hodnotu stem:[c], jednu pro kazdou polozku. Tyto hodnoty prevedeme do diagonální matice stem:[C_{u}] s rozmery stem:[ixi]. V rovnici bude tato matice figurovat jako váhy. Tedy:
+Existuje tedy minimální důvěra stem:[1] pro zatim nezkonzumované položky. Hodnota proměnné lineárně narůstá s počtem užití produktu. Poměr nárustu je dán konstantou stem:[\alpha], přesná hodnota tohoto paramteru je specifická pro konkrétní dataset a bude odvozena v rámci experimentální fáze. Pro kazdeho uživatele máme k dispozici stem:[i] hodnotu stem:[c], jednu pro kazdou polozku. Tyto hodnoty prevedeme do diagonální matice stem:[C_{u}] s rozmery stem:[ixi]. V rovnici bude tato matice figurovat jako váhy:
 
 [stem]
 ++++
