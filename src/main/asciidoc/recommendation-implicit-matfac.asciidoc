@@ -16,7 +16,7 @@ Na <<matfac_2>> jsou tyto hodnocení zapsány v maticovém tvaru, kde je řádek
 [[matfac_3]]
 image::matfac_3.png[title="Faktorové matice", pdfwidth="100%"]
 
-Na <<matfac_3>> jsou zobrazeny výsledné faktorové matice pro dva faktory. V tomto případě byl každému faktoru přiřazen konkrétni význam, jeden pro komedie a druhý pro akční filmy. Při reálném použití jsou konkretní významy faktorů skryté   a z hlediska algoritmu nejsou důležité. Matice s uživatelskými faktory obsahuje pro každého uživatele hodnotu nakolik je v daných faktorech zastoupen. Stejně tak i matice s produktovými faktory obsahuje pro každý produkt hondnotu stejných faktorů. Výsledkem maticového součinu těchto dvou faktorových matic je doplněná matice obsahující predikce pro všechny uživatele a produkty. 
+Na <<matfac_3>> jsou zobrazeny výsledné faktorové matice pro dva faktory. V tomto případě byl každému faktoru přiřazen konkrétni význam, jeden pro komedie a druhý pro akční filmy. Při reálném použití jsou konkretní významy faktorů skryté   a z hlediska algoritmu nejsou důležité. Matice s uživatelskými faktory obsahuje pro každého uživatele hodnotu nakolik je v daných faktorech zastoupen. Stejně tak i matice s produktovými faktory obsahuje pro každý produkt hodnotu stejných faktorů. Výsledkem maticového součinu těchto dvou faktorových matic je doplněná matice obsahující predikce pro všechny uživatele a produkty. 
 
 Singular value decomposition (SVD) je vhodný algoritmus, který odebere šum ze zdrojové matice stem:[R] a zároveň  přesně odhadne chybějící hodnoty. Další algoritmus, popularizovaný během slavné Netflix výzvy, je Alternating Square Roots (ALS) cite:[NETFLIX_PRIZE]. 
 
