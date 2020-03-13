@@ -3,7 +3,8 @@
 
 === Ziskani dat
 
-Pro test algoritmu byl vybran implicitni dataset volne dostupny presdd API spolecnosti Last.fm. Last.fm je hudební web založený ve Velké Británii v roce 2002. Pomocí systému hudebních doporučení s názvem „Audioscrobbler“ vytváří Last.fm podrobný profil hudebního vkusu každého uživatele zaznamenáním podrobností o skladbách, které uživatel poslouchá, a to buď z Internetové rozhlasové stanice, počítače uživatele nebo pomoci přenosneho hudebního zařízení. Tyto informace jsou přenášeny do databáze Last.fm buď prostřednictvím samotného hudebního přehrávače (mimo jiné včetně Spotify, Deezer, Tidal a MusicBee) nebo prostřednictvím plug-in nainstalovaného do hudebního přehrávače uživatele. Data se poté zobrazí na stránce profilu uživatele.
+
+Pro test algoritmu byl vybrán implicitní dataset volně dostupný přes API společnosti Last.fm. Tato společnost provozuje hudební web, založený ve Velké Británii v roce 2002. Pomocí systému hudebních doporučení s názvem „Audioscrobbler“ vytváří Last.fm podrobný profil hudebního vkusu každého uživatele zaznamenáním podrobností o skladbách, které uživatel poslouchá, a to buď z Internetové rozhlasové stanice, počítače uživatele nebo pomoci přenosneho hudebního zařízení. Tyto informace jsou přenášeny do databáze Last.fm buď prostřednictvím samotného hudebního přehrávače (mimo jiné včetně Spotify, Deezer, Tidal a MusicBee) nebo prostřednictvím plug-in nainstalovaného do hudebního přehrávače uživatele. Data se poté zobrazí na stránce profilu uživatele.
 
 === Příprava dat
 
@@ -15,7 +16,7 @@ rawData = spark.read.format('text').load("usersha1-artmbid-artname-plays.tsv")
 rawData.show(2, False)
 ---- 
 
-Dataset obsahuje jediný sloupec nazvaný value, obsah buněk odpovídá jednotlivým řádkům ze zdrojového souboru. Kazdy radek obsahuje ctyri udaje. Identifikator uzivatele, identifikator interpreta, nazev interpreta a pocet prehrani:
+Dataset obsahuje jediný sloupec nazvaný *value*, obsah buněk odpovídá jednotlivým řádkům ze zdrojového souboru. Každý řádek obsahuje čtyři údaje. Identifikátor uživatele, identifikátor interpreta, název interpreta a počet přehrání některé skladby tohoto interpreta:
  
 [%autofit]
 ----
@@ -27,38 +28,31 @@ Dataset obsahuje jediný sloupec nazvaný value, obsah buněk odpovídá jednotl
 +---------------------------------------------------------------------------------------------------------+
 ----
 
-Dalsim krokem je zprasovat jednotlive radky do struktury vhodnejsi pro dalsi vypocty. Zde nadefinujeme vlastni funkci parseLine, krera rozdeli radek dle tabulatoru. Zde pouzijeme metodu flatMap RDD API, kreta nam umozni transformovat vstupni hodnotu na pole vystupnich hodnot. Vstupni radek, ktere neobsahuji presne 4 retezce z dalsiho zpracovani vyradime. Sloupoce datasetu prejmenujeme na smysluplne nazvy:
+Dalším krokem je převést jednotlivé řádky do struktury vhodnější pro další výpočty. Jednou z možností by bylo nadefinovat vlastní funkci, krerá by rozdělila vstpní řádek dle tabulátoru. Jednodušší postup ale je interpretovat vstupní soubor jako CSV formát s tabulátorem jako separátorem buněk. Spark obsahuje zabudovabnou podporu pro tento formát spolu s řadou řídících voleb. V našem případě použijeme volbu *mode* s hodnotou DROPMALFORMED tak že se při zpracování ignorují řádky, které nemají vyhovující formát. Dále aktivujeme volbu *inferSchema* aby se Spark pokusil přiřadit vhodné datové typy jednotlivým sloupcům. Nakonec přiřadíme sloupcům vhodná jména pomocí metody *withColumnRenamed*:  
 
 [source, python, numbered]
 ---- 
-def parseLine(line) :
-    splits = line.value.split("\t")
-    if (len(splits) == 4):
-        return [splits]
-    else:
-        return []      
-
-parsedData = rawData.rdd.flatMap(parseLine).toDF()\
-    .withColumnRenamed("_1", "userHash")\
-    .withColumnRenamed("_2", "artistMBID")\
-    .withColumnRenamed("_3", "artistName")\
-    .withColumnRenamed("_4", "listenCount")
-    
-parsedData.show(2, False)
+df = spark.read.format('csv')\
+    .option("header", "false")\
+    .option("sep", "\t")\
+    .option("mode", "DROPMALFORMED")\
+    .option("inferSchema", "true")\
+    .load("usersha1-artmbid-artname-plays.tsv")\
+    .withColumnRenamed("_c0", "userHash")\
+    .withColumnRenamed("_c1", "artistMBID")\
+    .withColumnRenamed("_c2", "artistName")\
+    .withColumnRenamed("_c3", "listenCount")
 ---- 
 
-Vystupme je dataset obsahujici 4 sloupce odpovidajici udajum ve zdrojovych datech:
-[%autofit]
+Pokud si nyní necháme vypsat schéma výsledného datasetu spolu s prvními třemi řádky:
+
+[source, python, numbered]
 ----
-+----------------------------------------+------------------------------------+-----------------------+-----------+
-|userHash                                |artistMBID                          |artistName             |listenCount|
-+----------------------------------------+------------------------------------+-----------------------+-----------+
-|00000c289a1829a808ac09c00daf10bc3c4e223b|3bd73256-3905-4f3a-97e2-8b341527f805|betty blowtorch        |2137       |
-|00000c289a1829a808ac09c00daf10bc3c4e223b|f2fb0ff0-5679-42ec-a55c-15109ce6e320|die Ärzte              |1099       |
-+----------------------------------------+------------------------------------+-----------------------+-----------+
+df.printSchema()
+df.show(3)
 ----
 
-Dalsim problemem jsou typy jednotlivych sloupcu, pokud nechame Spark vypsat schema naseho datasetu:
+Dataset obsahuje čtyři sloupce s tím, že sloupec *listenCount* má přiřazený numerický datový typ: 
 
 [%autofit]
 ----
@@ -66,35 +60,40 @@ root
  |-- userHash: string (nullable = true)
  |-- artistMBID: string (nullable = true)
  |-- artistName: string (nullable = true)
- |-- listenCount: string (nullable = true)
+ |-- listenCount: double (nullable = true)
+
++--------------------+--------------------+-----------------+-----------+
+|            userHash|          artistMBID|       artistName|listenCount|
++--------------------+--------------------+-----------------+-----------+
+|00000c289a1829a80...|3bd73256-3905-4f3...|  betty blowtorch|     2137.0|
+|00000c289a1829a80...|f2fb0ff0-5679-42e...|        die Ärzte|     1099.0|
+|00000c289a1829a80...|b3ae82c2-e60b-455...|melissa etheridge|      897.0|
++--------------------+--------------------+-----------------+-----------+
+only showing top 3 rows
 ----
 
-Vsechny sloupce jsou retezce, nas algoritmus ale vyzaduje aby identikatory uzivatelu resp. produktu byla cela cisla a hodnoceni cisla realna. Ze zdrojoveho datasetu vytvorime novy dataset obsahujici pouze unikatni identifikatory uzivatelu. Kazdemu uzivateli priradime pomoci funkce zipWithIndex unikatni celociselny identifikator odpovidajici indexu prislusneho radku v datasetu. Vysledny dataset obsahujici unikatni uzivatele spolku s jejich celociselnymi identifikatory nakonec ulozime do souboru prp dalsi pouziti:
+Dalším problémem jsou datové typy sloupců userHash a artistName. ALS algoritmus  vyžaduje aby identikátory uživatelů resp. produktů byla celá čísla. Tito jsou ale ve zdrojovém datasetu identifikováni řetězci, které se nedají automaticky převést na numerické hodnoty. Ze zdrojového datasetu tedy vytvoříme nový dataset obsahující pouze unikátní identifikátory uživatelů. Každému uživateli přiřadíme pomocí funkce *zipWithIndex* unikátní celočíselný identifikátor odpovádající indexu příslušného řádku v datasetu:
 
 [source, python, numbered]
 ---- 
-users = parsedData\
-    .select(parsedData['userHash'])\
-    .dropDuplicates(['userHash'])
-users = users.rdd.zipWithIndex().map(lambda row: [row[0][0], row[1]]).toDF()
+users = df.select(df.userHash).distinct()
+users = users.rdd.zipWithIndex().toDF()
 users = users.select(\
-    users["_2"].alias('userId').cast("integer"),\
-    users["_1"].alias('userHash')\
-)
-users.write.mode("overwrite").save("/data/lastfm-dataset-360K/users.parquet") 
+    users._1.userHash.alias("userHash"),\
+    users._2.alias("userId").cast("integer")) 
 ---- 
 
-Analogickou operaci jako s uzivateli opakujeme i s inteprety a vytvorime dalsi dataset artists obsahujici unikatni inteprety spolku s jejich celociselnymi identifikatory. Tyto dva datasety spojime se zdorojovym dataset a kazdemu hodnoceni priradime celociselnymi identifikatory uzivatele a intepreta:
+Analogickou operaci jako s uživateli opakujeme i s inteprety a vytvoříme další dataset artists obsahující unikátní inteprety spolu s jejich celočíselnými identifikátory. Tyto dva datasety propojíme se zdorojovým datasetem a každému hodnocení přiřadíme celočíselné identifikátory uživatele a intepreta:
 
 [source, python, numbered]
 ----
-ratings = parsedData\
-    .join(users, parsedData["userHash"]==users["userHash"], 'inner')\
-    .join(artists, parsedData["artistName"]==artists["artistName"], 'inner')\
-    .select(users["userId"], artists["artistId"], parsedData["listenCount"].cast("float"))
+df = df\
+    .join(users, df.userHash==users.userHash, 'inner')\
+    .join(artists, df.artistName==artists.artistName, 'inner')\
+    .select(users.userId, artists.artistId, df.listenCount.cast("float"))
 ----
 
-Pokud nechame Spark vypsat pomoci metody printSchmea schema vysledneho datasetu, overime ze vysledny dataset ratings obsahuje tri slupce,  userId obsahujici celocisleny identifikator uzivcatele, artistId obsahujici celocisleny identifikator interpreta a listenCount obsahujci realne cislo odpovidajici poctu poslechu. V teto podobe je datset priparveny pro strojove zpracovani nasim algoritmem:  
+Pokud necháme Spark vypsat schéma výsledného datasetu, oveříme, že se výsledný dataset ratings skládá ze tří sloupců. Sloupec userId pro celočíslený identifikátor uživatele, artistId pro celočíslený identifikátor interpreta a listenCount obsahující reálné číslo odpovídající počtu poslechů: 
 
 [%autofit]
 ----
@@ -104,10 +103,28 @@ root
  |-- listenCount: float (nullable = true)
 ----
 
-=== Pruzkum dat
+=== Průzkum dat
 
-Dalsi fazi je ziskat povedoimi o datech z kterych se nasledne pokusime vytrenovat prislusny model. V teto chvili tedy mame tri datasety, dataset ratings obsahuje vsechna hodnoceni, dataset users obsahuje seznam uzivatelu a dataset artists obsahuje seznam interpretu. 
+Další fází je získat povědomí o datech ze kterých se následně pokusíme vytrénovat příslušný model. Nejprve jistíme krajní hodnoty pro počet poslechů:
 
+[source, python, numbered]
+----
+df.select(min("listenCount"), max("listenCount"), avg("listenCount")).show()
+----
+
+[%autofit]
+----
++----------------+----------------+------------------+
+|min(listenCount)|max(listenCount)|  avg(listenCount)|
++----------------+----------------+------------------+
+|             1.0|        419157.0|215.18530888924704|
++----------------+----------------+------------------+
+----
+
+Z výstupu je patrné, že hodnoty nejsou v daatasetu rovnoměrně distribuované. Manimální hodnota, kdy je pro jediného uživatele 400 tisíc poslechů jediného intepreta mnohonásobně převyšuje průměrnou hodnotu 215. Z <<ratings-dist>> je zřejmé, že se většina hodnot pohybuje kolem průměru ale dataset obsahuje malý počet extrémních hodnot.  
+
+[[ratings-dist]]
+image::../eda_files/eda_11_0.png[title="Rozložení hodnot v datsetu hodnocení", pdfwidth="100%"]  
 
 === Vytvoreni treningoveho a testovaciho datasetu
 
@@ -117,6 +134,7 @@ Pred samotnym vytovirenim modelu je treba vyclenit cast dat tak aby nebyla zahrn
 ----
 train, test = ratings.randomSplit([0.7, 0.3])
 ----
+
 
 === Vytvoreni modelu
 

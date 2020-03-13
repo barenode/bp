@@ -17,7 +17,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end::box-def[]
 =end
     config.vm.box = "../box/package.box"
-
+    config.disksize.size = '150GB'
+        
     #synced folders
     #tag::synced-folders[]
     config.vm.synced_folder '../.',       '/opt/dev',            type: 'nfs'

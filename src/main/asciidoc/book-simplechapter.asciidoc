@@ -22,6 +22,6 @@
 :bibtex-file: /opt/dev/src/main/asciidoc/library.bib
 :bibtex-style: ieee-with-url
 
-include::als-2.asciidoc[]
+include::exp-intro.asciidoc[]
 
 include::references.asciidoc[]
