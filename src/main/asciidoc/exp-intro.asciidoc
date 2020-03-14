@@ -126,9 +126,9 @@ Z výstupu je patrné, že hodnoty nejsou v daatasetu rovnoměrně distribuovan�
 [[ratings-dist]]
 image::../eda_files/eda_11_0.png[title="Rozložení hodnot v datsetu hodnocení", pdfwidth="100%"]  
 
-=== Vytvoreni treningoveho a testovaciho datasetu
+=== Vytvoření tréningového a testovacího datasetu
 
-Pred samotnym vytovirenim modelu je treba vyclenit cast dat tak aby nebyla zahrnuta v treningove fazi. Tento takzvany testovaci dataset bude pouzit pro overeni presnosti modelu <<>>. Zdrojovy dataset tedy rozdelime do dvou casti v pomeru 70% pro trenovaci dataset a zbylych 30% pro dataset testovaci: 
+Před vytvořením samotného modelu je třeba vyčlenit část dat tak, aby nebyla zahrnuta v tréningové fázi. Tento takzvaný testovací dataset bude použit pro vyhodnocení přesnosti modelu <<test-and-validation>>. Zdrojový dataset rozdělíme do dvou částí v poměru 70% pro trénovací dataset a zbylých 30% pro dataset testovací: 
 
 [source, python, numbered]
 ----
@@ -136,9 +136,9 @@ train, test = ratings.randomSplit([0.7, 0.3])
 ----
 
 
-=== Vytvoreni modelu
+=== Vytvoření iniciálního modelu
 
-Prvni model bude opbsahovat vychozi hodnoty pro vsechny paramtery algoritmu tak jak jsou uvedeny v <<>>. Model bude vytvoren pouze na zaklade treningovych dat:
+Iniciální model bude obsahovat výchozí hodnoty pro všechny parametry algoritmu tak jak jsou uvedeny <<als-estimator>>. Model bude vytvořen pouze na základě tréningových dat:
 
 [source, python, numbered]
 ----
@@ -151,7 +151,7 @@ alg = AlternatingLeastSquare()\
 model = alg.fit(train)
 ----
 
-Po vytvoreni modelu vyhodnotime jeho presnost. Na trenigovych i testovacich datech spocitame RMSE. Nejprve model pomoci metody transform aplikujeme na testovaci i trenovaci data. V teto fazi mame v bou datasetetch novy sloupce prediction ktery obsahuje predikci poslechu:
+Po vytvoření modelu vyhodnotíme jeho přesnost. Nejprve model pomocí metody *transform* aplikujeme na testovací i trénovací data. Tato operace do testovacího a trénovacího datasetu přidá nový sloupec *prediction*, který obsahuje predikci počtu poslechů:
 
 [source, python, numbered]
 ----
@@ -159,7 +159,7 @@ trainPredictions = model.transform(train)
 testPredictions = model.transform(test)
 ----
 
-Nasledne pomoci vestevene Spark tridy RegressionEvaluator spocitame RMSE na zaklade zmerenych poslechu ve sloupci listenCount a tech predikovanych ve sloupci prediction:
+Následně pomocí vestavěné Spark třídy RegressionEvaluator spočítáme RMSE na základě naměřených poslechů ve sloupci *listenCount* a těch predikovaných ve sloupci *prediction*:
 
 [source, python, numbered]
 ----
@@ -172,12 +172,23 @@ trainRmse = evaluator.evaluate(trainPredictions)
 testRmse = evaluator.evaluate(testPredictions)
 ----
 
-Ve vysledku vidime obrovsky rozdil mezi RMSE pro trenovaci  a testovaci data. Model poskytuje mnohem horsi vysledky nad daty, ktere nebyly pouzity pro jeho trening: 
+Výsledek jak pro trénovací RMSE tak i pro testovací obsahuje extrémně výsoké hodnoty. Průměrná chyba odpovídá trojnásobku průměru počtu poslechů. Také RMSE pro testovací data, které nebyly součástí učícího procesu, je nižší než pro data trénovací:
 
 ----
-train RMSE = 224.674909
-test RMSE = 1583.331258
+train RMSE = 655.374786
+test RMSE = 641.610511
 ----
+
+Tento, extrémně nepřesný výsledek, je pravděpodobně způsobený nerovnoměrnou distribucí hodnot ve zdrojovém datasetu viz. <<ratings-dist>>. Zejména malý počet extrémních hodnot bude mít za následek pokřivení výsledného modelu.
+
+
+=== Úprava vstupních dat
+
+Pro úpravu vstupnćích dat zvolíme jednoduchou metodu kdy z datasetu odstraníme nejnižších a nejvyšších 5% hodnot. Nejprve spočítáme 5% resp. 95% kvantil ze sdrojových dat:
+
+  
+
+
 
 
 

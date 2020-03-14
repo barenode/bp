@@ -1,5 +1,5 @@
 ﻿
-==== Estimator
+==== Estimator [[als-estimator]]
 
 Hyper paramtery mají vliv na výsledné predikce hodnocení, jejich optimální hodnoty jsou závislé na datasetu, pro který vyváříme model. Přesné hodnoty odvodíme až při experimentování, typicky pomocí křížové validace <<CH ML>>. Algoritmus bude podporovat následující vstupní hyper parametry:
 
