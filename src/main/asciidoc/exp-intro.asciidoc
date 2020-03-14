@@ -210,7 +210,25 @@ Další úpravou zdrojových dat je standardizace hodnot <<eda>>. Tato úprava p
 
 V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper parametry <<als-estimator>>. Optimáli postup by byl použít křížovou validaci spolu se Spark třídou *ParamGridBuilder*, která umožní nalézt optimální hodnoty pro kombinace více hyper parametrů. Bohužel tato technika dalece přesahuje možnosti použitého testovacího clustru. V našem případě budeme hledat optimální hodnotu pro každý parametr hyper zvlášť pro treninkovź i testovací dataset. 
 
-=== Rank
+==== Rank
 
- 
+Z <<hp-rank>> je patrné, že RMSE klesá jak pro trénovací i testovací sadu pro rank menší než 25. Dále již klesá RMSE pouze pro sadu trénovací, což znamená že se model stává postupně přeučeným na tuto sadu. Pro další vzpočty použijeme hodnotu hyper parametru rank 25.  
+
+[[hp-rank]]
+image::../rank-tuning-stdpos_files/rank-tuning-stdpos_5_10.png[title="Rank", pdfwidth="60%"]  
+
+
+==== Regulariční parametr
+
+Z <<hp-regParam>> je patrné, že i minimální regularizace má negativní vliv na výsledný model. Typicky by se měla regularizace aplikovat pokud by docházelo k přeučení modelu s velkým rozdílem mezi trénovací a testovací sadou. V našem případě se obejdeme bez regularizace a použijeme nulový regulariční parametr. 
+
+[[hp-regParam]]
+image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_10.png[title="Regulariční parametr", pdfwidth="60%"]  
+
+==== Alpha parametr
+
+Z <<hp-alphaParam>> je patrné, že pro alpha parametr poskytují lepší výsledky vyšší hodnoty než výchozí hodnota 1. Pro další vzpočty použijeme hodnotu hyper parametru alpha 10.        
+
+[[hp-alphaParam]]
+image::../alpha-tuning-stdpos_files/alpha-tuning-stdpos_7_1.png[title="Alpha parametr", pdfwidth="60%"]  
 

@@ -1,1 +1,1 @@
-ssh -i %HOMEDRIVE%%HOMEPATH%/.ssh/vagrant_private_key vagrant@192.168.72.101 "sudo /opt/rh/rh-python36/root/bin/jupyter nbconvert --to asciidoc --output-dir /opt/dev/src/main/asciidoc --template=/opt/dev/src/main/asciidoc/asciidoc.tpl /opt/dev/src/main/jupyter/360k/eda"
+ssh -i %HOMEDRIVE%%HOMEPATH%/.ssh/vagrant_private_key vagrant@192.168.72.101 "sudo /opt/rh/rh-python36/root/bin/jupyter nbconvert --to asciidoc --output-dir /opt/dev/src/main/asciidoc --template=/opt/dev/src/main/asciidoc/asciidoc.tpl /opt/dev/src/main/jupyter/360k/regParam-tuning-stdpos"

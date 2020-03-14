@@ -1,0 +1,2539 @@
+[source, ipython3]
+----
+%load_ext autoreload
+%env SPARK_HOME=/usr/hdp/current/spark2-client
+
+import findspark
+findspark.init()
+print('findspark initialized ...')
+
+import pyspark
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import expr, col, column, max, min
+----
+
+
+----
+env: SPARK_HOME=/usr/hdp/current/spark2-client
+findspark initialized ...
+----
+
+[source, ipython3]
+----
+def initspark():
+    spark = SparkSession.builder.appName('mlonspark')\
+        .config('spark.executor.instances', '3')\
+        .getOrCreate()
+    print('pyspark ready ...')
+    return spark
+----
+
+[source, ipython3]
+----
+from pyspark.ml.recommendation import ALS
+def initalg(val):
+    return ALS()\
+    .setUserCol("userId")\
+    .setItemCol("artistId")\
+    .setRatingCol("stdCountPos")\
+    .setRank(25)\
+    .setRegParam(val)\
+    .setImplicitPrefs(True)
+
+----
+
+[source, ipython3]
+----
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+def plot(res):
+    x = []
+    yTrain = []
+    yTest = []
+    for v in res:
+        x.append(v[0])
+        yTrain.append(v[1])
+        yTest.append(v[2])
+
+    plt.figure(figsize=(8,4))
+    plt.plot(x, yTrain, "g-", linewidth=2, label=r"$TRAIN$")
+    plt.plot(x, yTest, "r:", linewidth=2, label=r"TEST")
+    plt.legend(loc="upper left", fontsize=15)
+    plt.ylabel("RMSE", fontsize=18)
+----
+
+[source, ipython3]
+----
+from pyspark.ml.evaluation import RegressionEvaluator
+from pyspark.sql.functions import isnan
+
+def runtest(rng, **model_kargs):
+    res = []
+    for i in rng:
+        spark = initspark();
+        train = spark.read.load("/data/lastfm-dataset-360K/data-filtered-std-pos-train.parquet")
+        test = spark.read.load("/data/lastfm-dataset-360K/data-filtered-std-pos-test.parquet")
+        
+        evaluator = RegressionEvaluator()\
+            .setMetricName("rmse")\
+            .setLabelCol("stdCountPos")\
+            .setPredictionCol("prediction")
+        
+        alg = initalg(i)
+        model = alg.fit(train)
+        trainPredictions = model.transform(train)
+        trainPredictionsFiltered = trainPredictions.where(~isnan(col("prediction")))  
+        trainRmse = evaluator.evaluate(trainPredictionsFiltered)
+        
+        
+        testPredictions = model.transform(test)
+        testPredictionsFiltered = testPredictions.where(~isnan(col("prediction")))    
+        
+        
+        testRmse = evaluator.evaluate(testPredictionsFiltered)
+        
+        
+        res.append([i, trainRmse, testRmse])
+        plot(res)
+        spark.stop()
+    return res
+----
+
+[source, ipython3]
+----
+%matplotlib inline
+
+import numpy as np
+rng = np.arange(0.0, 2.0, 0.2).tolist()
+res = runtest(rng)
+print(res)
+----
+
+
+----
+pyspark ready ...
+pyspark ready ...
+pyspark ready ...
+pyspark ready ...
+pyspark ready ...
+pyspark ready ...
+pyspark ready ...
+----
+
+----
+ERROR:root:Exception while sending command.
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1159, in send_command
+    raise Py4JNetworkError("Answer from Java side is empty")
+py4j.protocol.Py4JNetworkError: Answer from Java side is empty
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 985, in send_command
+    response = connection.send_command(command)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1164, in send_command
+    "Error while receiving", e, proto.ERROR_ON_RECEIVE)
+py4j.protocol.Py4JNetworkError: Error while receiving
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 3331, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "<ipython-input-6-ddb166285348>", line 5, in <module>
+    res = runtest(rng)
+  File "<ipython-input-5-c7bfb8b89e92>", line 17, in runtest
+    model = alg.fit(train)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/base.py", line 132, in fit
+    return self._fit(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 288, in _fit
+    java_model = self._fit_java(dataset)
+  File "/usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py", line 285, in _fit_java
+    return self._java_obj.fit(dataset._jdf)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/hdp/current/spark2-client/python/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 336, in get_return_value
+    format(target_id, ".", name))
+py4j.protocol.Py4JError: An error occurred while calling o1184.fit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/rh/rh-python36/root/lib/python3.6/site-packages/IPython/core/interactiveshell.py", line 2044, in showtraceback
+    stb = value._render_traceback_()
+AttributeError: 'Py4JError' object has no attribute '_render_traceback_'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+----
+
+
+    ---------------------------------------------------------------------------
+
+    Py4JError                                 Traceback (most recent call last)
+
+    <ipython-input-6-ddb166285348> in <module>
+          3 import numpy as np
+          4 rng = np.arange(0.0, 2.0, 0.2).tolist()
+    ----> 5 res = runtest(rng)
+          6 print(res)
+
+
+    <ipython-input-5-c7bfb8b89e92> in runtest(rng, **model_kargs)
+         15 
+         16         alg = initalg(i)
+    ---> 17         model = alg.fit(train)
+         18         trainPredictions = model.transform(train)
+         19         trainPredictionsFiltered = trainPredictions.where(~isnan(col("prediction")))
+
+
+    /usr/hdp/current/spark2-client/python/pyspark/ml/base.py in fit(self, dataset, params)
+        130                 return self.copy(params)._fit(dataset)
+        131             else:
+    --> 132                 return self._fit(dataset)
+        133         else:
+        134             raise ValueError("Params must be either a param map or a list/tuple of param maps, "
+
+
+    /usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py in _fit(self, dataset)
+        286 
+        287     def _fit(self, dataset):
+    --> 288         java_model = self._fit_java(dataset)
+        289         model = self._create_model(java_model)
+        290         return self._copyValues(model)
+
+
+    /usr/hdp/current/spark2-client/python/pyspark/ml/wrapper.py in _fit_java(self, dataset)
+        283         """
+        284         self._transfer_params_to_java()
+    --> 285         return self._java_obj.fit(dataset._jdf)
+        286 
+        287     def _fit(self, dataset):
+
+
+    /usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py in __call__(self, *args)
+       1255         answer = self.gateway_client.send_command(command)
+       1256         return_value = get_return_value(
+    -> 1257             answer, self.gateway_client, self.target_id, self.name)
+       1258 
+       1259         for temp_arg in temp_args:
+
+
+    /usr/hdp/current/spark2-client/python/pyspark/sql/utils.py in deco(*a, **kw)
+         61     def deco(*a, **kw):
+         62         try:
+    ---> 63             return f(*a, **kw)
+         64         except py4j.protocol.Py4JJavaError as e:
+         65             s = e.java_exception.toString()
+
+
+    /usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py in get_return_value(answer, gateway_client, target_id, name)
+        334             raise Py4JError(
+        335                 "An error occurred while calling {0}{1}{2}".
+    --> 336                 format(target_id, ".", name))
+        337     else:
+        338         type = answer[1]
+
+
+    Py4JError: An error occurred while calling o1184.fit
+
+
+----
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+----
+
+
+[[]]
+image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_4.png[title=""]
+
+
+[[]]
+image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_5.png[title=""]
+
+----
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+ERROR:py4j.java_gateway:An error occurred while trying to connect to the Java server (127.0.0.1:43146)
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [Errno 111] Connection refused
+----
+
+
+[[]]
+image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_7.png[title=""]
+
+
+[[]]
+image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_8.png[title=""]
+
+
+[[]]
+image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_9.png[title=""]
+
+
+[[]]
+image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_10.png[title=""]
+
+[source, ipython3]
+----
+x = []
+yTrain = []
+yTest = []
+for v in res:
+    x.append(v[0])
+    yTrain.append(v[1])
+    yTest.append(v[2])
+
+print(yTest)
+----
+
+[source, ipython3]
+----
+%matplotlib inline
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8,4))
+plt.plot(x, yTrain, "g-", linewidth=2, label=r"$TRAIN$")
+plt.plot(x, yTest, "r:", linewidth=2, label=r"TEST")
+plt.legend(loc="upper left", fontsize=15)
+plt.ylabel("RMSE", fontsize=18)
+----
+
+[source, ipython3]
+----
+
+----
