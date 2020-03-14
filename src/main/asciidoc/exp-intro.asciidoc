@@ -124,7 +124,7 @@ df.select(min("listenCount"), max("listenCount"), avg("listenCount")).show()
 Z výstupu je patrné, že hodnoty nejsou v daatasetu rovnoměrně distribuované. Manimální hodnota, kdy je pro jediného uživatele 400 tisíc poslechů jediného intepreta mnohonásobně převyšuje průměrnou hodnotu 215. Z <<ratings-dist>> je zřejmé, že se většina hodnot pohybuje kolem průměru ale dataset obsahuje malý počet extrémních hodnot.  
 
 [[ratings-dist]]
-image::../eda_files/eda_11_0.png[title="Rozložení hodnot v datsetu hodnocení", pdfwidth="100%"]  
+image::../eda_files/eda_11_0.png[title="Rozložení hodnot v datasetu hodnocení", pdfwidth="100%"]  
 
 === Vytvoření tréningového a testovacího datasetu
 
@@ -184,12 +184,33 @@ Tento, extrémně nepřesný výsledek, je pravděpodobně způsobený nerovnom�
 
 === Úprava vstupních dat
 
-Pro úpravu vstupnćích dat zvolíme jednoduchou metodu kdy z datasetu odstraníme nejnižších a nejvyšších 5% hodnot. Nejprve spočítáme 5% resp. 95% kvantil ze sdrojových dat:
+Pro úpravu vstupních dat zvolíme jednoduchou metodu kdy z datasetu odstraníme nejnižších a nejvyšších 5% hodnot. Nejprve spočítáme 5% resp. 95% kvantil ze zdrojových dat:
 
-  
+[source, python, numbered]
+----
+from pyspark.sql import DataFrameStatFunctions as statFunc
+quantiles = statFunc(df).approxQuantile("listenCount", [0.05, 0.95], 0.001)
+---- 
+
+----
+[6.0, 751.0]
+----
+
+Z výsledku je patrné, že zejména hodnota 95% kvantilu 751 je výrazně nižší než maximální hodnota 419157. Po odstranění nejnižších a nejvyšších 5% hodnot je distribuce hodnot v datasetu rovnoměrnější viz. <<ratings-dist-filtered>>.
+
+[[ratings-dist-filtered]]
+image::../eda_files/eda_14_0.png[title="Rozložení hodnot v upraveném datasetu", pdfwidth="100%"]  
+
+Pro model vytvořený na základě upraveného datasetu jsme naměřili RMSE 212.78 pro trénovací datset, resp. 213.15 pro dataset testovací. Tyto hodnoty se již blíží průměrné hodnotě 149.60. Také RMSE pro testovací dataset je vyšší než pro dataset trénovací.  
+
+Další úpravou zdrojových dat je standardizace hodnot <<eda>>. Tato úprava převede hodnoty tak aby měly nulový průmer a směrodatnou odchylku rovnou 1. Problém je, že ALS algoritmus očekává pouze kladné hodnoty, proto všechny hodnoty posuneme tak, aby minimální hodnota byla rovná nule. Pro model vytvořený na základě standardizovaného datasetu jsme naměřili RMSE 1.297 pro trénovací datset, resp. 1.310 pro dataset testovací. 
 
 
+=== Ladění hyper parametrů
 
+V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper parametry <<als-estimator>>. Optimáli postup by byl použít křížovou validaci spolu se Spark třídou *ParamGridBuilder*, která umožní nalézt optimální hodnoty pro kombinace více hyper parametrů. Bohužel tato technika dalece přesahuje možnosti použitého testovacího clustru. V našem případě budeme hledat optimální hodnotu pro každý parametr hyper zvlášť pro treninkovź i testovací dataset. 
 
+=== Rank
 
+ 
 

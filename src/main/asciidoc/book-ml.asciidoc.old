@@ -8,7 +8,7 @@ Vytvoøení funkèního modelu na základì vstupních dat je komplexní postup, který n
 2. Výbìr modelu
 3. Vytvoøení a vyhodnocení modelu 
     
-=== Zkoumání a pøíprava dat 
+=== Zkoumání a pøíprava dat [[eda]] 
 
 Vstupní data nemusí a obvykle nebudou pøipravená pro strojové zpracování. Toto platí zejména pro pøípad implicitních dat, která mohou byt v podobì rùzných logovacích souborù, obsahujících dalši nerelevantní údaje, nebo v podobì databázových tabulek. Z takových zdrojù je tøeba extrahovat potøebná data do struktur vhodnìjších pro další zpracování. Dále je nutné vstupní data prozkoumat a porozumìt jejich zakladním charakteristikám. K tomu slouží rùzne vizualizaèní a dotazovací nástroje, které nám umožní porozumìt distribucím hodnot jednotlivých vlastností, korelacím mezi vlastnostmi atd. Obecnì se tato fáze v odborné literatuøe uvádí pod zkratkou EDA (Exploratory Data Analysis). V rámci této fáze by se mìly objevit nedostatky a chyby ve vstupních datech, které by mìly za následek pokøiveni vysledneho modelu. Dále je tøeba upravit vlastnosti vstupních dat tak aby jejich hodnoty byly vhodné pro strojové zpracovaní. Typicky pøevodem vlastností na numerické hodnoty a úpravou škály jejich hodnot. Dva základní postupy pro úpravu škály numerických hodnot jsou normalizce a standardizace. U normalizace odeèteme minimum a dìlíme rozsahem. Toto nám pøevede hodnoty do intervalu <0, 1>. Normalizaci definujeme jako:
 
