@@ -227,8 +227,17 @@ image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_10.png[title="Re
 
 ==== Alpha parametr
 
-Z <<hp-alphaParam>> je patrné, že pro alpha parametr poskytují lepší výsledky vyšší hodnoty než výchozí hodnota 1. Pro další vzpočty použijeme hodnotu hyper parametru alpha 10.        
+Z <<hp-alphaParam>> je patrné, že pro alpha parametr poskytují lepší výsledky vyšší hodnoty než výchozí hodnota 1. Pro další výpočty použijeme hodnotu hyper parametru alpha 10.        
 
 [[hp-alphaParam]]
 image::../alpha-tuning-stdpos_files/alpha-tuning-stdpos_7_1.png[title="Alpha parametr", pdfwidth="60%"]  
+
+
+==== Počet iterací
+
+Počet iterací by se měl nastavit dostatečně vysoký aby nadále nedocházelo ke snížení výsledného RMSE, tj. tato hodnota by měla uvíznout ve svém minimu.  
+
+==== Optimální hodnoty hyper parametrů
+
+
 

@@ -1,7 +1,7 @@
 
 === Doporuceni
 
-Pro vyhodnoceni konktretnich doporuceni byl vybran jeden z uzivatelu. Tento uzivatel je zamereny temer vyhradne na poslech elektronicke hudby. V nasledujicim prehledu je zobrazeno 20 skladeb s nejvice poslechy pro tohoto uzivatele:
+Pro vyhodnoceni konktretnich doporuceni byl vybran jeden z uzivatelu. Tento uzivatel je zamereny temer vyhradne na poslech elektronicke hudby. V nasledujicim prehledu je zobrazeno 20 skladeb s nejvice poslechy pro tohoto uzivatele. Nejvice poslouchany intepret je infected mushroom spadajici do zanru psy trance, ostatni interpreti (az na stereo mcs a stereo mcs) spadaji do zanru drumm&bass:
 
 [%autofit]
 ----
@@ -30,8 +30,6 @@ Pro vyhodnoceni konktretnich doporuceni byl vybran jeden z uzivatelu. Tento uziv
 |           sub focus|       80.0|
 +--------------------+-----------+ 
 ----
-
-Nejvice poslouchany intepret je infected mushroom spadajici do zanru psy trance, ostatni interpreti (az na stereo mcs a stereo mcs) spadaji do zanru drumm&bass. 
 
 Nejprve si nechame vyhodnotit doporuceni nad kompletnimi vstupnimi daty a modelem s vychozimi hodnotami pro jednotlive hyper parametry. Z vystupu vidime, ze nam model poskytl relativne uspokojiva doporuceni. Vicemene vsichni intepreti spadaji do elektronicke hudby. Drumm&bass je v doporuceni zastoupen ve 40%, ve vyberu neni zadny intepret ze zanru psy trance:
 
