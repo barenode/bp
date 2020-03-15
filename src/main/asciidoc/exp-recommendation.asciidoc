@@ -51,7 +51,7 @@ Nejprve si nechame vyhodnotit doporuceni nad kompletnimi vstupnimi daty a modele
 +------------------+
 ----
 
-Dalsi doporuceni si nechame vyhodnotit od modelu, ktery byt vytvoren nad daty, ze ktyerych byl odebran dolni 5% kvantil resp. horni 95% kvantil. Timto jsme z datasetu odebrali extremni hodnoty a dosahli tim lepsi distribuce hodnot viz. <<ratings-dist-filtered>>. 
+Dalsi doporuceni si nechame vyhodnotit od modelu, ktery byt vytvoren nad daty, ze kterych byl odebran dolni 5% kvantil resp. horni 95% kvantil. Timto jsme z datasetu odebrali extremni hodnoty a dosahli tim lepsi distribuce hodnot viz. <<ratings-dist-filtered>>. K modelu pouzijeme optimální hodnoty hyper paramtrù <<param-optimal-values>>. Z vystupu je patrne ze nam model poskytl perfektni doporuceni. Vsichni intepreti jsou z zanru Drumm&bass az na  1200 micrograms, ktery patri do zanru psy trance. Model doporucuje interprety, u kterych uzivatel nema zadne poslechny. Oproti modelu s pouzitymi vychozimi hodnotami doslo k vzraynemu kvalitativnimu posunu.
 
 [%autofit]
 ----
@@ -69,4 +69,23 @@ Dalsi doporuceni si nechame vyhodnotit od modelu, ktery byt vytvoren nad daty, z
 |          dj fresh|
 |         ltj bukem|
 +------------------+
+----
+
+
+[%autofit]
+----
++--------------------+
+|          artistName|
++--------------------+
+|         the prodigy|
+|the chemical brot...|
+|            pendulum|
+|                moby|
+|         fatboy slim|
+|thievery corporation|
+|           daft punk|
+|            röyksopp|
+|   infected mushroom|
+|           faithless|
++--------------------+
 ----

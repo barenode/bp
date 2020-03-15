@@ -23,5 +23,7 @@
 :bibtex-style: ieee-with-url
 
 include::exp-intro.asciidoc[]
+include::exp-recommendation.asciidoc[]
+include::final.asciidoc[]
 
 include::references.asciidoc[]

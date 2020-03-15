@@ -208,7 +208,7 @@ Další úpravou zdrojových dat je standardizace hodnot <<eda>>. Tato úprava p
 
 === Ladění hyper parametrů
 
-V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper parametry <<als-estimator>>. Optimáli postup by byl použít křížovou validaci spolu se Spark třídou *ParamGridBuilder*, která umožní nalézt optimální hodnoty pro kombinace více hyper parametrů. Bohužel tato technika dalece přesahuje možnosti použitého testovacího clustru. V našem případě budeme hledat optimální hodnotu pro každý parametr hyper zvlášť pro treninkovź i testovací dataset. 
+V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper parametry <<als-estimator>>. Optimáli postup by byl použít křížovou validaci spolu se Spark třídou *ParamGridBuilder*, která umožní nalézt optimální hodnoty pro kombinace více hyper parametrů. Bohužel tato technika dalece přesahuje možnosti použitého testovacího clustru. V našem případě budeme hledat optimální hodnotu pro každý parametr hyper zvlášť pro trénovací i testovací dataset. 
 
 ==== Rank
 
@@ -235,9 +235,31 @@ image::../alpha-tuning-stdpos_files/alpha-tuning-stdpos_7_1.png[title="Alpha par
 
 ==== Počet iterací
 
-Počet iterací by se měl nastavit dostatečně vysoký aby nadále nedocházelo ke snížení výsledného RMSE, tj. tato hodnota by měla uvíznout ve svém minimu.  
+Počet iterací by se měl nastavit dostatečně vysoký aby nadále nedocházelo ke snížení výsledného RMSE, tj. tato hodnota by měla uvíznout ve svém minimu. Z <<hp-maxIter>> je zřejmé že výchozí počet iterací 10 je dostatečný, hodnota RMSE se ustálí po šesté iteraci.
 
-==== Optimální hodnoty hyper parametrů
+[[hp-maxIter]]
+image::../maxIter-tuning-stdpos_files/maxIter-tuning-stdpos_7_1.png[title="Počet iterací", pdfwidth="60%"] 
 
+==== Optimální hodnoty hyper parametrů [[param-optimal-values]]
 
+V <<hp-optimal-values>> je zobrazen přehled hyper parametrů a nalezených optimálních hodnot. Vzhledem k použité technice není zaručené, že nedošlo k uváznutí na lokálním minimu a neexistuje kombinace parametrů, která by dosáhla lepšich výsledků. 
+
+.Optimální hodnoty hyper parametrů
+[[hp-optimal-values]]
+|===
+|Paramter|Hodnota
+
+|Rank
+|25
+
+|Regulariční parametr
+|0.0
+
+|Alpha parametr
+|10
+
+|Počet iterací
+|10
+
+|===
 
