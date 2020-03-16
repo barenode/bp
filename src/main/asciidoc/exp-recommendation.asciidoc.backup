@@ -1,4 +1,4 @@
-﻿
+
 === Doporuceni
 
 Pro vyhodnoceni konktretnich doporuceni byl vybran jeden z uzivatelu. Tento uzivatel je zamereny temer vyhradne na poslech elektronicke hudby. V nasledujicim prehledu je zobrazeno 20 skladeb s nejvice poslechy pro tohoto uzivatele. Nejvice poslouchany intepret je infected mushroom spadajici do zanru psy trance, ostatni interpreti (az na stereo mcs a stereo mcs) spadaji do zanru drumm&bass:
@@ -51,7 +51,7 @@ Nejprve si nechame vyhodnotit doporuceni nad kompletnimi vstupnimi daty a modele
 +------------------+
 ----
 
-Dalsi doporuceni si nechame vyhodnotit od modelu, ktery byt vytvoren nad daty, ze kterych byl odebran dolni 5% kvantil resp. horni 95% kvantil. Timto jsme z datasetu odebrali extremni hodnoty a dosahli tim lepsi distribuce hodnot viz. <<ratings-dist-filtered>>. K vytvoreni modelu pouzijeme optimální hodnoty hyper paramtrů <<param-optimal-values>>. Z vystupu je patrne ze nam model poskytl perfektni doporuceni. Vsichni intepreti jsou z zanru Drumm&bass az na  1200 micrograms, ktery patri do zanru psy trance. Model doporucuje interprety, u kterych uzivatel nema zadne poslechny. Oproti modelu s pouzitymi vychozimi hodnotami doslo k vzraynemu kvalitativnimu posunu.
+Dalsi doporuceni si nechame vyhodnotit od modelu, ktery byt vytvoren nad daty, ze kterych byl odebran dolni 5% kvantil resp. horni 95% kvantil. Timto jsme z datasetu odebrali extremni hodnoty a dosahli tim lepsi distribuce hodnot viz. <<ratings-dist-filtered>>. K modelu pouzijeme optim�ln� hodnoty hyper paramtr� <<param-optimal-values>>. Z vystupu je patrne ze nam model poskytl perfektni doporuceni. Vsichni intepreti jsou z zanru Drumm&bass az na  1200 micrograms, ktery patri do zanru psy trance. Model doporucuje interprety, u kterych uzivatel nema zadne poslechny. Oproti modelu s pouzitymi vychozimi hodnotami doslo k vzraynemu kvalitativnimu posunu.
 
 [%autofit]
 ----
@@ -71,8 +71,6 @@ Dalsi doporuceni si nechame vyhodnotit od modelu, ktery byt vytvoren nad daty, z
 +------------------+
 ----
 
-Posledni doporuceni si nechame vyhodnotit od modelu, u ktereho jsme provedli standaridazaci hodnot. K vytvoreni modelu budou pouzita data bez extremnich hodnot <<ratings-dist-filtered>> a optimální hodnoty hyper paramtrů <<param-optimal-values>>. Z vystupu je zrejme, ze tento model poskytuje nejhorší doporučení, ačkoliv všichni intrpreti spadaji do elektronicke hudby, pouze jediny, pendulum, spada do preferovanych pod zanru. Standaridazaci hodnot zjevne zapricinila pokriveni vysledneho modelu:
-
 
 [%autofit]
 ----
@@ -86,7 +84,7 @@ Posledni doporuceni si nechame vyhodnotit od modelu, u ktereho jsme provedli sta
 |         fatboy slim|
 |thievery corporation|
 |           daft punk|
-|            röyksopp|
+|            r�yksopp|
 |   infected mushroom|
 |           faithless|
 +--------------------+

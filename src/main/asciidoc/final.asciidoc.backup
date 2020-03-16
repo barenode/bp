@@ -1,4 +1,4 @@
-﻿== Zaver
+=== Zaver
 
 Spark je uzitgecny nastroj i sam o sobe, neni nutne ho pouzivat pouze jako nastroj v racmi clsutroveho stacku. Zejmena spolu s jupyter notebookem, muze slouzit jako lokalni analyticka platforma. Nicmene v tomto segmentu je k dispozici mnoho dalsich nastroju, ktere nevyzaduji takovy objem znalosti jako apache Spark. Jedna se napriklad o knovnu pandas pro python ktera spolu s vizualizacni knihovnou matplot tvori sikovny analyticky nastroj. 
 

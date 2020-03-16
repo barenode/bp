@@ -28,7 +28,7 @@ Dataset obsahuje jediný sloupec nazvaný *value*, obsah buněk odpovídá jedno
 +---------------------------------------------------------------------------------------------------------+
 ----
 
-Dalším krokem je převést jednotlivé řádky do struktury vhodnější pro další výpočty. Jednou z možností by bylo nadefinovat vlastní funkci, krerá by rozdělila vstpní řádek dle tabulátoru. Jednodušší postup ale je interpretovat vstupní soubor jako CSV formát s tabulátorem jako separátorem buněk. Spark obsahuje zabudovabnou podporu pro tento formát spolu s řadou řídících voleb. V našem případě použijeme volbu *mode* s hodnotou DROPMALFORMED tak že se při zpracování ignorují řádky, které nemají vyhovující formát. Dále aktivujeme volbu *inferSchema* aby se Spark pokusil přiřadit vhodné datové typy jednotlivým sloupcům. Nakonec přiřadíme sloupcům vhodná jména pomocí metody *withColumnRenamed*:  
+Dalším krokem je převést jednotlivé řádky do struktury vhodnější pro další výpočty. Jednou z možností by bylo nadefinovat vlastní funkci, krerá by rozdělila vstpní řádek dle tabulátoru. Jednodušší postup ale je interpretovat vstupní soubor jako CSV formát s tabulátorem jako separátorem buněk. Spark obsahuje zabudovanou podporu pro tento formát spolu s řadou řídících voleb. V našem případě použijeme volbu *mode* s hodnotou DROPMALFORMED tak, že se při zpracování ignorují řádky, které nemají vyhovující formát. Dále aktivujeme volbu *inferSchema* aby se Spark pokusil přiřadit vhodné datové typy jednotlivým sloupcům. Nakonec přiřadíme sloupcům vhodná jména pomocí metody *withColumnRenamed*:  
 
 [source, python, numbered]
 ---- 
@@ -72,7 +72,7 @@ root
 only showing top 3 rows
 ----
 
-Dalším problémem jsou datové typy sloupců userHash a artistName. ALS algoritmus  vyžaduje aby identikátory uživatelů resp. produktů byla celá čísla. Tito jsou ale ve zdrojovém datasetu identifikováni řetězci, které se nedají automaticky převést na numerické hodnoty. Ze zdrojového datasetu tedy vytvoříme nový dataset obsahující pouze unikátní identifikátory uživatelů. Každému uživateli přiřadíme pomocí funkce *zipWithIndex* unikátní celočíselný identifikátor odpovádající indexu příslušného řádku v datasetu:
+Dalším problémem jsou datové typy sloupců userHash a artistName. ALS algoritmus  vyžaduje aby identikátory uživatelů resp. produktů byla celá čísla. Tyto jsou ale ve zdrojovém datasetu identifikovány řetězci, které se nedají automaticky převést na numerické hodnoty. Ze zdrojového datasetu tedy vytvoříme nový dataset obsahující pouze unikátní identifikátory uživatelů. Každému uživateli přiřadíme pomocí funkce *zipWithIndex* unikátní celočíselný identifikátor odpovádající indexu příslušného řádku v datasetu:
 
 [source, python, numbered]
 ---- 
@@ -83,7 +83,7 @@ users = users.select(\
     users._2.alias("userId").cast("integer")) 
 ---- 
 
-Analogickou operaci jako s uživateli opakujeme i s inteprety a vytvoříme další dataset artists obsahující unikátní inteprety spolu s jejich celočíselnými identifikátory. Tyto dva datasety propojíme se zdorojovým datasetem a každému hodnocení přiřadíme celočíselné identifikátory uživatele a intepreta:
+Analogickou operaci jako s uživateli opakujeme i s inteprety a vytvoříme další dataset artists obsahující unikátní inteprety spolu s jejich celočíselnými identifikátory. Tyto dva datasety propojíme se zdrojovým datasetem a každému hodnocení přiřadíme celočíselné identifikátory uživatele a intepreta:
 
 [source, python, numbered]
 ----
@@ -105,7 +105,7 @@ root
 
 === Průzkum dat
 
-Další fází je získat povědomí o datech ze kterých se následně pokusíme vytrénovat příslušný model. Nejprve jistíme krajní hodnoty pro počet poslechů:
+Další fází je získat povědomí o datech ze kterých se následně pokusíme vytrénovat příslušný model. Nejprve zjistíme krajní hodnoty pro počet poslechů:
 
 [source, python, numbered]
 ----
@@ -121,7 +121,7 @@ df.select(min("listenCount"), max("listenCount"), avg("listenCount")).show()
 +----------------+----------------+------------------+
 ----
 
-Z výstupu je patrné, že hodnoty nejsou v daatasetu rovnoměrně distribuované. Manimální hodnota, kdy je pro jediného uživatele 400 tisíc poslechů jediného intepreta mnohonásobně převyšuje průměrnou hodnotu 215. Z <<ratings-dist>> je zřejmé, že se většina hodnot pohybuje kolem průměru ale dataset obsahuje malý počet extrémních hodnot.  
+Z výstupu je patrné, že hodnoty nejsou v daatasetu rovnoměrně distribuované. Manimální hodnota, kdy je pro jediného uživatele 400 tisíc poslechů jediného intepreta, mnohonásobně převyšuje průměrnou hodnotu 215. Z <<ratings-dist>> je zřejmé, že se většina hodnot pohybuje kolem průměru ale dataset obsahuje malý počet extrémních hodnot.  
 
 [[ratings-dist]]
 image::../eda_files/eda_11_0.png[title="Rozložení hodnot v datasetu hodnocení", pdfwidth="100%"]  
@@ -151,7 +151,7 @@ alg = AlternatingLeastSquare()\
 model = alg.fit(train)
 ----
 
-Po vytvoření modelu vyhodnotíme jeho přesnost. Nejprve model pomocí metody *transform* aplikujeme na testovací i trénovací data. Tato operace do testovacího a trénovacího datasetu přidá nový sloupec *prediction*, který obsahuje predikci počtu poslechů:
+Po vytvoření modelu vyhodnotíme jeho přesnost. Nejprve model pomocí metody *transform* aplikujeme na testovací i trénovací data. Tato operace do testovacího a trénovacího datasetu přidá nový sloupec prediction, který obsahuje predikci počtu poslechů:
 
 [source, python, numbered]
 ----
@@ -159,7 +159,7 @@ trainPredictions = model.transform(train)
 testPredictions = model.transform(test)
 ----
 
-Následně pomocí vestavěné Spark třídy RegressionEvaluator spočítáme RMSE na základě naměřených poslechů ve sloupci *listenCount* a těch predikovaných ve sloupci *prediction*:
+Následně pomocí vestavěné Spark třídy RegressionEvaluator spočítáme RMSE na základě naměřených poslechů ve sloupci listenCount a těch predikovaných ve sloupci prediction:
 
 [source, python, numbered]
 ----
@@ -172,14 +172,14 @@ trainRmse = evaluator.evaluate(trainPredictions)
 testRmse = evaluator.evaluate(testPredictions)
 ----
 
-Výsledek jak pro trénovací RMSE tak i pro testovací obsahuje extrémně výsoké hodnoty. Průměrná chyba odpovídá trojnásobku průměru počtu poslechů. Také RMSE pro testovací data, které nebyly součástí učícího procesu, je nižší než pro data trénovací:
+Výsledek jak pro trénovací RMSE tak i pro testovací obsahuje extrémně výsoké hodnoty. Průměrná chyba odpovídá trojnásobku průměru počtu poslechů. Také RMSE pro testovací data, která nebyla součástí učícího procesu, je paradoxně nižší než pro data trénovací:
 
 ----
 train RMSE = 655.374786
 test RMSE = 641.610511
 ----
 
-Tento, extrémně nepřesný výsledek, je pravděpodobně způsobený nerovnoměrnou distribucí hodnot ve zdrojovém datasetu viz. <<ratings-dist>>. Zejména malý počet extrémních hodnot bude mít za následek pokřivení výsledného modelu.
+Tento, extrémně nepřesný výsledek, je pravděpodobně způsobený nerovnoměrnou distribucí hodnot ve zdrojovém datasetu viz. <<ratings-dist>>. Zejména malý počet extrémních hodnot bude mít s velkou pravděpodobností za následek pokřivení výsledného modelu.
 
 
 === Úprava vstupních dat
@@ -196,7 +196,7 @@ quantiles = statFunc(df).approxQuantile("listenCount", [0.05, 0.95], 0.001)
 [6.0, 751.0]
 ----
 
-Z výsledku je patrné, že zejména hodnota 95% kvantilu 751 je výrazně nižší než maximální hodnota 419157. Po odstranění nejnižších a nejvyšších 5% hodnot je distribuce hodnot v datasetu rovnoměrnější viz. <<ratings-dist-filtered>>.
+Z výsledku je patrné, že zejména hodnota 95% kvantilu 751 je výrazně nižší než maximální hodnota 419157. Po odstranění nejnižších a nejvyšších 5% hodnot je distribuce hodnot v datasetu výrazně rovnoměrnější viz. <<ratings-dist-filtered>>.
 
 [[ratings-dist-filtered]]
 image::../eda_files/eda_14_0.png[title="Rozložení hodnot v upraveném datasetu", pdfwidth="100%"]  
@@ -208,7 +208,7 @@ Další úpravou zdrojových dat je standardizace hodnot <<eda>>. Tato úprava p
 
 === Ladění hyper parametrů
 
-V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper parametry <<als-estimator>>. Optimáli postup by byl použít křížovou validaci spolu se Spark třídou *ParamGridBuilder*, která umožní nalézt optimální hodnoty pro kombinace více hyper parametrů. Bohužel tato technika dalece přesahuje možnosti použitého testovacího clustru. V našem případě budeme hledat optimální hodnotu pro každý parametr hyper zvlášť pro trénovací i testovací dataset. 
+V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper parametry <<als-estimator>>. Optimální postup by byl použít křížovou validaci spolu se Spark třídou *ParamGridBuilder*, která umožní nalézt optimální hodnoty pro kombinace více hyper parametrů. Bohužel tato technika dalece přesahuje dostupný výkon použitého testovacího clustru. V našem případě budeme hledat optimální hodnotu pro každý hyper parametr zvlášť pro trénovací i testovací dataset. 
 
 ==== Rank
 
@@ -235,7 +235,7 @@ image::../alpha-tuning-stdpos_files/alpha-tuning-stdpos_7_1.png[title="Alpha par
 
 ==== Počet iterací
 
-Počet iterací by se měl nastavit dostatečně vysoký aby nadále nedocházelo ke snížení výsledného RMSE, tj. tato hodnota by měla uvíznout ve svém minimu. Z <<hp-maxIter>> je zřejmé že výchozí počet iterací 10 je dostatečný, hodnota RMSE se ustálí po šesté iteraci.
+Počet iterací by se měl nastavit dostatečně vysoký aby nadále nedocházelo ke snížení výsledného RMSE, tj. tato hodnota by měla uváznout ve svém minimu. Z <<hp-maxIter>> je zřejmé že výchozí počet iterací 10 je dostatečný, hodnota RMSE se ustálí již po šesté iteraci.
 
 [[hp-maxIter]]
 image::../maxIter-tuning-stdpos_files/maxIter-tuning-stdpos_7_1.png[title="Počet iterací", pdfwidth="60%"] 
