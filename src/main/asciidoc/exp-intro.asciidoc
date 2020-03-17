@@ -1,8 +1,7 @@
 ﻿
-== Experimentani faze
+== Vytvoření modelu 
 
-=== Ziskani dat
-
+=== Získání dat   
 
 Pro test algoritmu byl vybrán implicitní dataset volně dostupný přes API společnosti Last.fm. Tato společnost provozuje hudební web, založený ve Velké Británii v roce 2002. Pomocí systému hudebních doporučení s názvem „Audioscrobbler“ vytváří Last.fm podrobný profil hudebního vkusu každého uživatele zaznamenáním podrobností o skladbách, které uživatel poslouchá, a to buď z Internetové rozhlasové stanice, počítače uživatele nebo pomoci přenosneho hudebního zařízení. Tyto informace jsou přenášeny do databáze Last.fm buď prostřednictvím samotného hudebního přehrávače (mimo jiné včetně Spotify, Deezer, Tidal a MusicBee) nebo prostřednictvím plug-in nainstalovaného do hudebního přehrávače uživatele. Data se poté zobrazí na stránce profilu uživatele.
 

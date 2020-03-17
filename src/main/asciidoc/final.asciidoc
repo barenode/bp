@@ -5,3 +5,12 @@ Spark je uzitgecny nastroj i sam o sobe, neni nutne ho pouzivat pouze jako nastr
 Jednou z velkych vyhod sparku je moznost programovat ve vice jazycich. V ramci praci byla pouzita Scala, nattivni jazyk Sparku. Ackoliv se pro java vyvojare mohla zdat syntaxe scaly zprvu ponekud nelogicka, postupem casu vynikla krasa tohoto jazyka. Podpora funkcinalniho programovani spolu s moznosti tvorit ad-hoc struktury cini z tohoto jazyka optimalni volbu pro SPark kdy vyvojar muze vyjadrovat komplexni logiku v prehledne a elegantni forme. 
 
 Dalsim pouzitym jazykem byl Python, jazyk popularni mezi datovymi vedci ma v Ramci Sparku kvalitni podporu. Zejmena spolu s pouzitim jupyter noteboooku kde bylo mozne kombinovat vypocty ve Sparku spolu s knihovnou matploty pro graficke znazorneni vysledku   
+
+
+Velkým překvapením je algoritmus ALS a doporuceni sestavena modely vztrenovane timto algoritmem. Algoritmus dokazal identifikovat jednotlive podzanry v ramci zanru elektronicke hudby. Vzhledem k tomu, ze ma tento zanr takovych podzanru desitky jedna se o pusobivy vysledek. Nalezeni optimalnich hodnot pro jednotlive hyper parametrz melo za nasledek yvzseni presnosti modelu i kvalitativni posun vzslednzch doporuceni. 
+
+Doporucovani hodnot se jevi jako obtiynejsi ney doporucovani knih nebo filmu, ktere maji typicky male hodnoty poctu precteni resp shlednuti. 
+
+Hadoop ma pozvolnou krivku uceni. Poroyumet ucelu jednotlivzch casti systemu, poskladat tyto casti do funkcniho celku je casove narocny proces. Kaydopadne se ale jedna o fascinujici tenchnologii, ktera dokaze adresovat poyadavky na uloyeni a analyyu velkych objemu dat, ktere generuji uzivatele internetu.  
+
+     
