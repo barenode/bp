@@ -2,11 +2,11 @@
 
 === Alternating Least Square (ALS)
 
-Algoritmus ALS je rozdělen na dvě základní komponenty *Model* a *Estimator* tak jak jsou popsány v kapitole [REF SPARK ML]. Estimator na základě datasetu s hodnoceními spočítá uživatelské a produktové faktory a inicializuje s nimi Model. Model následně na základě těchto faktorů bude poskytovat doporučení.
+Algoritmus ALS je rozdělen na dvě základní komponenty *Model* a *Estimator* <<spark-ml>>. Estimator na základě datasetu s hodnoceními spočítá uživatelské a produktové faktory a inicializuje s nimi Model. Model následně na základě těchto faktorů bude poskytovat doporučení.
 
 ==== Model
 
-Model je inicializován s referencemi na uživatelské a produktové faktorové datasety. Oba tyto datasety mají analogickou strukturu, kde řádky jsou dvojice klíč, hodnota. Klíč obsahuje celočíselný identifikátor uživatele respektive produktu. Jako hodnota je příslušný faktorový vektor v podobě pole reálných numerických hodnot. Vektorový součin uživatelského a produktového faktoru predikuje hodnocení produktu uživatelem. Maticový součin obou datasetů je kompletní matice obsahující predikce hodnocení všech produktů pro všechny uživatele. Model musí povinně implementovat metodu *transform* se vstupním parametrem typu Dataset [REF SPARK ML]. Pro interní manipulaci s tímto datasetem Model vyžaduje následující parametry:
+Model je inicializován s referencemi na uživatelské a produktové faktorové datasety. Oba tyto datasety mají analogickou strukturu, kde řádky jsou dvojice klíč, hodnota. Klíč obsahuje celočíselný identifikátor uživatele respektive produktu. Jako hodnota je příslušný faktorový vektor v podobě pole reálných numerických hodnot. Vektorový součin uživatelského a produktového faktoru predikuje hodnocení produktu uživatelem. Maticový součin obou datasetů je kompletní matice obsahující predikce hodnocení všech produktů pro všechny uživatele. Model musí povinně implementovat metodu *transform* se vstupním parametrem typu Dataset <<spark-ml>>. Pro interní manipulaci s tímto datasetem Model vyžaduje následující parametry:
 
 userCol::
     Jméno sloupce ve vstupním datasetu, který obsahuje numerický identifikátor uživatele.
@@ -17,14 +17,14 @@ itemCol::
 predictionCol::
     Jméno sloupce pod kterým Model přidá predikce hodnocení do vstupního datasetu.
 
-Metoda transform provede join mezi vstupním datasetem a faktorovými datasety, na úrovni řádku provede vektorový součin faktorů a výsledek uloží do sloupce s predikcemi:
+Metoda transform provede spojení mezi vstupním datasetem a faktorovými datasety, na úrovni řádku provede vektorový součin faktorů a výsledek uloží do sloupce s predikcemi:
 
 [source, scala, numbered]
 ----
 include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=model-transform]
 ---- 
 
-Pokud tedy použijeme testovací dataset jako vstup do modelu, budeme mít v každém řádku reálné hodnocení produktu uživatelem a zároven i predikci hodnocení. Na základě těchto dvou hodnot bude možné násldně hodnotit přesnost našeho modelu. 
+Pokud tedy použijeme testovací dataset jako vstup do modelu, budeme mít v každém řádku reálné hodnocení produktu uživatelem a zároveň i predikci hodnocení. Na základě těchto dvou hodnot bude možné následně hodnotit přesnost našeho modelu. 
 
 Model dále obsahuje metody pro doporučení konkrétního počtu produktů uživatelům a naopak. 
 

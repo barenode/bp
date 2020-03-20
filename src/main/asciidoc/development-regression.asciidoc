@@ -1,7 +1,7 @@
 
 ==== Lineární systém
 
-V rámci algoritmu, jak uz sám název napovídá, je třeba opakovaně řešit lineární systém, kdy vektorový součin uživatelských a produktových faktorů odpovídá příslušnému hodnocení. Pro výpočet výpočet faktorového vektoru stem:[x] pro jednoho uživatele tedy platí, že součin matice produktových faktorů stem:[A] a vektoru stem:[x] odpovídá vektoru hodnocení daného uživatele pro všechny produkty: 
+V rámci algoritmu, jak už sám název napovídá, je třeba opakovaně řešit lineární systém, kdy vektorový součin uživatelských a produktových faktorů odpovídá příslušnému hodnocení. Pro výpočet faktorového vektoru stem:[x] pro jednoho uživatele tedy platí, že součin matice produktových faktorů stem:[A] a vektoru stem:[x] odpovídá vektoru hodnocení daného uživatele pro všechny produkty: 
 
 [stem]
 ++++
@@ -10,7 +10,7 @@ Ax = b
 \end{align*}
 ++++ 
 
-Počet rovnic v lineárním systému odpovídá počtu uživatelu resp. počtu produktů a počet neznámých odpovídá zvolenému ranku faktoru. Vzhledem k tomu, že je počet rovnic mnohokrát vyšší než počet neznámých nebude mít tento lienární systém typicky jediné přesné řešení. Pro výpočet tedy použijeme lineární regresi, kdy se snažíme nalézt řešení s nejmenší možnou chybou. Lineární systém budeme tedy udržovat v takzvaném normálním stavu:
+Počet rovnic v lineárním systému odpovídá počtu uživatelů resp. počtu produktů a počet neznámých odpovídá zvolenému ranku faktoru. Vzhledem k tomu, že je počet rovnic mnohokrát vyšší než počet neznámých nebude mít tento lineární systém typicky jediné přesné řešení. Pro výpočet tedy použijeme lineární regresi, kdy se snažíme nalézt řešení s nejmenší možnou chybou. Lineární systém budeme udržovat v takzvaném normálním stavu:
 
 [stem]
 ++++
@@ -19,11 +19,11 @@ A^TAx = A^Tb
 \end{align*}
 ++++ 
  
-Konkrétně si bude udržovat dvě komponenty. První z nich odpovídající výrazu stem:[A^TA] je čtvercová a symetrická matice. Vzhledem k tomu, že jako matici stem:[A] použijeme střídavě uživatelské resp. produktové faktory bude mít tato matice relativně malé rozměry stem:[rxr] kde stem:[r] odpovída zvolenému ranku. Druhá komponenta bude vektor odpovídající výrazu stem:[A^Tb], kde vektor stem:[b] odpovídá vektoru hodnocení, tato komponenta bude mít dimenzi stem:[r]. 
+Konkrétně si bude udržovat dvě komponenty. První z nich odpovídající výrazu stem:[A^TA] je čtvercová a symetrická matice. Vzhledem k tomu, že jako matici stem:[A] použijeme střídavě uživatelské resp. produktové faktory bude mít tato matice relativně malé rozměry stem:[rxr] kde stem:[r] odpovídá zvolenému ranku. Druhá komponenta bude vektor odpovídající výrazu stem:[A^Tb], kde vektor stem:[b] odpovídá vektoru hodnocení, tato komponenta bude mít dimenzi stem:[r]. 
  
 Do lineárního systému bude možné přidávat komponenty jednotlivě, kdy budou jako argumenty faktorový vektor stem:[a] a skalár stem:[b_{i}] odpovídající konkrétnímu hodnocení. Následně přičteme k první komponentě výraz stem:[a^Ta] a ke druhé vyraz stem:[a^Tb_{i}].
 
-Spark interně používa pro výpočty lineární algebry knihovnu JBLAS. Tato knihovna je pouze tenký Java klient nad nativními knihovnami LAPACK a BLAS. Tyto knihovny, vytvořené ve Fortranu 77, jsou optimalizované na vysoký výkon a použité v nástrojích jako jsou MATLAB nebo RStudio. Pro rešení lineárního systému použijeme rutinu DPPSV, založenou na Choleského faktorizaci.
+Spark interně používá pro výpočty lineární algebry knihovnu JBLAS. Tato knihovna je pouze tenký Java klient nad nativními knihovnami LAPACK a BLAS. Tyto knihovny, vytvořené ve Fortranu 77, jsou optimalizované na vysoký výkon a použité v nástrojích jako jsou MATLAB nebo RStudio. Pro řešení lineárního systému použijeme rutinu DPPSV, založenou na Choleského faktorizaci.
 
 
      

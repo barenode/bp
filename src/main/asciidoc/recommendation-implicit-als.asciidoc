@@ -1,7 +1,7 @@
 ﻿
-=== Alternating Least Square (ALS)   
+=== Alternating Least Square (ALS)  [[recommendation-als]] 
 
-ALS z anglického názvu **Alternating Least Squares** volně přeloženo jako *střídavá metoda nejmenších čtverců* je algoritmus pro faktorizaci matic <<matrix_factorization>>. Definujme matici stem:[R_{ui}] kde stem:[u] určuje počet uživatelů a stem:[i] počet položek v katalogu. Elementy stem:[r_{ui} \in \mathbb{R}] matice stem:[R] definují ohodnocení uživatele stem:[u] položky stem:[i]. Předpokládáme, že matice stem:[R] je rozsáhlá ale zároveň velice řídká, typicky méně než 1 % polí má přiřazenou hodnotu. 
+ALS z anglického názvu Alternating Least Squares, volně přeloženo jako střídavá metoda nejmenších čtverců, je algoritmus pro faktorizaci matic <<matrix_factorization>>. Definujme matici stem:[R_{ui}] kde stem:[u] určuje počet uživatelů a stem:[i] počet položek v katalogu. Elementy stem:[r_{ui} \in \mathbb{R}] matice stem:[R] definují ohodnocení uživatele stem:[u] položky stem:[i]. Předpokládáme, že matice stem:[R] je rozsáhlá ale zároveň velice řídká, typicky méně než 1 % polí má přiřazenou hodnotu. 
 
 [stem]
 ++++
@@ -16,7 +16,7 @@ R_{m,n} =
 \end{align*}
 ++++ 
 
-Matici stem:[R] rozložíme na 2 matice stem:[X_{uk}] a stem:[Y_{ik}] tak, že stem:[XY^T \approx R]. Tyto matice obsahující řádky pro každého uživatele resp. produkt se nazývají faktorové. Vektory v těchto faktorových maticích mají typicky nízký počet rozměrů stem:[k]. Každý tento rozměr odpovídá latentní vlastnosti modelu a jejich hodnoty odpovídají tomu nakolik jsou uživatelé a produkty spjaty s touto skrytou vlastností. Na rozdíl od stem:[R] je vysledná matice stem:[XY^T] hustá, doplněné hodnoty obsahují odhad ohodnocení mezi uživateli a položkami. 
+Matici stem:[R] rozložíme na 2 matice stem:[X_{uk}] a stem:[Y_{ik}] tak, že stem:[XY^T \approx R]. Tyto matice obsahující řádky pro každého uživatele resp. produkt se nazývají faktorové. Vektory v těchto faktorových maticích mají typicky nízký počet rozměrů stem:[k]. Každý tento rozměr odpovídá latentní vlastnosti modelu a jejich hodnoty odpovídají tomu nakolik jsou uživatelé a produkty spjaty s touto skrytou vlastností. Na rozdíl od stem:[R] je výsledná matice stem:[XY^T] hustá, doplněné hodnoty obsahují odhad ohodnocení mezi uživateli a položkami. 
 Soustava rovnic daná stem:[XY^T = R] nemá pravděpodobně řešení. Důvodem je příliš mnoho rovnic stem:[u] pro stem:[X] resp. stem:[i] pro stem:[Y] a pouze stem:[k] neznámých. Řešením je použít metodu nejmenších čtverců, kdy hledáme řešení s minimální chybou:
 
 [stem]

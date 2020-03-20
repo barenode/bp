@@ -3,7 +3,7 @@
 
 === Získání dat   
 
-Pro test algoritmu byl vybrán implicitní dataset volně dostupný přes API společnosti Last.fm. Tato společnost provozuje hudební web, založený ve Velké Británii v roce 2002. Pomocí systému hudebních doporučení s názvem „Audioscrobbler“ vytváří Last.fm podrobný profil hudebního vkusu každého uživatele zaznamenáním podrobností o skladbách, které uživatel poslouchá, a to buď z Internetové rozhlasové stanice, počítače uživatele nebo pomoci přenosneho hudebního zařízení. Tyto informace jsou přenášeny do databáze Last.fm buď prostřednictvím samotného hudebního přehrávače (mimo jiné včetně Spotify, Deezer, Tidal a MusicBee) nebo prostřednictvím plug-in nainstalovaného do hudebního přehrávače uživatele. Data se poté zobrazí na stránce profilu uživatele.
+Pro test algoritmu byl vybrán implicitní dataset volně dostupný přes API společnosti Last.fm. Tato společnost provozuje hudební web, založený ve Velké Británii v roce 2002. Pomocí systému hudebních doporučení s názvem „Audioscrobbler“ vytváří Last.fm podrobný profil hudebního vkusu každého uživatele zaznamenáním podrobností o skladbách, které uživatel poslouchá, a to buď z Internetové rozhlasové stanice, počítače uživatele nebo pomocí přenosného hudebního zařízení. Tyto informace jsou přenášeny do databáze Last.fm buď prostřednictvím samotného hudebního přehrávače (mimo jiné včetně Spotify, Deezer, Tidal a MusicBee) nebo prostřednictvím plug-in nainstalovaného do hudebního přehrávače uživatele. Data se poté zobrazí na stránce profilu uživatele.
 
 === Příprava dat
 
@@ -27,7 +27,7 @@ Dataset obsahuje jediný sloupec nazvaný *value*, obsah buněk odpovídá jedno
 +---------------------------------------------------------------------------------------------------------+
 ----
 
-Dalším krokem je převést jednotlivé řádky do struktury vhodnější pro další výpočty. Jednou z možností by bylo nadefinovat vlastní funkci, krerá by rozdělila vstpní řádek dle tabulátoru. Jednodušší postup ale je interpretovat vstupní soubor jako CSV formát s tabulátorem jako separátorem buněk. Spark obsahuje zabudovanou podporu pro tento formát spolu s řadou řídících voleb. V našem případě použijeme volbu *mode* s hodnotou DROPMALFORMED tak, že se při zpracování ignorují řádky, které nemají vyhovující formát. Dále aktivujeme volbu *inferSchema* aby se Spark pokusil přiřadit vhodné datové typy jednotlivým sloupcům. Nakonec přiřadíme sloupcům vhodná jména pomocí metody *withColumnRenamed*:  
+Dalším krokem je převést jednotlivé řádky do struktury vhodnější pro další výpočty. Jednou z možností by bylo nadefinovat vlastní funkci, která by rozdělila vstupní řádek dle tabulátoru. Jednodušší postup ale je interpretovat vstupní soubor jako CSV formát s tabulátorem jako separátorem buněk. Spark obsahuje zabudovanou podporu pro tento formát spolu s řadou řídících voleb. V našem případě použijeme volbu *mode* s hodnotou DROPMALFORMED tak, že se při zpracování ignorují řádky, které nemají vyhovující formát. Dále aktivujeme volbu *inferSchema* aby se Spark pokusil přiřadit vhodné datové typy jednotlivým sloupcům. Nakonec přiřadíme sloupcům vhodná jména pomocí metody *withColumnRenamed*:  
 
 [source, python, numbered]
 ---- 
@@ -71,7 +71,7 @@ root
 only showing top 3 rows
 ----
 
-Dalším problémem jsou datové typy sloupců userHash a artistName. ALS algoritmus  vyžaduje aby identikátory uživatelů resp. produktů byla celá čísla. Tyto jsou ale ve zdrojovém datasetu identifikovány řetězci, které se nedají automaticky převést na numerické hodnoty. Ze zdrojového datasetu tedy vytvoříme nový dataset obsahující pouze unikátní identifikátory uživatelů. Každému uživateli přiřadíme pomocí funkce *zipWithIndex* unikátní celočíselný identifikátor odpovádající indexu příslušného řádku v datasetu:
+Dalším problémem jsou datové typy sloupců userHash a artistName. ALS algoritmus  vyžaduje aby identifikátory uživatelů resp. produktů byla celá čísla. Tyto jsou ale ve zdrojovém datasetu identifikovány řetězci, které se nedají automaticky převést na numerické hodnoty. Ze zdrojového datasetu tedy vytvoříme nový dataset obsahující pouze unikátní identifikátory uživatelů. Každému uživateli přiřadíme pomocí funkce *zipWithIndex* unikátní celočíselný identifikátor odpovídající indexu příslušného řádku v datasetu:
 
 [source, python, numbered]
 ---- 
@@ -82,7 +82,7 @@ users = users.select(\
     users._2.alias("userId").cast("integer")) 
 ---- 
 
-Analogickou operaci jako s uživateli opakujeme i s inteprety a vytvoříme další dataset artists obsahující unikátní inteprety spolu s jejich celočíselnými identifikátory. Tyto dva datasety propojíme se zdrojovým datasetem a každému hodnocení přiřadíme celočíselné identifikátory uživatele a intepreta:
+Analogickou operaci jako s uživateli opakujeme i s interprety a vytvoříme další dataset artists obsahující unikátní interprety spolu s jejich celočíselnými identifikátory. Tyto dva datasety propojíme se zdrojovým datasetem a každému hodnocení přiřadíme celočíselné identifikátory uživatele a intepreta:
 
 [source, python, numbered]
 ----
@@ -92,7 +92,7 @@ df = df\
     .select(users.userId, artists.artistId, df.listenCount.cast("float"))
 ----
 
-Pokud necháme Spark vypsat schéma výsledného datasetu, oveříme, že se výsledný dataset ratings skládá ze tří sloupců. Sloupec userId pro celočíslený identifikátor uživatele, artistId pro celočíslený identifikátor interpreta a listenCount obsahující reálné číslo odpovídající počtu poslechů: 
+Pokud necháme Spark vypsat schéma výsledného datasetu, ověříme, že se výsledný dataset ratings skládá ze tří sloupců. Sloupec userId pro celočíslený identifikátor uživatele, artistId pro celočíselný identifikátor interpreta a listenCount obsahující reálné číslo odpovídající počtu poslechů: 
 
 [%autofit]
 ----
@@ -120,14 +120,14 @@ df.select(min("listenCount"), max("listenCount"), avg("listenCount")).show()
 +----------------+----------------+------------------+
 ----
 
-Z výstupu je patrné, že hodnoty nejsou v daatasetu rovnoměrně distribuované. Manimální hodnota, kdy je pro jediného uživatele 400 tisíc poslechů jediného intepreta, mnohonásobně převyšuje průměrnou hodnotu 215. Z <<ratings-dist>> je zřejmé, že se většina hodnot pohybuje kolem průměru ale dataset obsahuje malý počet extrémních hodnot.  
+Z výstupu je patrné, že hodnoty nejsou v datasetu rovnoměrně distribuované. Minimální hodnota, kdy je pro jediného uživatele 400 tisíc poslechů jediného interpreta, mnohonásobně převyšuje průměrnou hodnotu 215. Z <<ratings-dist>> je zřejmé, že se většina hodnot pohybuje kolem průměru ale dataset obsahuje malý počet extrémních hodnot.  
 
 [[ratings-dist]]
 image::../eda_files/eda_11_0.png[title="Rozložení hodnot v datasetu hodnocení", pdfwidth="100%"]  
 
 === Vytvoření tréningového a testovacího datasetu
 
-Před vytvořením samotného modelu je třeba vyčlenit část dat tak, aby nebyla zahrnuta v tréningové fázi. Tento takzvaný testovací dataset bude použit pro vyhodnocení přesnosti modelu <<test-and-validation>>. Zdrojový dataset rozdělíme do dvou částí v poměru 70% pro trénovací dataset a zbylých 30% pro dataset testovací: 
+Před vytvořením samotného modelu je třeba vyčlenit část dat tak, aby nebyla zahrnuta v tréninkové fázi. Tento takzvaný testovací dataset bude použit pro vyhodnocení přesnosti modelu <<test-and-validation>>. Zdrojový dataset rozdělíme do dvou částí v poměru 70% pro trénovací dataset a zbylých 30% pro dataset testovací: 
 
 [source, python, numbered]
 ----
@@ -137,7 +137,7 @@ train, test = ratings.randomSplit([0.7, 0.3])
 
 === Vytvoření iniciálního modelu
 
-Iniciální model bude obsahovat výchozí hodnoty pro všechny parametry algoritmu tak jak jsou uvedeny <<als-estimator>>. Model bude vytvořen pouze na základě tréningových dat:
+Iniciální model bude obsahovat výchozí hodnoty pro všechny parametry algoritmu tak jak jsou uvedeny <<als-estimator>>. Model bude vytvořen pouze na základě tréninkových dat:
 
 [source, python, numbered]
 ----
@@ -171,7 +171,7 @@ trainRmse = evaluator.evaluate(trainPredictions)
 testRmse = evaluator.evaluate(testPredictions)
 ----
 
-Výsledek jak pro trénovací RMSE tak i pro testovací obsahuje extrémně výsoké hodnoty. Průměrná chyba odpovídá trojnásobku průměru počtu poslechů. Také RMSE pro testovací data, která nebyla součástí učícího procesu, je paradoxně nižší než pro data trénovací:
+Výsledek jak pro trénovací RMSE tak i pro testovací obsahuje extrémně vysoké hodnoty. Průměrná chyba odpovídá trojnásobku průměru počtu poslechů. Také RMSE pro testovací data, která nebyla součástí učícího procesu, je paradoxně nižší než pro data trénovací:
 
 ----
 train RMSE = 655.374786
@@ -200,9 +200,9 @@ Z výsledku je patrné, že zejména hodnota 95% kvantilu 751 je výrazně niž�
 [[ratings-dist-filtered]]
 image::../eda_files/eda_14_0.png[title="Rozložení hodnot v upraveném datasetu", pdfwidth="100%"]  
 
-Pro model vytvořený na základě upraveného datasetu jsme naměřili RMSE 212.78 pro trénovací datset, resp. 213.15 pro dataset testovací. Tyto hodnoty se již blíží průměrné hodnotě 149.60. Také RMSE pro testovací dataset je vyšší než pro dataset trénovací.  
+Pro model vytvořený na základě upraveného datasetu jsme naměřili RMSE 212.78 pro tréninkový dataset, resp. 213.15 pro dataset testovací. Tyto hodnoty se již blíží průměrné hodnotě 149.60. Také RMSE pro testovací dataset je vyšší než pro dataset tréninkový.  
 
-Další úpravou zdrojových dat je standardizace hodnot <<eda>>. Tato úprava převede hodnoty tak aby měly nulový průmer a směrodatnou odchylku rovnou 1. Problém je, že ALS algoritmus očekává pouze kladné hodnoty, proto všechny hodnoty posuneme tak, aby minimální hodnota byla rovná nule. Pro model vytvořený na základě standardizovaného datasetu jsme naměřili RMSE 1.297 pro trénovací datset, resp. 1.310 pro dataset testovací. 
+Další úpravou zdrojových dat je standardizace hodnot <<eda>>. Tato úprava převede hodnoty tak aby měly nulový průměr a směrodatnou odchylku rovnou 1. Problém je, že ALS algoritmus očekává pouze kladné hodnoty, proto všechny hodnoty posuneme tak, aby minimální hodnota byla rovná nule. Pro model vytvořený na základě standardizovaného datasetu jsme naměřili RMSE 1.297 pro tréninkový datset, resp. 1.310 pro dataset testovací. 
 
 
 === Ladění hyper parametrů
@@ -211,15 +211,15 @@ V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper p
 
 ==== Rank
 
-Z <<hp-rank>> je patrné, že RMSE klesá jak pro trénovací i testovací sadu pro rank menší než 25. Dále již klesá RMSE pouze pro sadu trénovací, což znamená že se model stává postupně přeučeným na tuto sadu. Pro další vzpočty použijeme hodnotu hyper parametru rank 25.  
+Z <<hp-rank>> je patrné, že RMSE klesá jak pro trénovací i testovací sadu pro rank menší než 25. Dále již klesá RMSE pouze pro sadu trénovací, což znamená že se model stává postupně přeučeným na tuto sadu. Pro další výpočty použijeme hodnotu hyper parametru rank 25.  
 
 [[hp-rank]]
 image::../rank-tuning-stdpos_files/rank-tuning-stdpos_5_10.png[title="Rank", pdfwidth="60%"]  
 
 
-==== Regulariční parametr
+==== Regularizační parametr
 
-Z <<hp-regParam>> je patrné, že i minimální regularizace má negativní vliv na výsledný model. Typicky by se měla regularizace aplikovat pokud by docházelo k přeučení modelu s velkým rozdílem mezi trénovací a testovací sadou. V našem případě se obejdeme bez regularizace a použijeme nulový regulariční parametr. 
+Z <<hp-regParam>> je patrné, že i minimální regularizace má negativní vliv na výsledný model. Typicky by se měla regularizace aplikovat pokud by docházelo k přeučení modelu s velkým rozdílem mezi trénovací a testovací sadou. V našem případě se obejdeme bez regularizace a použijeme nulový regularizační parametr. 
 
 [[hp-regParam]]
 image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_10.png[title="Regulariční parametr", pdfwidth="60%"]  
@@ -241,17 +241,17 @@ image::../maxIter-tuning-stdpos_files/maxIter-tuning-stdpos_7_1.png[title="Poče
 
 ==== Optimální hodnoty hyper parametrů [[param-optimal-values]]
 
-V <<hp-optimal-values>> je zobrazen přehled hyper parametrů a nalezených optimálních hodnot. Vzhledem k použité technice není zaručené, že nedošlo k uváznutí na lokálním minimu a neexistuje kombinace parametrů, která by dosáhla lepšich výsledků. 
+V <<hp-optimal-values>> je zobrazen přehled hyper parametrů a nalezených optimálních hodnot. Vzhledem k použité technice není zaručené, že nedošlo k uváznutí na lokálním minimu a neexistuje kombinace parametrů, která by dosáhla lepších výsledků. 
 
 .Optimální hodnoty hyper parametrů
 [[hp-optimal-values]]
 |===
-|Paramter|Hodnota
+|Parametr|Hodnota
 
 |Rank
 |25
 
-|Regulariční parametr
+|Regularizační parametr
 |0.0
 
 |Alpha parametr

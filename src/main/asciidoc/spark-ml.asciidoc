@@ -1,16 +1,16 @@
 ﻿
 === Spark a strojové učení [[spark-ml]]
 
-Základním kamenem pro pokročilé analytické výpočty na platformě Apache Spark je jeho standartní knihovna MLlib. Tato knihovna obsahuje širokou podporu postupů strojového učení a jeho jednotlivých fází viz. REF[CH1 ML]. Dále knihovna nabízí konzistentní API s praktickou podporou pro řetězení částí výpočtů. Vývojář se soustředí pouze na implementaci konkrétního algoritmu a následně ho propojí do tréningového řetězce s dostupnými komponentami pro škálování hodnot, ladění hyper paramterů, vyhodnocování přesnosti vztvořeného modelu atd. [SDG]. Knihovna obsahuje tyto základn prvky:
+Základním kamenem pro pokročilé analytické výpočty na platformě Apache Spark je jeho standartní knihovna MLlib. Tato knihovna obsahuje širokou podporu postupů strojového učení a jeho jednotlivých fází <<book-ml>>. Dále knihovna nabízí konzistentní API s praktickou podporou pro řetězení částí výpočtů. Vývojář se soustředí pouze na implementaci konkrétního algoritmu a následně ho propojí do tréninkového řetězce s dostupnými komponentami pro škálování hodnot, ladění hyper parametrů, vyhodnocování přesnosti vytvořeného modelu atd. [SDG]. Knihovna obsahuje tyto základní prvky:
 
 Model::
-    Model je komponenta která dokáže nějakým způsobem transformovat vstupní data. Obsahuje jedinou metodu *transform* se vstupním parametrem typu DataFrame <<spark-struct-api>>. Model dále obsahuje podporu pro definici konfiguračních parametrů, například jméno sloupce pod kterým model přidá predikce ke vstupním datům. Dalši praktická vlastnost modelu je podpora presistence. Vytvoření modelu může být výpočetně náročné, je tedy potřeba mít možnost takový model uložit a později znovu načíst pro opakované použití.
+    Model je komponenta která dokáže nějakým způsobem transformovat vstupní data. Obsahuje jedinou metodu *transform* se vstupním parametrem typu DataFrame <<spark-struct-api>>. Model dále obsahuje podporu pro definici konfiguračních parametrů, například jméno sloupce pod kterým model přidá predikce ke vstupním datům. Další praktická vlastnost modelu je podpora prezistence. Vytvoření modelu může být výpočetně náročné, je tedy potřeba mít možnost takový model uložit a později znovu načíst pro opakované použití.
     
 Estimator::
-    Estimator obsahuje jedinou metodu *fit* se vstupním parametrem typu DataFrame <<spark-struct-api>> a návratovým typem Model. Estimator provede analýzu vstupních data a na jejich základě incializuje příslušný Model.  
+    Estimator obsahuje jedinou metodu *fit* se vstupním parametrem typu DataFrame <<spark-struct-api>> a návratovým typem Model. Estimator provede analýzu vstupních data a na jejich základě inicializuje příslušný Model.  
     
     
 [TODO OBR]   
 
-V diagramu [DIAG] je zobrazeno typické použití dvojice Estimator a Model. Estimator nejprve na základě tréningové sady inicializuje Model, který následně přidá do datasetu další sloupec, obsahující predikce pro nová data.
+V diagramu [DIAG] je zobrazeno typické použití dvojice Estimator a Model. Estimator nejprve na základě tréninkové sady inicializuje Model, který následně přidá do datasetu další sloupec, obsahující predikce pro nová data.
 

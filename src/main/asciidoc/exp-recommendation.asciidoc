@@ -1,7 +1,7 @@
 ﻿
 === Sestavení doporučení
 
-Pro vyhodnocení konktrétních doporučení byl vybrán jeden z uživatelů zaměřený téměř výhradně na poslech elektronické hudby. V nasledujícím přehledu je zobrazeno 20 skladeb s nejvíce poslechy pro tohoto uživatele. Nejvíce poslouchaný intepret je _infected mushroom_ spadající do podžánru _psy trance_, ostatní interpreti, až na _stereo mcs_ a _underworld_) spadají do podžánru _drum&bass_:
+Pro vyhodnocení konkrétních doporučení byl vybrán jeden z uživatelů zaměřený téměř výhradně na poslech elektronické hudby. V následujícím přehledu je zobrazeno 20 interpretů s nejvíce poslechy pro tohoto uživatele. Nejvíce poslouchaný interpret je _infected mushroom_ spadající do podžánru _psy trance_, ostatní interpreti, až na _stereo mcs_ a _underworld_) spadají do podžánru _drum&bass_:
 
 [%autofit]
 ----
@@ -31,7 +31,7 @@ Pro vyhodnocení konktrétních doporučení byl vybrán jeden z uživatelů zam
 +--------------------+-----------+ 
 ----
 
-Nejprve si necháme sestavit doporučení nad kompletními vstupními daty a modelem s výchozimi hodnotami pro jednotlivé hyper parametry. Z výstupu je patrné, že nám model poskytl relativně uspokojivá doporučení. Všichni intepreti spadají do elektronické hudby. _Drum&bass_ je v doporučení zastoupen ve 40%, ve výběru není žádný intepret z podžánru _psy trance_:
+Nejprve si necháme sestavit doporučení nad kompletními vstupními daty a modelem s výchozími hodnotami pro jednotlivé hyper parametry. Z výstupu je patrné, že nám model poskytl relativně uspokojivá doporučení. Všichni interpreti spadají do elektronické hudby. _Drum&bass_ je v doporučení zastoupen ve 40%, ve výběru není žádný interpret z podžánru _psy trance_:
 
 [%autofit]
 ----
@@ -51,7 +51,7 @@ Nejprve si necháme sestavit doporučení nad kompletními vstupními daty a mod
 +------------------+
 ----
 
-Další doporučení si necháme sestavit od modelu, který byl vytvořen nad daty, ze kterých byl odebrán dolní 5% kvantil resp. horní 95% kvantil. Tímto jsme z datasetu odebrali extrémní hodnoty a dosáhli tím vyrovnanější distribuce hodnot viz. <<ratings-dist-filtered>>. K vytvoření modelu použijeme optimální hodnoty hyper parametrů viz. <<hp-optimal-values>>. Z výstupu je patrné, že nám model poskytl perfektní doporučení. Všichni intepreti jsou z podžánru drum&bass_ až na  _1200 micrograms_, který patří do žánru psy trance. Model doporučuje interprety u kterých tento uživatel nemá žádne poslechny. Oproti modelu s použitými výchozími hodnotami došlo k výraznému kvalitativnímu posunu:
+Další doporučení si necháme sestavit od modelu, který byl vytvořen nad daty, ze kterých byl odebrán dolní 5% kvantil resp. horní 95% kvantil. Tímto jsme z datasetu odebrali extrémní hodnoty a dosáhli tím vyrovnanější distribuce hodnot viz. <<ratings-dist-filtered>>. K vytvoření modelu použijeme optimální hodnoty hyper parametrů viz. <<hp-optimal-values>>. Z výstupu je patrné, že nám model poskytl perfektní doporučení. Všichni intepreti jsou z podžánru _drum&bass_ až na _1200 micrograms_, který patří do žánru _psy trance_. Model doporučuje interprety u kterých tento uživatel nemá žádné poslechny. Oproti modelu s použitými výchozími hodnotami došlo k výraznému kvalitativnímu posunu:
 
 [%autofit]
 ----
@@ -71,7 +71,7 @@ Další doporučení si necháme sestavit od modelu, který byl vytvořen nad da
 +------------------+
 ----
 
-Poslední doporučení si necháme sestavit od modelu, u kterého jsme provedli standardizaci hodnot. K vytvoření modelu byla také použita data bez extremních hodnot viz. <<ratings-dist-filtered>> a optimální hodnoty hyper paramtrů viz. <<hp-optimal-values>>. Z výstupu je patrné, že tento model poskytuje zatím nejhorší doporučení, ačkoliv všichni interpreti spadají do elektronické hudby, pouze jediný, _pendulum_, spadá do preferovaných podžánrů. Standaridazace hodnot pravděpodobně zapříčinila pokřivení výsledného modelu:
+Poslední doporučení si necháme sestavit od modelu, u kterého jsme provedli standardizaci hodnot. K vytvoření modelu byla také použita data bez extrémních hodnot viz. <<ratings-dist-filtered>> a optimální hodnoty hyper parametrů viz. <<hp-optimal-values>>. Z výstupu je patrné, že tento model poskytuje zatím nejhorší doporučení, ačkoliv všichni interpreti spadají do elektronické hudby, pouze jediný, _pendulum_, spadá do preferovaných podžánrů. Standaridzace hodnot pravděpodobně zapříčinila pokřivení výsledného modelu:
 
 
 [%autofit]

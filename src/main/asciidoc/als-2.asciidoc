@@ -1,5 +1,5 @@
 ﻿
-Autoři cite:[CFI] rozšířili popsaný algoritmus tak aby se výpočet del efektivně distribuovat. Hodnoty jednotlivých hodnocení stem:[r_{ui}] byly nahrazeny odvozenou binární proměnnou stem:[p_{ui}] tak, že platí:
+Autoři cite:[CFI] rozšířili popsaný algoritmus tak aby se výpočet dal efektivně distribuovat. Hodnoty jednotlivých hodnocení stem:[r_{ui}] byly nahrazeny odvozenou binární proměnnou stem:[p_{ui}] tak, že platí:
 
 [stem]
 ++++
@@ -14,21 +14,21 @@ Autoři cite:[CFI] rozšířili popsaný algoritmus tak aby se výpočet del efe
 \end{align*}
 ++++
 
-Pokud uživatel dosud produkt 'nezkonzumoval'.footnote:[konzumace = užití] proměná nabývá hodnotu stem:[0] v opačném případě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o produktu zatím neví. Pro každého uživatele a produkt tedy platí, že součin příslušných faktorových vektorů stem:[x_{u}] a stem:[y_{i}] odpovídá této binární proměnné:
+Pokud uživatel dosud produkt 'nezkonzumoval'.footnote:[konzumace = užití] proměnná nabývá hodnotu stem:[0] v opačném případě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o produktu zatím neví. Pro každého uživatele a produkt tedy platí, že součin příslušných faktorových vektorů stem:[x_{u}] a stem:[y_{i}] odpovídá této binární proměnné:
 
 [stem]
 ++++
 p_{ui}=x_{u}^Ty_{i}  
 ++++
 
-Čím je počet konzumací vyšsí tím více narůstá důvěra v hodnotu stem:[p_{ui}=1]. Autoři článku vyjádřili důvěru v hodnotu stem:[p_{ui}] následovně:
+Čím je počet konzumací vyšší tím více narůstá důvěra v hodnotu stem:[p_{ui}=1]. Autoři článku vyjádřili důvěru v hodnotu stem:[p_{ui}] následovně:
 
 [stem]
 ++++
 c_{ui} = 1 + \alpha r_{ui}
 ++++
 
-Existuje tedy minimální důvěra stem:[1] pro zatim nezkonzumované produkty. Hodnota proměnné lineárně narůstá s počtem užití produktu. Poměr nárustu je dán konstantou stem:[\alpha], přesná hodnota tohoto paramteru je specifická pro konkrétní dataset a bude odvozena v rámci křížové validace <<hyperparameters>>. Pro každého uživatele máme k dispozici stem:[i] hodnot stem:[c], jednu pro každý produkt. Tyto hodnoty převedeme do diagonální matice stem:[C_{u}] s rozměry stem:[ixi]. V rovnici bude tato matice figurovat jako váhy:
+Existuje tedy minimální důvěra stem:[1] pro zatím nezkonzumované produkty. Hodnota proměnné lineárně narůstá s počtem užití produktu. Poměr nárustu je dán konstantou stem:[\alpha], přesná hodnota tohoto parametru je specifická pro konkrétní dataset a bude odvozena v rámci křížové validace <<hyperparameters>>. Pro každého uživatele máme k dispozici stem:[i] hodnot stem:[c], jednu pro každý produkt. Tyto hodnoty převedeme do diagonální matice stem:[C_{u}] s rozměry stem:[ixi]. V rovnici bude tato matice figurovat jako váhy:
 
 [stem]
 ++++
@@ -42,21 +42,21 @@ Rovnici násobíme transpozicí položkové faktorové matice. Tímto rovnici p�
  Y^TC_{u}Yx_{u} = Y^TC_{u}p_{u}
 ++++  
 
-Výsledna rovnice, po zahrnutí regularizačního parametru, která vyjadřuje výpočet faktoru pro jediného uživatele odpovídá:
+Výsledná rovnice, po zahrnutí regularizačního parametru, která vyjadřuje výpočet faktoru pro jediného uživatele odpovídá:
 
 [stem]
 ++++
  x_{u} = (Y^TC_{u}Y + \lambda I)^{-1}Y^TC_{u}p_{u}
 ++++    
      
-Problém při výpočtu je výraz stem:[Y^TC_{u}Y]. Zde by se muselo opakovaně provádět pro každého uživatele násobeni produktové faktorové matice a diagonalní matice s preferencemi daného uživatele. Faktorová matice je v rámci distribuovaného výpočtu typicky rozdělená na více vypočetních uzlů a její násobení vyžaduje přeskládání bloků dat v rámci výpočetniho clustru. Autoři článku vyřesili tento problém prevedením výrazu stem:[Y^TC_{u}Y] na výraz: 
+Problém při výpočtu je výraz stem:[Y^TC_{u}Y]. Zde by se muselo opakovaně provádět pro každého uživatele násobeni produktové faktorové matice a diagonální matice s preferencemi daného uživatele. Faktorová matice je v rámci distribuovaného výpočtu typicky rozdělená na více výpočetních uzlů a její násobení vyžaduje přeskládání bloků dat v rámci výpočetního clustru. Autoři článku vyřešili tento problém převedením výrazu stem:[Y^TC_{u}Y] na výraz: 
 
 [stem]
 ++++
 Y^TY+Y^T(C_{u}-I)Y 
 ++++
   
-Zde nejprve předpočítáme stem:[Y^TY] a následně přičítáme pro každého uživatele stem:[Y^T(C_{u}-I)Y]. Z výpočtu vypadnou všechny produkty, které nemají pro daného uživatele žádné hodnocení, ty mají v diagonální matici stem:[C_{u}] hodnotu stem:[1] (stem:[c_{ui} = 1 + \alpha r_{ui}]) a odečtením jednotkové matice získáme matici kde jsou v příslušných řádcích samé nuly. Analogický případ je i výraz stem:[Y^TC_{u}p_{u}], kde také neřešíme chybějcí hodnocení pro které obsahuje vektor stem:[p_{u}] nulové hodnoty. V rámci distribuovaného výpočtu můžeme držet při výpočtu hodnocení daného uživatele na jednom vypocetnim uzlu a provádět výpočet cílových faktorů lokálně. Analogicky rovnice, která vyjadřuje výpočet faktorů pro jediný produkt odpovídá: 
+Zde nejprve předpočítáme stem:[Y^TY] a následně přičítáme pro každého uživatele stem:[Y^T(C_{u}-I)Y]. Z výpočtu vypadnou všechny produkty, které nemají pro daného uživatele žádné hodnocení, ty mají v diagonální matici stem:[C_{u}] hodnotu stem:[1] (stem:[c_{ui} = 1 + \alpha r_{ui}]) a odečtením jednotkové matice získáme matici kde jsou v příslušných řádcích samé nuly. Analogický případ je i výraz stem:[Y^TC_{u}p_{u}], kde také neřešíme chybějící hodnocení pro které obsahuje vektor stem:[p_{u}] nulové hodnoty. V rámci distribuovaného výpočtu můžeme držet při výpočtu hodnocení daného uživatele na jednom výpočetním uzlu a provádět výpočet cílových faktorů lokálně. Analogicky rovnice, která vyjadřuje výpočet faktorů pro jediný produkt odpovídá: 
 
 [stem]
 ++++

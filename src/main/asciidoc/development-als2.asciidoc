@@ -1,18 +1,18 @@
 ﻿
 ==== Estimator [[als-estimator]]
 
-Hyper paramtery mají vliv na výsledné predikce hodnocení, jejich optimální hodnoty jsou závislé na datasetu, pro který vyváříme model. Přesné hodnoty odvodíme až při experimentování, typicky pomocí křížové validace <<CH ML>>. Algoritmus bude podporovat následující vstupní hyper parametry:
+Hyper paramtery mají vliv na výsledné predikce hodnocení, jejich optimální hodnoty jsou závislé na datasetu, pro který vyváříme model. Přesné hodnoty odvodíme až při experimentování, typicky pomocí křížové validace <<test-and-validation>>. Algoritmus bude podporovat následující vstupní hyper parametry:
 
 rank::
-    Rank určuje dimenzi faktorových vektorů. Tato dimenze je vždy stejná jak pro uživatele tak i pro produkty. Pokud je velikost faktorových vektorů příliš nízký, model bude také příliš zjedndušený a nebudé podávat optimalní predikce. Na druhou stranu pokud bude tento počet příliš velký, může dojít k takzvanému přeučení, kdy model bude příliš spjatý s trénovacími daty. Výhozí hodnota je 10.
+    Rank určuje dimenzi faktorových vektorů. Tato dimenze je vždy stejná jak pro uživatele tak i pro produkty. Pokud je velikost faktorových vektorů příliš nízká, model bude také příliš zjednodušený a nebude podávat optimální predikce. Na druhou stranu pokud bude tento počet příliš velký, může dojít k takzvanému přeučení, kdy model bude příliš spjatý s trénovacími daty. Výchozí hodnota je 10.
     
 alpha::
-    Alpha nastavuje poměr nárůstu důvěry v hodnocení, viz <<CH ALS>>. Výchozí hodnota je 0.1.
+    Alpha nastavuje poměr nárůstu důvěry v hodnocení, viz <<recommendation-als>>. Výchozí hodnota je 0.1.
     
 regParam::
     Regularizační parametr zabraňuje přeučení modelu. Hodnota 0 má za následek, že se při výpočtu regularizace neaplikuje. Výchozí hodnota je 0.1.  
     
-Tréningové parametry nemají přímo vliv na nastavení výpočtu ale můžeme pomocí nich kontrolovat jak budou data distribuována v rámci výpočetního clustru. Data jsou před výpočtem samotným rozdělěna do bloků. Tyto bloky jsou vlastně partition a jsou následně zpracovávány paralelně. Zvolený počet bloků spoilu s kapacitou výpočetního clustru mají zásadní dopad na to, jak dlouho zabere vytvoření modelu. Dle <<HDG>> je optimalní velikost bloku mezi jedním až pěti miliony hodnocení. Náš algoritmus bude podporovat následující trénovací parametry:
+Tréninkové parametry nemají přímo vliv na nastavení výpočtu ale můžeme pomocí nich kontrolovat jak budou data distribuována v rámci výpočetního clustru. Data jsou před výpočtem samotným rozdělena do bloků. Tyto bloky jsou vlastně partition a jsou následně zpracovávány paralelně. Zvolený počet bloků spolu s kapacitou výpočetního clustru mají zásadní dopad na to, jak dlouho zabere vytvoření modelu. Dle cite:[HDG] je optimalní velikost bloku mezi jedním až pěti miliony hodnocení. Náš algoritmus bude podporovat následující trénovací parametry:
 
 numUserBlocks::
     Počet bloků do kterých budou rozděleni uživatelé, výchozí hodnota je 10. 
@@ -37,17 +37,17 @@ rating::
         
 =====  Struktura bloků  
 
-Pro práci s bloky zvolíme rozdílnou terminologii než rozdělení na uživatele a produkty. Vzhledem k povaze algoritmu, kdy se střídavě provádí výpočet faktorů zvlašť pro uživatele a zvlašť pro proukty, použijeme pro oba stejný algoritmus a vytvoříme pro ně analogické struktury. Jednou budou jako cíl výpočtu uživatelské faktory, které použijí jako zdroj pro výpočet faktory produktové. Podruhé to bude naopak. Dále tedy budeme pro vysvětlení algoritmu používat termíny zdroj a cíl. 
+Pro práci s bloky zvolíme rozdílnou terminologii než rozdělení na uživatele a produkty. Vzhledem k povaze algoritmu, kdy se střídavě provádí výpočet faktorů zvlášť pro uživatele a zvlášť pro produkty, použijeme pro oba stejný algoritmus a vytvoříme pro ně analogické struktury. Jednou budou jako cíl výpočtu uživatelské faktory, které použijí jako zdroj pro výpočet faktory produktové. Podruhé to bude naopak. Dále tedy budeme pro vysvětlení algoritmu používat termíny zdroj a cíl. 
 
-Pro vyhodnocení cílového bloku vytvoříme jednoduchou hašovací funkci. Tato rozdělí hodnocení rovnoměrně dle zvoléného celkového počtu bloků. Každému uživateli resp. produktu přidělí cílový blok na základě jejich celočíselného identifikátoru. Výsledné id bloku bude také celé číslo v řadě začínající nulou, bude tedy také zároveň jeho indexem v sadě příslušných bloků. 
+Pro vyhodnocení cílového bloku vytvoříme jednoduchou hašovací funkci. Tato rozdělí hodnocení rovnoměrně dle zvoleného celkového počtu bloků. Každému uživateli resp. produktu přidělí cílový blok na základě jejich celočíselného identifikátoru. Výsledné id bloku bude také celé číslo v řadě začínající nulou, bude tedy také zároveň jeho indexem v sadě příslušných bloků. 
 
 [[als_block_diagram]]
 image::als_block_diagram02022020.jpg[title="Diagram bloku hodnoceni", pdfwidth="75%"]
 
-V diagramu <<als_block_diagram>> je zobrazena struktura bloku hodncení. Pro každý blok vzniknou tři nezávislé struktury:
+V diagramu <<als_block_diagram>> je zobrazena struktura bloku hodnocení. Pro každý blok vzniknou tři nezávislé struktury:
 
 Blok::
-    Základní struktura, obsahující příslušná hodnocení. Tyto bloky se inicializují na začátku výpočtu na základě vstupních dat. Data v nich zůstávají konstantní přes všechny iterace výpočtu. Výpočet se provádí lokálně na počítači kde jsou tyto data uložena, není tedy třeba tyto bloky v průbehu výpočtu opakovaně přenášet po síti v rámci výpočetního clustru. V těchto blocích je jeden z identifikátorů zvolen jak zdrojový a druhý jako cílový. Hodnocení jsou seřazena dle zdrojového identifikátoru (vzestupně). Data v bloku jsou  zkomprimována do takzvané CSC (compressed sparse column) struktury. Vzhledem k tomu, že jeden zdrojový identifikátor může být v datech zastoupený několikrát, vybereme nejprve unikátní zdrojové identifikátory viz. (Zdrojové ID) <<als_block_diagram>>. K těmto identifikátorům přiřadíme ukazatel do bloku hodnocení. Tento ukazatel určuje ke kterým hodnocením příslušné zdrojové ID patří. Cílový identifikátor nahradíme v datech identifikátorem cílového bloku a lokálním indexem. Lokální index určuje index seřazených unikatních cílových id pro dany zdrojový a cílový blok. Tyto idenitifikátory provazují zdrojový blok a cílový meta blok.
+    Základní struktura, obsahující příslušná hodnocení. Tyto bloky se inicializují na začátku výpočtu na základě vstupních dat. Data v nich zůstávají konstantní přes všechny iterace výpočtu. Výpočet se provádí lokálně na počítači kde jsou tyto data uložena, není tedy třeba tyto bloky v průběhu výpočtu opakovaně přenášet po síti v rámci výpočetního clustru. V těchto blocích je jeden z identifikátorů zvolen jak zdrojový a druhý jako cílový. Hodnocení jsou seřazena dle zdrojového identifikátoru (vzestupně). Data v bloku jsou  zkomprimována do takzvané CSC (compressed sparse column) struktury. Vzhledem k tomu, že jeden zdrojový identifikátor může být v datech zastoupený několikrát, vybereme nejprve unikátní zdrojové identifikátory viz. (Zdrojové ID) <<als_block_diagram>>. K těmto identifikátorům přiřadíme ukazatel do bloku hodnocení. Tento ukazatel určuje ke kterým hodnocením příslušné zdrojové ID patří. Cílový identifikátor nahradíme v datech identifikátorem cílového bloku a lokálním indexem. Lokální index určuje index seřazených unikátních cílových id pro daný zdrojový a cílový blok. Tyto identifikátory provazují zdrojový blok a cílový meta blok.
     
 Blok faktorů::
     Pro každé unikátní zdrojové id v rámci propojeného bloku bude v tomto bloku právě jeden faktorový vektor. Dimenze těchto vektorů je dána zvoleným rankem, typicky se jedná o relativně nízkou hodnotu, viz. výchozí hodnota 10. Tyto faktory se přepočítávají v rámci každé iterace a jsou následně použity jako zdroj pro výpočet cílových faktorů. Tyto bloky je tedy nutné v průběhu výpočtu distribuovat v rámci clustru. Blok faktorů inicializujeme na začátku výpočtu a jednotlivým faktorům přiřadíme náhodná reálná čísla.
@@ -58,7 +58,7 @@ Meta blok::
 [[als_block_connection]]
 image::als_block_connection02022020.jpg[title="Diagram propojeni bloku", pdfwidth="75%"]
 
-V diagramu <<als_block_connection>> je zobrazené propojené mezi zdrojovými a cílovými bloky. Pokud chceme spočítat zdrojový faktor pro jedno zdrojové id (30)musíme do lineárního systému zahrnout včechny cílové faktory (cílové id 5, 12) pro které existuje hodnocení pro dané zdrojové a cílové id. Tyto mohou být typicky v rozdílných cílových blocích (1, 4) uložených na rozdílných počítačích v rámci clustru.
+V diagramu <<als_block_connection>> je zobrazené propojené mezi zdrojovými a cílovými bloky. Pokud chceme spočítat zdrojový faktor pro jedno zdrojové id (30) musíme do lineárního systému zahrnout všechny cílové faktory (cílové id 5, 12) pro které existuje hodnocení pro dané zdrojové a cílové id. Tyto mohou být typicky v rozdílných cílových blocích (1, 4) uložených na rozdílných počítačích v rámci clustru.
 
 
 =====  Rozdělení hodnoceni do bloků 
@@ -70,14 +70,14 @@ Jako top level vstup do algoritmu použijeme strukturované API jako preferovan�
 include::{scala-dir}/mlonspark/AlternatingLeastSquare.scala[tags=dataset-to-rdd]
 ----
 
-Tato trojice se skládá ze zdrojového id (srcId), ciloveho id (dstId) a hodnocení. Nejprve vytvoříme uživatelské bloky, tj. jako zdrojové id použijeme id uživatele a jako cílové id použijeme id produktu. Nejprve pro každou trojici určíme příslušný zdrojový a cílový blok. Toto je nutné z důvodu určení vazeb mezi všemi bloky. Pro každou vstupní trojici tedy emitujeme klíč, dvojici hodnot obsahující identifikátory zdrojového a cíloveho bloku:
+Tato trojice se skládá ze zdrojového id (srcId), cílového id (dstId) a hodnocení. Nejprve vytvoříme uživatelské bloky, tj. jako zdrojové id použijeme id uživatele a jako cílové id použijeme id produktu. Nejprve pro každou trojici určíme příslušný zdrojový a cílový blok. Toto je nutné z důvodu určení vazeb mezi všemi bloky. Pro každou vstupní trojici tedy emitujeme klíč, dvojici hodnot obsahující identifikátory zdrojového a cílového bloku:
 
 [source, scala, numbered]
 ----
 include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-emit-key]
 ----  
 
-Dále provedeme seskupovací operaci. Tato nam seskupí všechny hodnocení pro danou kombinaci zdrojového a cílového bloku. Výstupem je tedy příslušný klíč a kolekce odpovídajících hodnocení. Metoda RDD mapValues, nám dovolí transformovat pouze hodnoty (druhou položku ze vstupní dvojice), výstupem je tedy klíč ze vstupu spolu s novou hodnotou. Zde je vstupní hodnotou kolekce hodnocení kterou převedeme do pomocné struktry pro snažší manipulaci s daty bloku. Tato struktura je v takzvané COO (Coordinate Format) formě. Obsahuje tři pole, kde hodnoty se stejným indexem určují trojici zdrojového resp. cílového id a příslušného hodnocení:
+Dále provedeme seskupovací operaci. Tato nám seskupí všechny hodnocení pro danou kombinaci zdrojového a cílového bloku. Výstupem je tedy příslušný klíč a kolekce odpovídajících hodnocení. Metoda RDD mapValues, nám dovolí transformovat pouze hodnoty (druhou položku ze vstupní dvojice), výstupem je tedy klíč ze vstupu spolu s novou hodnotou. Zde je vstupní hodnotou kolekce hodnocení kterou převedeme do pomocné struktury pro snazší manipulaci s daty bloku. Tato struktura je v takzvané COO (Coordinate Format) formě. Obsahuje tři pole, kde hodnoty se stejným indexem určují trojici zdrojového resp. cílového id a příslušného hodnocení:
 
 [source, scala, numbered]
 ----
@@ -91,13 +91,13 @@ Z pole cílových id pro daný zdrojový a cílový blok vybereme unikátní hod
 include::{scala-dir}/mlonspark/ALSEngine.scala[tags=blockify-dstIdToLocalIndex]
 ---- 
 
-V této chvíli máme tedy RDD kde je klíčem id zdrojového bloku a hodnotou blok hodnocení. Pro jedno id zdrojového bloku může být v datasetu více záznamů, zhledem k tomu, že příslušný blok obsahuje hodnocení pouze pro jediný cílový blok. Dateset tedy seskupíme dle klíče, id zdrojového bloku. Jednotlive bloky hodnocení spojíme do jediného bloku, obsahujícího všechny hodnocení pro daný zdrojový blok. Tento výsledný blok převedeme do cílové formy tak jak je zobrazena v diagramu <<als_block_diagram>>. Dále na základě tohoto bloku vytvoříme příslušný meta blok a blok faktorů, inicializovaný na náhodné hodnoty.
+V této chvíli máme tedy RDD kde je klíčem id zdrojového bloku a hodnotou blok hodnocení. Pro jedno id zdrojového bloku může být v datasetu více záznamů, vzhledem k tomu, že příslušný blok obsahuje hodnocení pouze pro jediný cílový blok. Dateset tedy seskupíme dle klíče, id zdrojového bloku. Jednotlivé bloky hodnocení spojíme do jediného bloku, obsahujícího všechny hodnocení pro daný zdrojový blok. Tento výsledný blok převedeme do cílové formy tak jak je zobrazena v diagramu <<als_block_diagram>>. Dále na základě tohoto bloku vytvoříme příslušný meta blok a blok faktorů, inicializovaný na náhodné hodnoty.
 
-Tento postup následně opakujeme, pouze s tím rozdílem, že je jako zdrojové id použito id produktu a jako cílove id, id uživatele. V této chvíli máme tedy vstupní data rozdělena do příslušných bloků, připravených pro výpočet samotný. 
+Tento postup následně opakujeme, pouze s tím rozdílem, že je jako zdrojové id použito id produktu a jako cílové id, id uživatele. V této chvíli máme tedy vstupní data rozdělena do příslušných bloků, připravených pro výpočet samotný. 
 
 
 =====  Výpočet faktorů
 
-Po rozdělení hodnocení do bloků je možné provést výpočet samotných faktorů. Tento výpočet probíhá iterativně, celkový počet iterací je určen vstupním parametrem maxIter. V každé iteraci nejprve proběhne výpočet uživatelských a následně produktových faktorů, pro oba výpočy se použije identický algoritmus vysvětlený v <<REC ALS>>. Do lineárního systému nejprve postupně vložíme všechny vektory z matice zdrojových faktorů stem:[Y], ten tedy bude následně obsahovat matici odpovídající výrazu stem:[Y^TY]. Tato operace vyžaduje přeskládání v rámci výpočetního clustru, kdy je do lineárního systému nutné zahrnout všechny zdrojové faktorové bloky. Výslednou čtvercovou matici, obsahující pouze stem:[rxr] elementů, kde stem:[r] odpovídá zadanému ranku, následně použijeme pro výpočet cílových faktorů. Tento výpočet již provádíme paralelně na úrovni jednotlivých cílových bloků, kde v cyklu spočítame jedotlivé cílové faktory. Zde je nutné do lineárního systému přidat všechny zdrojové faktory a příslušné hodnocení, které existují pro daný cílový faktor. Řešeni lineárního systému odpovídá hledanému cílovému faktoru.  
+Po rozdělení hodnocení do bloků je možné provést výpočet samotných faktorů. Tento výpočet probíhá iterativně, celkový počet iterací je určen vstupním parametrem maxIter. V každé iteraci nejprve proběhne výpočet uživatelských a následně produktových faktorů, pro oba výpočty se použije identický algoritmus vysvětlený <<recommendation-als>>. Do lineárního systému nejprve postupně vložíme všechny vektory z matice zdrojových faktorů stem:[Y], ten tedy bude následně obsahovat matici odpovídající výrazu stem:[Y^TY]. Tato operace vyžaduje přeskládání v rámci výpočetního clustru, kdy je do lineárního systému nutné zahrnout všechny zdrojové faktorové bloky. Výslednou čtvercovou matici, obsahující pouze stem:[rxr] elementů, kde stem:[r] odpovídá zadanému ranku, následně použijeme pro výpočet cílových faktorů. Tento výpočet již provádíme paralelně na úrovni jednotlivých cílových bloků, kde v cyklu spočítáme jednotlivé cílové faktory. Zde je nutné do lineárního systému přidat všechny zdrojové faktory a příslušné hodnocení, které existují pro daný cílový faktor. Řešeni lineárního systému odpovídá hledanému cílovému faktoru.  
 
   

@@ -12,7 +12,7 @@ V kořenovém adresáři projektu vytvoříme základní adresářovou strukturu
       scala/ <zdrojové soubory testu aplikace>        
 ----
 
-Projekty řízené nástrojem Apache Maven dále vyžadují základní deskriptor projektu. Tento deskriptor je uložený v kořenovéem adresáři projektu pod fixním jménem pom.xml. Deskriptor obsahuje několik základních částí, které ovlivňují průběh sestavení a výslednou podobu aplikace.
+Projekty řízené nástrojem Apache Maven dále vyžadují základní deskriptor projektu. Tento deskriptor je uložený v kořenovém adresáři projektu pod fixním jménem pom.xml. Deskriptor obsahuje několik základních částí, které ovlivňují průběh sestavení a výslednou podobu aplikace.
 
 [source, xml]
 ----
@@ -34,7 +34,7 @@ Každý deskriptor projektu musí obsahuje základní informace o aplikaci. Jedn
   </properties>
 ----
 
-V sekci properties definujeme proměnné použité dále v deskriptoru. V našem případě obsahují tyto proměnné zejména verze jednotlivých závislostí projektu. Verzím je třeba věnovat zvýšenou pozornost, je žádoucí aby tyto verze přesně odpovídaly verzím, které jsou nainstalovány v našem testovacím Spark klusteru. Pokud by byly použity nekomapatibilní verze, mohlo by docházet k chybám při běhu programu. Tedy ačkoliv byla v době implementace aplikace posední vydaná verze Sparku 2.4.4 v projektu jsme použili verzi 2.3.1, která odpovídá verzi Sparku z Hadoop distribuce našeho testovacího clustru. Použijeme také stejné verze Javy a Scaly, ktere jsou použity v této verzi. Pro tuto verzi Sparku byla použita Java 8 a Scala 2.11.12.
+V sekci properties definujeme proměnné použité dále v deskriptoru. V našem případě obsahují tyto proměnné zejména verze jednotlivých závislostí projektu. Verzím je třeba věnovat zvýšenou pozornost, je žádoucí aby tyto verze přesně odpovídaly verzím, které jsou nainstalovány v našem testovacím Spark klusteru. Pokud by byly použity nekompatibilní verze, mohlo by docházet k chybám při běhu programu. Tedy ačkoliv byla v době implementace aplikace posední vydaná verze Sparku 2.4.4 v projektu jsme použili verzi 2.3.1, která odpovídá verzi Sparku z Hadoop distribuce našeho testovacího clustru. Použijeme také stejné verze Javy a Scaly, které jsou použity v této verzi. Pro tuto verzi Sparku byla použita Java 8 a Scala 2.11.12.
 
 [source, xml]
 ----
@@ -55,15 +55,15 @@ V sekci properties definujeme proměnné použité dále v deskriptoru. V našem
 <1> Verze Scaly je nadefinována v sekci properties
 <2> Verze Sparku je nadefinována v sekci properties
 
-Sekce dependencies obsahuje takzvané závislosti projektu. Reálně se jedná o standartní Java archivy (jary) ze kterých budeme importovat třídy do našeho zdrojového kódu. Apache Maven pro nás tyto knihovny automaticky stáhne a nalinkuje včetne tranzitivních závislostí těchto knihoven. Seznam záavislostí je poměrně rozsáhlý, uvadíme zde tedy pouze zkrácenou verzi s knihovnami pro Spark a Scalu. Dále deskriptor obsahuje v sekci plugins definici rozšířeni pro Scalu. Ve výchozím stavu podporuje Apache Maven pouze zdrojový kód v jazyce Java, podporu Scaly je nutné expilictně definovat. Rozšíření scala-maven-plugin zavádí podporu kompilaci Scala zdrojového kódu. Rozšíření scalatest-maven-plugin aktivuje podporu unit testů pro Scalu. Tato definice obsahuje dodatečné atributy potřebné pro vytváření lokalních instancí Sparku v rámci jednotlivých testů.
+Sekce dependencies obsahuje takzvané závislosti projektu. Reálně se jedná o standartní Java archivy (jary) ze kterých budeme importovat třídy do našeho zdrojového kódu. Apache Maven pro nás tyto knihovny automaticky stáhne a nalinkuje včetně tranzitivních závislostí těchto knihoven. Seznam závislostí je poměrně rozsáhlý, uvádíme zde tedy pouze zkrácenou verzi s knihovnami pro Spark a Scalu. Dále deskriptor obsahuje v sekci plugins definici rozšířeni pro Scalu. Ve výchozím stavu podporuje Apache Maven pouze zdrojový kód v jazyce Java, podporu Scaly je nutné expilictně definovat. Rozšíření scala-maven-plugin zavádí podporu kompilaci Scala zdrojového kódu. Rozšíření scalatest-maven-plugin aktivuje podporu unit testů pro Scalu. Tato definice obsahuje dodatečné atributy potřebné pro vytváření lokálních instancí Sparku v rámci jednotlivých testů.
 
-Korektní sestavení aplikace ověříme z přikazové radky příkazem:
+Korektní sestavení aplikace ověříme z příkazové radky příkazem:
 
 ----
   > mvn clean install
 ----
 
-Do konzole se nám následně vypíší informace o uspěsném zkompletovaní aplikace:
+Do konzole se nám následně vypíší informace o uspěšném zkompletovaní aplikace:
 
 ----
   [INFO] BUILD SUCCESS

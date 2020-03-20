@@ -44,6 +44,8 @@ include::development-als-model.asciidoc[]
 include::development-als2.asciidoc[]
 include::development-regression.asciidoc[]  
 
-include::exp-intro.asciidoc[]  
+include::exp-intro.asciidoc[]
+include::exp-recommendation.asciidoc[]
+include::final.asciidoc[] 
 
 include::references.asciidoc[]
