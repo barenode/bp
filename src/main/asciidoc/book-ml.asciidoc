@@ -3,7 +3,7 @@
 
 Strojové učení je zatím nepřesně definovaný pojem, obecně ale můžeme říct, že strojové učení je věda o programování počítačů tak, aby se byly schopné učit z dat. Aplikace strojového učení již pronikla do našeho každodenního života, jedním z viditelnějších případů je například filtrování spamu. Při tvorbě takového systému tradičním přístupem by programátor nadefinoval sadu pravidel, která by na základě obsahu daného emailu rozhodla zda se jedná o spam nebo ne. Takový systém by ale zdaleka nebyl triviální a musel by se průběžně přizpůsobovat měnícím se podmínkám. Sada vestavěných pravidel by se stávala čím dál tím více komplexnější s narůstajícími požadavky na údržbu. Spam filtr založený na strojovém učení používá rozdílný přístup. Automaticky se naučí, která slova a fráze spam typicky obsahuje. Zřejmý problém je zde fráze 'automaticky se naučí'. Učícímu algoritmu je nutné poskytnout podmínky za kterých se bude schopný sám učit. V případě spam filtru učícímu algoritmu poskytneme databázi historických emailů. Emaily samotné nám ale nestačí, pro potřeby učícího algoritmu ještě potřebujeme označení zda je daný historický email spam nebo ne. Obecně můžeme říct, že se snažíme vytvořit abstraktní model, který nám  na základě zadaného, předem nepoznaného, vstupu poskytne nějakou formu výstupu. Skupinu postupů, kdy k učení použijeme data obsahující vstup a požadovaný výstup, nazýváme učení s učitelem. Učeni s učitelem je pouze jednou z kategorií v rámci technik strojového učení. Účelem této práce není poskytnout kompletní přehled všech těchto technik, tento je možné dohledat například zde cite:[ISL,ESL,HANDSON]. Pro aplikaci strojového učení aktuálně existuje celá řada nástrojů. Mezi nejpoužívanější patří MATLAB, knihovna Scikit-Learn pro Python nebo RStudio.
 
-Vytvoření funkčního modelu na základě vstupních dat je komplexní postup, který není specifický pro žádnou konkrétní platformu. Tento postup je možné rozdělit do několika základních kroků cite:[HANDSON(33)]:
+Vytvoření funkčního modelu na základě vstupních dat je komplexní postup, který není specifický pro žádnou konkrétní platformu. Tento postup je možné rozdělit do několika základních kroků cite:[HANDSON]:
 
 1. Zkoumání a příprava dat
 2. Výběr modelu
@@ -33,7 +33,7 @@ Obecně se preferuje standardizace před normalizací. Normalizace je citlivěj�
 
 ===  Výběr modelu
 
-Jaký typ modelu zvolit je plně závislé na zvoleném úkolu. Pro některé úlohy bude vhodnější lineární model a pro jiné neuronová síť. A priori není žádný typ modelu nevýhodnější [HANDSON]. Typickým postupem je vytvořit model pro několik nejvhodnějších kandidátů a následně vyhodnotit ten nejúspěšnější. 
+Jaký typ modelu zvolit je plně závislé na zvoleném úkolu. Pro některé úlohy bude vhodnější lineární model a pro jiné neuronová síť. A priori není žádný typ modelu nevýhodnější cite:[HANDSON]. Typickým postupem je vytvořit model pro několik nejvhodnějších kandidátů a následně vyhodnotit ten nejúspěšnější. 
 
 === Vytvoření a vyhodnocení modelu 
 

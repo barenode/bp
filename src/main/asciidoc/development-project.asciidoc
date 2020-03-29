@@ -23,7 +23,7 @@ Projekty řízené nástrojem Apache Maven dále vyžadují základní deskripto
   <name>Strojove uceni na paltforme Spark</name>
 ----
 
-Každý deskriptor projektu musí obsahuje základní informace o aplikaci. Jedná se o identifikátor skupiny, identifikátor aplikace a verzi aplikace. Tyto informace řídí jak bude cílová aplikace pojmenována a jakého bude typu. V případě naší aplikace bude tedy výsledkem standartní java Java archiv (jar) s přiřazeným jménem ml-on-spark-1.0.jar. 
+Každý deskriptor projektu musí obsahovat základní informace o aplikaci. Jedná se o identifikátor skupiny, identifikátor aplikace a verzi aplikace. Tyto informace řídí jak bude cílová aplikace pojmenována a jakého bude typu. V případě naší aplikace bude tedy výsledkem standartní java Java archiv (jar) s přiřazeným jménem ml-on-spark-1.0.jar. 
 
 [source, xml]
 ----

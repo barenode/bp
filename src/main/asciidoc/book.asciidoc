@@ -1,8 +1,10 @@
-﻿:doctype: book
+﻿:notitle:
+:doctype: book
 :toc:
 :toc-title: Obsah
 :numbered:
 :chapter-label:
+:chapter-refsig: viz.
 :section-refsig: viz.
 :table-caption: Tab.
 :figure-caption: Obr.
@@ -22,6 +24,8 @@
 :bibtex-file: /opt/dev/src/main/asciidoc/library.bib
 :bibtex-style: ieee-with-url
 :pdf-page-size: [8.27in, 11.69in]
+
+= Strojové učení na platformě Apache Spark
           
 include::introduction.asciidoc[]
 include::book-ml.asciidoc[] 

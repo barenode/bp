@@ -1,0 +1,1 @@
+/dev/exiftool/exiftool -Title="XXXVVVCCC" /dev/bp/src/main/asciidoc/bp.pdf -overwrite_original

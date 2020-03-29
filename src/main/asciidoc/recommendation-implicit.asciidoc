@@ -9,7 +9,7 @@ Implicitní data vznikají samotnou interakcí uživatele se systémem. Tato int
 
 3. Studený start. Nově přidané produkty do systému mají nulový počet interakcí. Systém by měl být schopný doporučovat i takové produkty.  
 
-Tato práce pokrývá dva základní přístupy kolaborativního filtrování pro implicitní datasety, nacházení nejbližších sousedů a faktorizaci matic. 
+Pro tvorbu doporučení na základě kolaborativního filtrování existují dva základní postupy, nacházení nejbližších sousedů a faktorizace matic.   
 
 ==== Nacházení nejbližších sousedů
 

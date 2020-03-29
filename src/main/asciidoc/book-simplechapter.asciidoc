@@ -1,4 +1,5 @@
-﻿:doctype: book
+﻿:notitle:
+:doctype: book
 :toc:
 :toc-title: Obsah
 :numbered:
@@ -6,9 +7,10 @@
 :section-refsig: viz.
 :table-caption: tab.
 :figure-caption: Obr.
-:math:
+:math: 
 :imagesoutdir: generated_images
 :imagesdir: images
+:image: section-cover-page.pdf[]
 :stem: latexmath
 :eqnums: none
 :mathematical-format: svg
@@ -22,6 +24,8 @@
 :bibtex-file: /opt/dev/src/main/asciidoc/library.bib
 :bibtex-style: ieee-with-url
 :pdf-page-size: [8.27in, 11.69in]
+
+= Strojové učení na platformě Apache Spark
 
 include::exp-intro.asciidoc[]
 include::exp-recommendation.asciidoc[]
