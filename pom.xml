@@ -274,6 +274,7 @@
                                     <executable>book-nbconvert.cmd</executable>
                                 </configuration>
                             </execution>
+                            -->
                             <execution>
                                 <id>book-asciidoctor</id>
                                 <phase>package</phase>
@@ -284,8 +285,7 @@
                                     <workingDirectory>${basedir}</workingDirectory>
                                     <executable>book-asciidoctor.cmd</executable>
                                 </configuration>
-                            </execution>
-                            -->
+                            </execution>        
                             <execution>
                                 <id>merge</id>
                                 <phase>package</phase>

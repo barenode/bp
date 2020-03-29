@@ -71,7 +71,7 @@ Další doporučení si necháme sestavit od modelu, který byl vytvořen nad da
 +------------------+
 ----
 
-Poslední doporučení si necháme sestavit od modelu, u kterého jsme provedli standardizaci hodnot. K vytvoření modelu byla také použita data bez extrémních hodnot viz. <<ratings-dist-filtered>> a optimální hodnoty hyper parametrů viz. <<hp-optimal-values>>. Z výstupu je patrné, že tento model poskytuje zatím nejhorší doporučení, ačkoliv všichni interpreti spadají do elektronické hudby, pouze jediný, _pendulum_, spadá do preferovaných podžánrů. Standardizace hodnot pravděpodobně zapříčinila pokřivení výsledného modelu:
+Poslední doporučení si necháme sestavit od modelu, u kterého jsme provedli standardizaci hodnot. K vytvoření modelu byla také použita data bez extrémních hodnot viz. <<ratings-dist-filtered>> a optimální hodnoty hyper parametrů viz. <<hp-optimal-values>>. Z výstupu je patrné, že tento model poskytuje zatím nejhorší doporučení. Ačkoliv všichni interpreti spadají do elektronické hudby, pouze jediný, _pendulum_, spadá do preferovaných podžánrů. Standardizace hodnot pravděpodobně zapříčinila pokřivení výsledného modelu:
 
 
 [%autofit]

@@ -1,1 +1,1 @@
-/dev/exiftool/exiftool -Title="XXXVVVCCC" /dev/bp/src/main/asciidoc/bp.pdf -overwrite_original
+﻿/dev/exiftool/exiftool -overwrite_original -charset utf8 -charset iptc=utf8 -codedcharacterset=utf8 -@ exiftoolargs.txt /dev/bp/src/main/asciidoc/bp.pdf 
