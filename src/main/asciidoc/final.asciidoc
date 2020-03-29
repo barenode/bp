@@ -1,16 +1,16 @@
-﻿== Zaver
+﻿== Závěr
 
-Spark je uzitgecny nastroj i sam o sobe, neni nutne ho pouzivat pouze jako nastroj v racmi clsutroveho stacku. Zejmena spolu s jupyter notebookem, muze slouzit jako lokalni analyticka platforma. Nicmene v tomto segmentu je k dispozici mnoho dalsich nastroju, ktere nevyzaduji takovy objem znalosti jako apache Spark. Jedna se napriklad o knovnu pandas pro python ktera spolu s vizualizacni knihovnou matplot tvori sikovny analyticky nastroj. 
+Apache Spark je užitečný nástroj s jednoduchým a srozumitelným API. Komplexní, distribuovaný algoritmus pro strojové učení se na této platformě podařilo implementovat i bez předchozích zkušeností. Apache Spark má kvalitní dokumentaci a širokou vývojářskou základnu. Tyto dva prvky výrazně usnadňovaly řešení problemů v průběhu implementace. V projektu byl použit programovací jazyk Scala, nativní jazyk Sparku. Ačkoliv se pro Java vývojáře mohla zdát syntaxe Scaly poněkud složitá, během implementace projektu vynikla síla tohoto jazyka. Zejména podpora funkcionálního programování činí z tohoto jazyka ideální volbu pro Spark. Integrované vývojové prostředí IntelliJ IDEA se ukázalo jako správná volba. Kvalitní podpora programovaciho jazyka Scala a jednotkových testů umožnila efektivní vývoj a rychlé testování aplikace.  
+  
+Apache Hadoop ma pozvolnou křivku učení. Porozumět účelu jednotlivých částí systému potřebných pro běh Spark aplikace a poskládat tyto části do funkčního celku se ukázalo jako časové náročný proces. Při spoustění aplikace docházelo zprvu k haváriím, které si vyžádaly prověřování specifických systémových logů a následnou rekonfiguraci problematických prvků.  
+ 
+Pro aplikaci vyvinutého algoritmu na konkrétní dataset byl použit programovací jazyk Python v rámci interaktivních zápisníků Jupyter. Tato kombinace se ukázala jako praktický nástroj pro ladění jednotlivých hyper parametrů a vizualizaci výsledků. 
 
-Jednou z velkych vyhod sparku je moznost programovat ve vice jazycich. V ramci praci byla pouzita Scala, nattivni jazyk Sparku. Ackoliv se pro java vyvojare mohla zdat syntaxe scaly zprvu ponekud nelogicka, postupem casu vynikla krasa tohoto jazyka. Podpora funkcinalniho programovani spolu s moznosti tvorit ad-hoc struktury cini z tohoto jazyka optimalni volbu pro SPark kdy vyvojar muze vyjadrovat komplexni logiku v prehledne a elegantni forme. 
+Velkým překvapením je algoritmus ALS. Doporučení sestavená na základě tohoto algoritmu se ukázala jako velice kvalitní. Také nalezení optimálních hodnot pro jednotlivé hyper parametry mělo za následek zvýšení přesnosti modelu i kvalitativní posun výsledných doporučení.  
 
-Dalsim pouzitym jazykem byl Python, jazyk popularni mezi datovymi vedci ma v Ramci Sparku kvalitni podporu. Zejmena spolu s pouzitim jupyter noteboooku kde bylo mozne kombinovat vypocty ve Sparku spolu s knihovnou matploty pro graficke znazorneni vysledku   
+Závěrem lze konstatovat, že na zvolených technologiích je možné realizovat systém pro produkční použití. Takový systém, odolný vůči softwarovým i hardwarovým haváriím, by bylo možné škálovat pro milióny zákazníků a desítky tisíc produktů.
 
 
-Velkým překvapením je algoritmus ALS a doporuceni sestavena modely vztrenovane timto algoritmem. Algoritmus dokazal identifikovat jednotlive podzanry v ramci zanru elektronicke hudby. Vzhledem k tomu, ze ma tento zanr takovych podzanru desitky jedna se o pusobivy vysledek. Nalezeni optimalnich hodnot pro jednotlive hyper parametrz melo za nasledek yvzseni presnosti modelu i kvalitativni posun vzslednzch doporuceni. 
 
-Doporucovani hodnot se jevi jako obtiynejsi ney doporucovani knih nebo filmu, ktere maji typicky male hodnoty poctu precteni resp shlednuti. 
-
-Hadoop ma pozvolnou krivku uceni. Poroyumet ucelu jednotlivzch casti systemu, poskladat tyto casti do funkcniho celku je casove narocny proces. Kaydopadne se ale jedna o fascinujici tenchnologii, ktera dokaze adresovat poyadavky na uloyeni a analyyu velkych objemu dat, ktere generuji uzivatele internetu.  
 
      

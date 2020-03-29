@@ -21,6 +21,7 @@
 :scala-test-dir: ../../test/scala
 :bibtex-file: /opt/dev/src/main/asciidoc/library.bib
 :bibtex-style: ieee-with-url
+:pdf-page-size: [8.27in, 11.69in]
 
 include::exp-intro.asciidoc[]
 include::exp-recommendation.asciidoc[]
