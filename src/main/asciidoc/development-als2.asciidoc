@@ -12,7 +12,7 @@ alpha::
 regParam::
     Regularizační parametr zabraňuje přeučení modelu. Hodnota 0 má za následek, že se při výpočtu regularizace neaplikuje. Výchozí hodnota je 0.1.  
     
-Tréninkové parametry nemají přímo vliv na nastavení výpočtu ale můžeme pomocí nich kontrolovat jak budou data distribuována v rámci výpočetního clustru. Data jsou před výpočtem samotným rozdělena do bloků. Tyto bloky jsou vlastně partition a jsou následně zpracovávány paralelně. Zvolený počet bloků spolu s kapacitou výpočetního clustru mají zásadní dopad na to, jak dlouho zabere vytvoření modelu. Dle cite:[HDG] je optimalní velikost bloku mezi jedním až pěti miliony hodnocení. Náš algoritmus bude podporovat následující trénovací parametry:
+Tréninkové parametry nemají přímo vliv na nastavení výpočtu ale můžeme pomocí nich kontrolovat jak budou data distribuována v rámci výpočetního clustru. Data jsou před výpočtem samotným rozdělena do bloků. Tyto bloky jsou vlastně partition a jsou následně zpracovávány paralelně. Zvolený počet bloků spolu s kapacitou výpočetního clustru mají zásadní dopad na to, jak dlouho zabere vytvoření modelu. Dle cite:[SDG] je optimalní velikost bloku mezi jedním až pěti miliony hodnocení. Náš algoritmus bude podporovat následující trénovací parametry:
 
 numUserBlocks::
     Počet bloků do kterých budou rozděleni uživatelé, výchozí hodnota je 10. 

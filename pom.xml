@@ -294,7 +294,7 @@
                                     <workingDirectory>${basedir}</workingDirectory>
                                     <mainClass>org.apache.pdfbox.tools.PDFMerger</mainClass>
                                     <arguments>
-                                      <argument>${basedir}/src/main/asciidoc/pdf/header.pdf</argument>
+                                      <argument>${basedir}/src/main/asciidoc/pdf/header_hot.pdf</argument>
                                       <argument>${basedir}/src/main/asciidoc/book.pdf</argument>
                                       <argument>${basedir}/src/main/asciidoc/bp.pdf</argument>
                                     </arguments>
