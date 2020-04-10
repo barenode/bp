@@ -3,6 +3,8 @@
 
 === Výběr vhodných technologií
 
+Před samotnou implementací je třeba zvolit vhodné technologie. Jedná se primárně o volbu programovacího jazyka a příslušných vývojových nástrojů. Pro vývoj v prostředí Apache Spark existuje řada technologií, které se svojí funkcionalitou částečně nebo úplně překrývají. Jejich výběru je proto třeba věnovat zvýšenou pozornost.   
+
 ==== Výběr programovacího jazyka
 
 Spark podporuje několik různých jazyků a to jsou Scala, Java, Python a R. Scala je nativní jazyk Sparku a jeho přidružených knihoven. Jedná se o takzvaný JMV jazyk, který potřebuje ke svému běhu nainstalovanou Javu, konkrétně její běhové prostředí. Zdrojový kód v jazyce Scala se při kompilaci převede do Java byte kódu. To znamená, že se aplikace distribuuje ve formě java archivů takzvaných jarů. K vývoji Spark aplikací můžeme tedy použít také přímo Javu samotnou, aplikace napsané v Javě mohou používat knihovny napsané ve Scale a naopak. Zejména podpora funkcionálního programování a ad-hoc struktur činí ze Scaly nejvhodnější jazyk pro Spark. Python je velice populární jazyk určený pro rychlé prototypování. V posledních letech se stal víceméně standardem pro experimentování v oblasti umělé inteligence a strojového učení. Python má k dispozici mnoho specializovaných knihoven jako jsou Sciki-learn nebo TensorFlow. Python není nativním jazykem Sparku, místo toho používá specializovanou knihovnu Py4J pro interakci s JVM. Jazyk R je naopak velice populární v rámci statistické komunity. Pro práci s tímto jazykem existují dokonce dvě knihovny, SparkR distribuovaná spolu se Sparkem a dále sparklyr, vyvíjená týmem nástroje RStudio.

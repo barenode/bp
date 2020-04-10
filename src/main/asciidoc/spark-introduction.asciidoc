@@ -1,30 +1,32 @@
 
 ==  Apache Spark
 
-Apache Spark je unifikovaný výpočetní systém pro paralelní zpracování dat na počítačových clustrech. Spark nabízí bohaté API pro datové operace jako je filtrování, spojováni (join), seskupování a agregace. Toto API je dostupné pro řadu populárních programovacích jazyků jako jsou Java, Python, C# a R. Spark je aktuálně nejaktivněji vyvíjeným open source projektem v této oblasti s více než tisícem aktivních vývojářů.
+Apache Spark cite:[SPARK] je unifikovaný výpočetní systém pro paralelní zpracování dat na počítačových clustrech. Spark nabízí bohaté API pro datové operace jako je filtrování, spojování (join), seskupování a agregace. Toto API je dostupné pro řadu populárních programovacích jazyků jako jsou Java, Python, C# a R. Spark je aktuálně nejaktivněji vyvíjeným open source projektem v této oblasti s více než tisícem aktivních vývojářů.
 
 Filozofie Sparku je rozdílná od předcházejících platforem pro zpracovávání velkých objemů dat jako je například Hadoop, ten zahrnuje jak výpočetní systém (MapReduce) tak i úložiště dat (HDFS). Obě tyto části jsou spolu úzce provázané a je obtížné provozovat jednu část bez té druhé. Ačkoliv je možné Spark bez problémů provozovat nad HDFS není na tomto úložném systému nijak závislý a je možné ho používat i spolu s jinými zdroji dat. Jednou z motivací tohoto přístupu je, že data které je potřeba analyzovat, jsou typicky již uložena v rozdílných formátech v řadě různých úložných systémů. Přesouvání těchto dat pro analytické účely může být zejména při vyšších objemech nepraktické. Spark je proto postaven tak aby byl přístup k datům co nejvíce transparentní.
 
 Klíčovou vlastností Sparku je, že samotné provedení sekvence datových operací je nejprve optimalizováno. Tato optimalizace zajistí co možná nejefektivnější řetězec zpracování s využítím operační paměti pro mezivýsledky. To je velkou výhodou v rychlosti výpočtu oproti MapReduce kde se v každém kroku výsledky perzistují a je nutné je v následujícím kroku řetězce znovu načíst.    
 
-V diagramu <<spark-structure>> je zobrazena základní struktura Sparku. Základem je nízko úrovňové API pro práci s datasety, RDD (Resilient Distributed Dataset) volně přeloženo jako pružný distribuovaný dataset. Dalším patrem je strukturované API, přidané v druhé generaci Sparku. Na RDD a strukturovaném API je postavena řada specifických modulů, které jsou součástí standartní distribuce Sparku. Mezi tyto moduly patří:
+V diagramu <<spark-structure>> je zobrazena základní struktura Sparku. Základem je nízko-úrovňové API pro práci s datasety, RDD (Resilient Distributed Dataset) volně přeloženo jako pružný distribuovaný dataset. Dalším patrem je strukturované API, přidané v druhé generaci Sparku. Na RDD a strukturovaném API je postavena řada specifických modulů, které jsou součástí standartní distribuce Sparku. Mezi tyto moduly patří:
 
 * MLlib pro podporu strojové učení. 
 * Structured Spark Streaming pro podporu datových proudů.
 * GraphX pro podporu analýzy grafů.     
 
 [[spark-structure]]
-image::spark-structure.png[title="Struktura Sparku", pdfwidth="75%"]
+image::spark-structure.png[title="Struktura Sparku cite:[SDG]", pdfwidth="75%"]
 
 
 === Spark API
+
+Pro vytváření vlastních aplikací existují ve Sparku dvě programové rozhraní (API). Jedná se základní RDD API a jeho nadstavbu, strukturované API viz. <<spark-structure>>.  
 
 ==== RDD
 
 RDD (Resilient Distributed Dataset) je základní konstrukt Spark API. Představuje neměnnou kolekci záznamů, rozdělenou do částí, které mohou být nezávisle paralelně zpracovány. Tyto části, takzvané partitions, jsou typicky rozložené na více uzlů v rámci výpočetního clustru. Jednotlivé záznamy jsou klasické Java, Python nebo Scala objekty. Při operaci nad daným RDD je každé partititon přiřazen právě jeden výkonný proces. RDD API dále disponuje řadou operací pro manipulaci s daty, které se dělí do dvou základních skupin:
 
 Transformace::
-    Ve Sparku jsou zdrojová data typicky neměnná. Pokud chceme provést úpravy nad RDD, definujeme jednu nebo více takzvaných transformací. Tyto transformace instruují Spark jak má změnit zdrojová data. Důležitý je fakt, že samotná transformace pouze definuje jak se mají data změnit, transformace samotná se ale instantně neiniciuje. Komplexní operace nad daty většinou zahrnují celý řetězec atomických transformací. Spark počká na akci která si vyžádá transformovaný RDD, z řetězce transformací následně automaticky vyhodnotí optimální plan provedení a teprve potom transformuje zdrojový RDD. Transformace se dále dělí na dva základní typy, na úzké a široké. Úzké transformace se aplikují na jednu partition nezávisle na ostatních. Výsledkem je právě jedna cílová partition, typicky uložená na stejném počítači v rámci clustru. Úzké transformace se tedy nechají jednoduše paralelizovat. Při široké transformaci je transformovaná partition závislá na ostatních partition, typicky uložených na ostatních počítačích. Je tedy nutné provést takzvané přeskládání (shuffle) a v rámci clustrové sítě přenést potřebná data.           
+    Ve Sparku jsou zdrojová data typicky neměnná. Pokud chceme provést úpravy nad RDD, definujeme jednu nebo více takzvaných transformací. Tyto transformace instruují Spark jak má změnit zdrojová data. Důležitý je fakt, že samotná transformace pouze definuje jak se mají data změnit, transformace samotná se ale instantně neiniciuje. Komplexní operace nad daty většinou zahrnují celý řetězec atomických transformací. Spark počká na akci která si vyžádá transformovaný RDD, z řetězce transformací následně automaticky vyhodnotí optimální plán provedení a teprve potom transformuje zdrojový RDD. Transformace se dále dělí na dva základní typy, na úzké a široké. Úzké transformace se aplikují na jednu partition nezávisle na ostatních. Výsledkem je právě jedna cílová partition, typicky uložená na stejném počítači v rámci clustru. Úzké transformace se tedy nechají jednoduše paralelizovat. Při široké transformaci je transformovaná partition závislá na ostatních partition, typicky uložených na ostatních počítačích. Je tedy nutné provést takzvané přeskládání (shuffle) a v rámci clustrové sítě přenést potřebná data.           
 
 Akce::
     Akce jsou metody RDD API, které spouští samotný výpočet, při kterém se aplikují definované transformace na zdrojový RDD. 

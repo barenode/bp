@@ -1,5 +1,5 @@
 ﻿
-=== Sestavení doporučení
+== Zhodnocení vytvořeného modelu
 
 Pro vyhodnocení konkrétních doporučení byl vybrán jeden z uživatelů zaměřený téměř výhradně na poslech elektronické hudby. V následujícím přehledu je zobrazeno 20 interpretů s nejvíce poslechy pro tohoto uživatele. Nejvíce poslouchaný interpret je _infected mushroom_ spadající do podžánru _psy trance_, ostatní interpreti, až na _stereo mcs_ a _underworld_) spadají do podžánru _drum&bass_:
 

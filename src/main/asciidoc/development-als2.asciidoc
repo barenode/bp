@@ -56,12 +56,12 @@ Meta blok::
     Na základě dat v bloku vytvoříme takzvaný metablok. Metabloky mezi sebou provazují zdrojové a cílové bloky. Reálně se jedná o dvourozměrné pole kde je záznam pro každý cílový blok. V těchto záznamech jsou zdrojová id, pro které existuje hodnocení v daném zdrojovém a cílovém bloku. 
        
 [[als_block_connection]]
-image::als_block_connection02022020.jpg[title="Diagram propojeni bloku", pdfwidth="75%"]
+image::als_block_connection02022020.jpg[title="Diagram propojení bloků", pdfwidth="75%"]
 
-V diagramu <<als_block_connection>> je zobrazené propojené mezi zdrojovými a cílovými bloky. Pokud chceme spočítat zdrojový faktor pro jedno zdrojové id (30) musíme do lineárního systému zahrnout všechny cílové faktory (cílové id 5, 12) pro které existuje hodnocení pro dané zdrojové a cílové id. Tyto mohou být typicky v rozdílných cílových blocích (1, 4) uložených na rozdílných počítačích v rámci clustru.
+V diagramu <<als_block_connection>> je zobrazené propojené mezi zdrojovými a cílovými bloky. Pokud chceme spočítat zdrojový faktor pro jedno zdrojové id (30) musíme do lineárního systému zahrnout všechny cílové faktory (cílové id 5, 12) pro které existuje hodnocení pro dané zdrojové a cílové id. Tyto mohou být typicky v rozdílných cílových blocích (1, 4) uložených na rozdílných počítačích v rámci clusteru.
 
 
-=====  Rozdělení hodnoceni do bloků 
+=====  Rozdělení hodnocení do bloků 
 
 Jako top level vstup do algoritmu použijeme strukturované API jako preferovaný způsob od druhé generace Sparku. Dataset musí obsahovat sloupce identifikované vstupními parametry userCol, itemCol a rating. V rámci algoritmu samotného ale pro práci s hodnoceními použijeme RDD API. Toto API nižší úrovně nám, narozdíl od doporučovaného, strukturovaného API, dává možnost řídit rozložení dat v rámci clustru. Jako vstup do části algoritmu, který nám rozdělí hodnocení do příslušných bloků, nejprve převedeme vstupní dataset do RDD uspořádaných trojic:
 
@@ -98,6 +98,6 @@ Tento postup následně opakujeme, pouze s tím rozdílem, že je jako zdrojové
 
 =====  Výpočet faktorů
 
-Po rozdělení hodnocení do bloků je možné provést výpočet samotných faktorů. Tento výpočet probíhá iterativně, celkový počet iterací je určen vstupním parametrem maxIter. V každé iteraci nejprve proběhne výpočet uživatelských a následně produktových faktorů, pro oba výpočty se použije identický algoritmus vysvětlený <<recommendation-als>>. Do lineárního systému nejprve postupně vložíme všechny vektory z matice zdrojových faktorů stem:[Y], ten tedy bude následně obsahovat matici odpovídající výrazu stem:[Y^TY]. Tato operace vyžaduje přeskládání v rámci výpočetního clustru, kdy je do lineárního systému nutné zahrnout všechny zdrojové faktorové bloky. Výslednou čtvercovou matici, obsahující pouze stem:[rxr] elementů, kde stem:[r] odpovídá zadanému ranku, následně použijeme pro výpočet cílových faktorů. Tento výpočet již provádíme paralelně na úrovni jednotlivých cílových bloků, kde v cyklu spočítáme jednotlivé cílové faktory. Zde je nutné do lineárního systému přidat všechny zdrojové faktory a příslušné hodnocení, které existují pro daný cílový faktor. Řešeni lineárního systému odpovídá hledanému cílovému faktoru.  
+Po rozdělení hodnocení do bloků je možné provést výpočet samotných faktorů. Tento výpočet probíhá iterativně, celkový počet iterací je určen vstupním parametrem maxIter. V každé iteraci nejprve proběhne výpočet uživatelských a následně produktových faktorů, pro oba výpočty se použije identický algoritmus vysvětlený <<recommendation-als>>. Do lineárního systému nejprve postupně vložíme všechny vektory z matice zdrojových faktorů stem:[Y], ten tedy bude následně obsahovat matici odpovídající výrazu stem:[Y^TY]. Tato operace vyžaduje přeskládání v rámci výpočetního clustru, kdy je do lineárního systému nutné zahrnout všechny zdrojové faktorové bloky. Výslednou čtvercovou matici, obsahující pouze stem:[rxr] elementů, kde stem:[r] odpovídá zadanému ranku, následně použijeme pro výpočet cílových faktorů. Tento výpočet již provádíme paralelně na úrovni jednotlivých cílových bloků, kde v cyklu spočítáme jednotlivé cílové faktory. Zde je nutné do lineárního systému přidat všechny zdrojové faktory a příslušné hodnocení, které existují pro daný cílový faktor. Řešení lineárního systému odpovídá hledanému cílovému faktoru.  
 
   

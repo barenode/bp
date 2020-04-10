@@ -14,7 +14,7 @@ Autoři cite:[CFI] rozšířili popsaný algoritmus tak aby se výpočet dal efe
 \end{align*}
 ++++
 
-Pokud uživatel dosud produkt 'nezkonzumoval'.footnote:[konzumace = užití] proměnná nabývá hodnotu stem:[0] v opačném případě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o produktu zatím neví. Pro každého uživatele a produkt tedy platí, že součin příslušných faktorových vektorů stem:[x_{u}] a stem:[y_{i}] odpovídá této binární proměnné:
+Pokud uživatel dosud produkt neužil, proměnná nabývá hodnotu stem:[0] v opačném případě hodnotu stem:[1]. Důvěra v tuto hodnotu je vysoce proměnlivá. Jak již bylo řečeno pro nulové hodnoty to může znamenat, že uživatel o produktu zatím neví. Pro každého uživatele a produkt tedy platí, že součin příslušných faktorových vektorů stem:[x_{u}] a stem:[y_{i}] odpovídá této binární proměnné:
 
 [stem]
 ++++
@@ -49,7 +49,7 @@ Výsledná rovnice, po zahrnutí regularizačního parametru, která vyjadřuje 
  x_{u} = (Y^TC_{u}Y + \lambda I)^{-1}Y^TC_{u}p_{u}
 ++++    
      
-Problém při výpočtu je výraz stem:[Y^TC_{u}Y]. Zde by se muselo opakovaně provádět pro každého uživatele násobeni produktové faktorové matice a diagonální matice s preferencemi daného uživatele. Faktorová matice je v rámci distribuovaného výpočtu typicky rozdělená na více výpočetních uzlů a její násobení vyžaduje přeskládání bloků dat v rámci výpočetního clustru. Autoři článku vyřešili tento problém převedením výrazu stem:[Y^TC_{u}Y] na výraz: 
+Problém při výpočtu je výraz stem:[Y^TC_{u}Y]. Zde by se muselo opakovaně provádět pro každého uživatele násobení produktové faktorové matice a diagonální matice s preferencemi daného uživatele. Faktorová matice je v rámci distribuovaného výpočtu typicky rozdělená na více výpočetních uzlů a její násobení vyžaduje přeskládání bloků dat v rámci výpočetního clustru. Autoři článku vyřešili tento problém převedením výrazu stem:[Y^TC_{u}Y] na výraz: 
 
 [stem]
 ++++

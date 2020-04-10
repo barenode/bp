@@ -3,7 +3,7 @@
 
 Implicitní data vznikají samotnou interakcí uživatele se systémem. Tato interakce může nabývat mnoho různých podob závislých na konkrétní podobě daného systému. Například pro společnosti poskytující streamovaný obsah jako Netflix nebo Spotify to může být shlédnutí daného obsahu. Ale také zda byl tento obsah shlédnutý celý, zda a kdy bylo shlédnutí přerušeno popřípadě počet shlédnutí. Pro internetové knihkupectví jako Amazon toto budou primárně zakoupené tituly. Tyto data se ukládají a následně vyhodnocují tak aby se dosáhlo co možná nejpřesnějších doporučení. Implicitní data mají tedy tendenci být komplexnější než data explicitní což sebou přináší i řadu problémů, které je nutné v daném algoritmu zohlednit:
 
-1. Pouze pozitivní feedback. Pokud evidujeme pouze položky, které si uživatel vybral, je obtížné rozlišit ty, které opravdu preferuje. Například pokud uživatel neshlédl daný film, může to být způsobeno tím že o něm dosud neví ale také tím, že ho nemá rád.
+1. Pouze pozitivní zpětná vazba. Pokud evidujeme pouze položky, které si uživatel vybral, je obtížné rozlišit ty, které opravdu preferuje. Například pokud uživatel neshlédl daný film, může to být způsobeno tím že o něm dosud neví ale také tím, že ho nemá rád.
 
 2. Implicitní datasety obsahují velký podíl šumu. Pokud pasivně sledujeme chování uživatele, můžeme pouze hádat jejich preference a pravé motivy. Například i přesto, že uživatel zhlédl některý film, nemusel se mu doopravdy líbit cite:[CFI].
 

@@ -175,7 +175,7 @@
   lccn          = {2007013096},
 }
 
-@Book{M,
+@Book{MME,
   author        = {Elden, L.},
   title         = {Matrix Methods in Data Mining and Pattern Recognition, Second Edition},
   year          = {2019},

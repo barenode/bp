@@ -19,7 +19,7 @@ A^TAx = A^Tb
 \end{align*}
 ++++ 
  
-Konkrétně si bude udržovat dvě komponenty. První z nich odpovídající výrazu stem:[A^TA] je čtvercová a symetrická matice. Vzhledem k tomu, že jako matici stem:[A] použijeme střídavě uživatelské resp. produktové faktory bude mít tato matice relativně malé rozměry stem:[rxr] kde stem:[r] odpovídá zvolenému ranku. Druhá komponenta bude vektor odpovídající výrazu stem:[A^Tb], kde vektor stem:[b] odpovídá vektoru hodnocení, tato komponenta bude mít dimenzi stem:[r]. 
+Konkrétně si budeme udržovat dvě komponenty. První z nich odpovídající výrazu stem:[A^TA] je čtvercová a symetrická matice. Vzhledem k tomu, že jako matici stem:[A] použijeme střídavě uživatelské resp. produktové faktory bude mít tato matice relativně malé rozměry stem:[rxr] kde stem:[r] odpovídá zvolenému ranku. Druhá komponenta bude vektor odpovídající výrazu stem:[A^Tb], kde vektor stem:[b] odpovídá vektoru hodnocení, tato komponenta bude mít dimenzi stem:[r]. 
  
 Do lineárního systému bude možné přidávat komponenty jednotlivě, kdy budou jako argumenty faktorový vektor stem:[a] a skalár stem:[b_{i}] odpovídající konkrétnímu hodnocení. Následně přičteme k první komponentě výraz stem:[a^Ta] a ke druhé vyraz stem:[a^Tb_{i}].
 
