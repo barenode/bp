@@ -72,8 +72,6 @@ end
         c7201.vm.synced_folder '/data/1', '/hadoop/hdfs',        type: 'nfs'   
                                              
         c7201.vm.provider :virtualbox do |vb|
-#          vb.customize ["modifyvm", :id, "--memory", 26216] 
-#          vb.customize ["modifyvm", :id, "--cpus", 12] 
           vb.customize ["modifyvm", :id, "--memory", 6216] 
           vb.customize ["modifyvm", :id, "--cpus", 3] 
         end        

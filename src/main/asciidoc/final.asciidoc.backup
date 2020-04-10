@@ -1,7 +1,0 @@
-=== Zaver
-
-Spark je uzitgecny nastroj i sam o sobe, neni nutne ho pouzivat pouze jako nastroj v racmi clsutroveho stacku. Zejmena spolu s jupyter notebookem, muze slouzit jako lokalni analyticka platforma. Nicmene v tomto segmentu je k dispozici mnoho dalsich nastroju, ktere nevyzaduji takovy objem znalosti jako apache Spark. Jedna se napriklad o knovnu pandas pro python ktera spolu s vizualizacni knihovnou matplot tvori sikovny analyticky nastroj. 
-
-Jednou z velkych vyhod sparku je moznost programovat ve vice jazycich. V ramci praci byla pouzita Scala, nattivni jazyk Sparku. Ackoliv se pro java vyvojare mohla zdat syntaxe scaly zprvu ponekud nelogicka, postupem casu vynikla krasa tohoto jazyka. Podpora funkcinalniho programovani spolu s moznosti tvorit ad-hoc struktury cini z tohoto jazyka optimalni volbu pro SPark kdy vyvojar muze vyjadrovat komplexni logiku v prehledne a elegantni forme. 
-
-Dalsim pouzitym jazykem byl Python, jazyk popularni mezi datovymi vedci ma v Ramci Sparku kvalitni podporu. Zejmena spolu s pouzitim jupyter noteboooku kde bylo mozne kombinovat vypocty ve Sparku spolu s knihovnou matploty pro graficke znazorneni vysledku   

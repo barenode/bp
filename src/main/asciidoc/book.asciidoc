@@ -28,14 +28,15 @@
 = Strojové učení na platformě Apache Spark
           
 include::introduction.asciidoc[]
-include::book-ml.asciidoc[] 
-include::test-and-validation.asciidoc[]
-include::recommendation.asciidoc[]
-include::recommendation-implicit.asciidoc[]
-include::recommendation-implicit-matfac.asciidoc[]
-include::recommendation-implicit-knn.asciidoc[]
-include::recommendation-implicit-als.asciidoc[]
-include::als-2.asciidoc[]
+
+include::ml-intro.asciidoc[] 
+include::ml-test-and-validation.asciidoc[]
+include::ml-recommendation.asciidoc[]
+include::ml-recommendation-implicit.asciidoc[]
+include::ml-recommendation-implicit-matfac.asciidoc[]
+include::ml-recommendation-implicit-knn.asciidoc[]
+include::ml-recommendation-implicit-als.asciidoc[]
+include::ml-recommendation-implicit-als-2.asciidoc[]
 
 include::spark-introduction.asciidoc[]
 include::spark-ml.asciidoc[]
@@ -44,13 +45,13 @@ include::spark-hadoop.asciidoc[]
 include::development.asciidoc[]
 include::development-cluster.asciidoc[]
 include::development-project.asciidoc[]    
- 
 include::development-als-model.asciidoc[]                             
 include::development-als2.asciidoc[]
 include::development-regression.asciidoc[]  
 
 include::exp-intro.asciidoc[]
 include::exp-recommendation.asciidoc[]
+
 include::final.asciidoc[] 
 
 include::references.asciidoc[]

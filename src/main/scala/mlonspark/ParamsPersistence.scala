@@ -1,6 +1,6 @@
 package mlonspark
 
-import com.custom.spark.utils.Utils
+import mlonspark.util.Utils
 import org.apache.hadoop.fs.Path
 import org.apache.spark.SparkContext
 import org.apache.spark.ml.param.{ParamPair, Params}

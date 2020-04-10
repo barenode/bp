@@ -123,7 +123,7 @@ df.select(min("listenCount"), max("listenCount"), avg("listenCount")).show()
 Z výstupu je patrné, že hodnoty nejsou v datasetu rovnoměrně distribuované. Minimální hodnota, kdy je pro jediného uživatele 400 tisíc poslechů jediného interpreta, mnohonásobně převyšuje průměrnou hodnotu 215. Z <<ratings-dist>> je zřejmé, že se většina hodnot pohybuje kolem průměru ale dataset obsahuje malý počet extrémních hodnot.  
 
 [[ratings-dist]]
-image::../eda_files/eda_11_0.png[title="Rozložení hodnot v datasetu hodnocení", pdfwidth="100%"]  
+image::eda_11_0.png[title="Rozložení hodnot v datasetu hodnocení", pdfwidth="100%"]  
 
 === Vytvoření tréningového a testovacího datasetu
 
@@ -198,7 +198,7 @@ quantiles = statFunc(df).approxQuantile("listenCount", [0.05, 0.95], 0.001)
 Z výsledku je patrné, že zejména hodnota 95% kvantilu 751 je výrazně nižší než maximální hodnota 419157. Po odstranění nejnižších a nejvyšších 5% hodnot je distribuce hodnot v datasetu výrazně rovnoměrnější viz. <<ratings-dist-filtered>>.
 
 [[ratings-dist-filtered]]
-image::../eda_files/eda_14_0.png[title="Rozložení hodnot v upraveném datasetu", pdfwidth="100%"]  
+image::eda_14_0.png[title="Rozložení hodnot v upraveném datasetu", pdfwidth="100%"]  
 
 Pro model vytvořený na základě upraveného datasetu jsme naměřili RMSE 212.78 pro tréninkový dataset, resp. 213.15 pro dataset testovací. Tyto hodnoty se již blíží průměrné hodnotě 149.60. Také RMSE pro testovací dataset je vyšší než pro dataset tréninkový.  
 
@@ -214,7 +214,7 @@ V další fázi se pokusíme nalézt optimální hodnoty pro jednotlivé hyper p
 Z <<hp-rank>> je patrné, že RMSE klesá jak pro trénovací i testovací sadu pro rank menší než 25. Dále již klesá RMSE pouze pro sadu trénovací, což znamená že se model stává postupně přeučeným na tuto sadu. Pro další výpočty použijeme hodnotu hyper parametru rank 25.  
 
 [[hp-rank]]
-image::../rank-tuning-stdpos_files/rank-tuning-stdpos_5_10.png[title="Rank", pdfwidth="60%"]  
+image::rank-tuning-stdpos_5_10.png[title="Rank", pdfwidth="60%"]  
 
 
 ==== Regularizační parametr
@@ -222,14 +222,14 @@ image::../rank-tuning-stdpos_files/rank-tuning-stdpos_5_10.png[title="Rank", pdf
 Z <<hp-regParam>> je patrné, že i minimální regularizace má negativní vliv na výsledný model. Typicky by se měla regularizace aplikovat pokud by docházelo k přeučení modelu s velkým rozdílem mezi trénovací a testovací sadou. V našem případě se obejdeme bez regularizace a použijeme nulový regularizační parametr. 
 
 [[hp-regParam]]
-image::../regParam-tuning-stdpos_files/regParam-tuning-stdpos_5_10.png[title="Regulariční parametr", pdfwidth="60%"]  
+image::regParam-tuning-stdpos_5_10.png[title="Regulariční parametr", pdfwidth="60%"]  
 
 ==== Alpha parametr
 
 Z <<hp-alphaParam>> je patrné, že pro alpha parametr poskytují lepší výsledky vyšší hodnoty než výchozí hodnota 1. Pro další výpočty použijeme hodnotu hyper parametru alpha 10.        
 
 [[hp-alphaParam]]
-image::../alpha-tuning-stdpos_files/alpha-tuning-stdpos_7_1.png[title="Alpha parametr", pdfwidth="60%"]  
+image::alpha-tuning-stdpos_7_1.png[title="Alpha parametr", pdfwidth="60%"]  
 
 
 ==== Počet iterací
@@ -237,7 +237,7 @@ image::../alpha-tuning-stdpos_files/alpha-tuning-stdpos_7_1.png[title="Alpha par
 Počet iterací by se měl nastavit dostatečně vysoký aby nadále nedocházelo ke snížení výsledného RMSE, tj. tato hodnota by měla uváznout ve svém minimu. Z <<hp-maxIter>> je zřejmé že výchozí počet iterací 10 je dostatečný, hodnota RMSE se ustálí již po šesté iteraci.
 
 [[hp-maxIter]]
-image::../maxIter-tuning-stdpos_files/maxIter-tuning-stdpos_7_1.png[title="Počet iterací", pdfwidth="60%"] 
+image::maxIter-tuning-stdpos_7_1.png[title="Počet iterací", pdfwidth="60%"] 
 
 ==== Optimální hodnoty hyper parametrů [[param-optimal-values]]
 

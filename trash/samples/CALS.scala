@@ -1,6 +1,0 @@
-package samples
-
-class CALS {
-
-
-}

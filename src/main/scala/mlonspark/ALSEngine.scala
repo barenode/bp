@@ -14,7 +14,6 @@ import scala.collection.mutable
 
 object ALSEngine {
 
-
   def train(
     //tag::params-def[]
     rdd: RDD[(Int, Int, Float)],
@@ -29,29 +28,20 @@ object ALSEngine {
     finalRDDStorageLevel: StorageLevel = StorageLevel.MEMORY_AND_DISK)
   : (RDD[(Int, Array[Float])], RDD[(Int, Array[Float])]) = {
 
-    println("TRAIN")
-
     val userPart = new HashPartitioner(numUserBlocks)
     val itemPart = new HashPartitioner(numItemBlocks)
 
     val (userBlocks, userMetaBlocks) = blockify(rdd, userPart, itemPart)
-    println("BLOCKIFIED")
-    //println(userMetaBlocks.collect().mkString(""))
 
     val swappedRdd = rdd.map{case(userId, itemId, rating)=>
       (itemId, userId, rating)
     }
 
     val (itemBlocks, itemMetaBlocks) = blockify(swappedRdd, itemPart, userPart)
-//    println(itemBlocks.collect().mkString(""))
-//    println(itemMetaBlocks.collect().mkString(""))
 
     val seedGen = new XORShiftRandom(0L)
     var userFactors = initialize(userBlocks, rank, seedGen.nextLong())
     var itemFactors = initialize(itemBlocks, rank, seedGen.nextLong())
-
-//    userFactors.collect().foreach(v=>println(v._1 + " " + v._2))
-//    itemFactors.collect().foreach(v=>println(v._1 + " " + v._2))
 
     for (iter <- 1 to maxIter) {
       println(s"itemFactors-$iter")
@@ -127,27 +117,16 @@ object ALSEngine {
           for (i <- srcPtrs(j) to srcPtrs(j + 1)-1) {
             val srcBlockId = srcBlockIds(i)
             val rating = ratings(i)
-            //val Compressed sparse column = srcIds(i)
+
             val srcLocalIndex = srcLocalIndices(i)
-            //println("dstBlockId: " + dstBlockId + ", dstId: " + dstId + ", srcBlockId: " + srcBlockId + ", srcId: " + srcId + ", srcLocalIndex: " + srcLocalIndex + ", rating: " + rating)
             val srcFactor = sortedSrcFactors(srcBlockId)(srcLocalIndex)
-            //println(FactorBlock(srcFactors))
             if (rating > 0.0) {
               numExplicits += 1
             }
 
-            //exact mode ??
             val c1 = 1 + (alpha * rating)
             ls.add(srcFactor, if (rating > 0.0) c1 else 0.0, c1-1)
-
-            //spark mode
-//            val c1 = alpha * math.abs(rating)
-//            ls.add(srcFactor, if (rating > 0.0) 1.0 + c1 else 0.0, c1)
           }
-          //exact mode ??
-          //dstFactors(j) = solve(ls, regParam)
-
-          //spark mode
           dstFactors(j) = solve(ls, numExplicits * regParam)
         }
         FactorBlock(dstFactors)
@@ -219,15 +198,6 @@ object ALSEngine {
         }
       builder.build().compress()
     }
-
-
-//    val blocks = rdd.map{case (srcId, dstId, rating) =>
-//      (partitioner.getPartition(srcId), (srcId, partitioner.getPartition(dstId), dstId, rating))
-//    }.groupByKey(partitioner).mapValues{v=>
-//      val builder = new BlockBuilder()
-//      v.foreach(i=>builder.add(i._1, i._2, i._3, i._4))
-//      builder.build().compress()
-//    }
 
     val metaBlocks = blocks.mapValues { case Block(srcIds, dstPtrs, _, dstBlockIds, _, _, _) =>
       val activeIds = Array.fill(dstPartitioner.numPartitions)(mutable.ArrayBuilder.make[Int])
@@ -329,58 +299,18 @@ case class RawBlock(srcIds: Array[Int], dstBlockIds: Array[Int], dstIds: Array[I
     dstPtrs += total
     Block(uniqueSrcIds.result(), dstPtrs.result(), srcIds, dstBlockIds, dstIds, dstLocalIndices, ratings)
   }
-
-  override def toString(): String = {
-    var res = "[\n";
-    for (i <- 0 to length-1) {
-      res += "% 7d".format(srcIds(i))
-      res += "% 7d".format(dstIds(i))
-      res += "% 7d".format(dstBlockIds(i))
-      res += "% 7d".format(dstLocalIndices(i))
-      res += "    % 7f".format(ratings(i))
-      res += "\n"
-    }
-    res += "]";
-    res
-  }
 }
 
-case class Block(srcIds: Array[Int], dstPtrs: Array[Int], srcIdsUncompressed: Array[Int], dstBlockIds: Array[Int], dstIds: Array[Int], dstLocalIndices: Array[Int], ratings: Array[Float]) {
+case class Block(
+  srcIds: Array[Int],
+  dstPtrs: Array[Int],
+  srcIdsUncompressed: Array[Int],
+  dstBlockIds: Array[Int],
+  dstIds: Array[Int],
+  dstLocalIndices: Array[Int],
+  ratings: Array[Float])
 
-  override def toString(): String = {
-    var res = "\n[\n";
-    res += "   " + srcIds.mkString(", ")
-    res += "\n"
-    res += dstPtrs.mkString(", ")
-    res += "\n"
-    res += "---------------------------------------------"
-    res += "\n"
-    for (i <- 0 to srcIdsUncompressed.length-1) {
-      res += "% 7d".format(srcIdsUncompressed(i))
-      res += "% 7d".format(dstIds(i))
-      res += "% 7d".format(dstBlockIds(i))
-      res += "% 7d".format(dstLocalIndices(i))
-      res += "    % 7f".format(ratings(i))
-      res += "\n"
-    }
-    res += "]\n";
-    res
-  }
-}
-
-case class MetaBlock(dstBlocks: Array[Array[Int]]) {
-  override def toString(): String = {
-    var res = "\n[\n";
-    for (i <- 0 to dstBlocks.length-1) {
-      res += i
-      res += " ["
-      res += dstBlocks(i).mkString(", ")
-      res += "]\n"
-    }
-    res += "]\n";
-    res
-  }
-}
+case class MetaBlock(dstBlocks: Array[Array[Int]])
 
 class HashPartitioner(partitions: Int) extends org.apache.spark.Partitioner {
 

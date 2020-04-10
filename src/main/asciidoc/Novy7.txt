@@ -1,9 +1,0 @@
-
-==== Lineární regrese
-
-Pro výpoèet lineární regrese zavedeme pomocnou tøídu. Tato bude udržovat lineární systém v takzvaném normálním váženém stavu.
-
----
-\mathbf{\left(X^TWX\right)\hat {\boldsymbol {\beta}}=X^TWy}.
----
-

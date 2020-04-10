@@ -6,6 +6,15 @@ import org.apache.spark.internal.Logging
 
 private[mlonspark] object Utils extends Logging {
 
+  def getSparkClassLoader: ClassLoader = getClass.getClassLoader
+
+  def getContextOrSparkClassLoader: ClassLoader =
+    Option(Thread.currentThread().getContextClassLoader).getOrElse(getSparkClassLoader)
+
+  def classForName(className: String): Class[_] = {
+    Class.forName(className, true, getContextOrSparkClassLoader)
+  }
+
   val random = new Random()
 
   /**
