@@ -11,12 +11,7 @@ class AlternatingLeastSquareModel(JavaModel, JavaMLReadable, JavaMLWritable):
 
     @staticmethod
     def _from_java(java_stage):
-        """
-        Given a Java object, create and return a Python wrapper of it.
-        Used for ML persistence.
 
-        Meta-algorithms such as Pipeline should override this method as a classmethod.
-        """
         # Generate a default new instance from the stage_name class.
         py_type = AlternatingLeastSquareModel
         if issubclass(py_type, JavaParams):

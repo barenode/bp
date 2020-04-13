@@ -1,7 +1,5 @@
 setup.py
 mlonspark/__init__.py
-mlonspark/common.py
-mlonspark/foo.py
 mlonspark.egg-info/PKG-INFO
 mlonspark.egg-info/SOURCES.txt
 mlonspark.egg-info/dependency_links.txt
