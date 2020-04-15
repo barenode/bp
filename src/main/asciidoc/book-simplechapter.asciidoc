@@ -7,6 +7,7 @@
 :section-refsig: viz.
 :table-caption: tab.
 :figure-caption: Obr.
+:appendix-caption: Příloha
 :math: 
 :imagesoutdir: generated_images
 :imagesdir: images
@@ -27,8 +28,4 @@
 
 = Strojové učení na platformě Apache Spark
 
-include::exp-intro.asciidoc[]
-include::exp-recommendation.asciidoc[]
-include::final.asciidoc[]
-
-include::references.asciidoc[]
+include::appendixes.asciidoc[]

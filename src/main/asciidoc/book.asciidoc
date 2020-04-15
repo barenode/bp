@@ -8,6 +8,7 @@
 :section-refsig: viz.
 :table-caption: Tab.
 :figure-caption: Obr.
+:appendix-caption: Příloha
 :math:
 :imagesoutdir: generated_images
 :imagesdir: images
@@ -55,3 +56,5 @@ include::exp-recommendation.asciidoc[]
 include::final.asciidoc[] 
 
 include::references.asciidoc[]
+
+include::appendixes.asciidoc[]

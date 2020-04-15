@@ -44,13 +44,11 @@ object ALSEngine {
     var itemFactors = initialize(itemBlocks, rank, seedGen.nextLong())
 
     for (iter <- 1 to maxIter) {
-      println(s"itemFactors-$iter")
       val previousItemFactors = itemFactors
       itemFactors = computeFactors(userFactors, userMetaBlocks, itemBlocks, rank, regParam, alpha)
       previousItemFactors.unpersist()
       itemFactors.setName(s"itemFactors-$iter").persist(intermediateRDDStorageLevel)
 
-      println(s"userFactors-$iter")
       val previousUserFactors = userFactors
       userFactors = computeFactors(itemFactors, itemMetaBlocks, userBlocks, rank, regParam, alpha)
       previousUserFactors.unpersist()
@@ -64,8 +62,6 @@ object ALSEngine {
         items.flatMap { case (_, (ids, factors)) =>
           ids.view.zip(factors.factors)
         }
-        // Preserve the partitioning because IDs are consistent with the partitioners in userInBlocks
-        // and userFactors.
       }, preservesPartitioning = true)
       .setName("userFactors")
       .persist(finalRDDStorageLevel)
@@ -395,7 +391,6 @@ class RatingBlockBuilder extends Serializable {
 
   var size = 0
 
-  /** Adds a rating. */
   def add(srcId : Int, dstId : Int, rating: Float): this.type = {
     size += 1
     srcIds += srcId
@@ -404,7 +399,6 @@ class RatingBlockBuilder extends Serializable {
     this
   }
 
-  /** Merges another [[RatingBlockBuilder]]. */
   def merge(other: RatingBlock): this.type = {
     size += other.srcIds.length
     srcIds ++= other.srcIds
@@ -413,22 +407,16 @@ class RatingBlockBuilder extends Serializable {
     this
   }
 
-  /** Builds a [[RatingBlock]]. */
   def build(): RatingBlock = {
     RatingBlock(srcIds.result(), dstIds.result(), ratings.result())
   }
 }
 
 private[mlonspark] class NormalEquation(val k: Int) extends Serializable {
-  //end::normal-eq-constructor[]
-
-  /** Number of entries in the upper triangular part of a k-by-k matrix. */
-  /** ata: A^T^ * A */
-  /** atb: A^T^ * A */
 
   //tag::normal-eq-fields[]
-  val triK = k * (k + 1) / 2
-  val ata = new Array[Double](triK)
+  val size = k * (k + 1) / 2
+  val ata = new Array[Double](size)
   val atb = new Array[Double](k)
   //end::normal-eq-fields[]
 
@@ -443,7 +431,6 @@ private[mlonspark] class NormalEquation(val k: Int) extends Serializable {
     }
   }
 
-  /** Adds an observation. */
   def add(a: Array[Float], b: Double, c: Double = 1.0): this.type = {
     require(c >= 0.0)
     require(a.length == k)
@@ -455,7 +442,6 @@ private[mlonspark] class NormalEquation(val k: Int) extends Serializable {
     this
   }
 
-  /** Merges another normal equation object. */
   def merge(other: NormalEquation): this.type = {
     require(other.k == k)
     blas.daxpy(ata.length, 1.0, other.ata, 1, ata, 1)
@@ -463,7 +449,6 @@ private[mlonspark] class NormalEquation(val k: Int) extends Serializable {
     this
   }
 
-  /** Resets everything to zero, which should be called after each solve. */
   def reset(): Unit = {
     ju.Arrays.fill(ata, 0.0)
     ju.Arrays.fill(atb, 0.0)

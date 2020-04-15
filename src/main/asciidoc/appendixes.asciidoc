@@ -1,0 +1,26 @@
+﻿
+[appendix]
+== Zdrojový kód projektu
+
+Kompletní zdrojové kódy práce jsou dostupné přes veřejný git repozitář. A to buď na domovské stránce projektu https://github.com/barenode/bp nebo přes lokální klon repozitáře:
+
+----
+git clone https://github.com/barenode/bp.git
+----
+
+
+[appendix]
+== Zdrojový kód algoritmu ALS
+
+Kompletní zdrojový kód algoritmu ALS pro faktorizaci matic, detailně popsaném <<als-estimator>>.
+
+[source, scala, numbered]
+.ALSEngine.scala
+----
+include::{scala-dir}/mlonspark/ALSEngine.scala[]
+----  
+
+
+
+
+     
