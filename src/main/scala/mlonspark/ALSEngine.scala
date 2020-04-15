@@ -130,11 +130,11 @@ object ALSEngine {
   }
 
   def solve(ne: NormalEquation, lambda: Double): Array[Float] = {
-    val k = ne.k
+    val k = ne.rank
     // Add scaled lambda to the diagonals of AtA.
     var i = 0
     var j = 2
-    while (i < ne.triK) {
+    while (i < ne.size) {
       ne.ata(i) += lambda
       i += j
       j += 1
@@ -412,20 +412,20 @@ class RatingBlockBuilder extends Serializable {
   }
 }
 
-private[mlonspark] class NormalEquation(val k: Int) extends Serializable {
+private[mlonspark] class NormalEquation(val rank: Int) extends Serializable {
 
   //tag::normal-eq-fields[]
-  val size = k * (k + 1) / 2
+  val size = rank * (rank + 1) / 2
   val ata = new Array[Double](size)
-  val atb = new Array[Double](k)
+  val atb = new Array[Double](rank)
   //end::normal-eq-fields[]
 
-  private val da = new Array[Double](k)
+  private val da = new Array[Double](rank)
   private val upper = "U"
 
   private def copyToDouble(a: Array[Float]): Unit = {
     var i = 0
-    while (i < k) {
+    while (i < rank) {
       da(i) = a(i)
       i += 1
     }
@@ -433,17 +433,17 @@ private[mlonspark] class NormalEquation(val k: Int) extends Serializable {
 
   def add(a: Array[Float], b: Double, c: Double = 1.0): this.type = {
     require(c >= 0.0)
-    require(a.length == k)
+    require(a.length == rank)
     copyToDouble(a)
-    blas.dspr(upper, k, c, da, 1, ata)
+    blas.dspr(upper, rank, c, da, 1, ata)
     if (b != 0.0) {
-      blas.daxpy(k, b, da, 1, atb, 1)
+      blas.daxpy(rank, b, da, 1, atb, 1)
     }
     this
   }
 
   def merge(other: NormalEquation): this.type = {
-    require(other.k == k)
+    require(other.rank == rank)
     blas.daxpy(ata.length, 1.0, other.ata, 1, ata, 1)
     blas.daxpy(atb.length, 1.0, other.atb, 1, atb, 1)
     this
