@@ -1,5 +1,10 @@
 ﻿== Závěr
 
+Účelem této práce byla experimentální aplikace strojového učení na platformě Apache Spark. Vybraný algoritmus měl být implementován s důrazem na paralelní výpočet a škálovatelnost. Pro algoritmus měla být navržena metodika ohodnocení přesnosti jednotlivých výpočtů.
+
+Těchto vytyčených cílů se podařilo dosáhnout. Pro test byl zvolen dataset obsahující záznamy o počtu poslechů hudebních interpretů jednotlivými uživateli.  
+Na základě těchto implicitních dat se podařilo pomocí nástroje Apache Spark vytrénovat prakticky použitelný model. Tento model byl schopen doporučovat uživatelům hudební interprety dle jejich preferencí. Implementovaný algoritmus  dokázal provádět výpočty paralelně nad částmi datasetu, distribuovaného v rámci výpočetního clustru. Při dostatečném výpočetním výkonu by bylo možné tento systém aplikovat i na řádově větší objemy dat.
+
 Apache Spark je užitečný nástroj s jednoduchým a srozumitelným API. Komplexní, distribuovaný algoritmus pro strojové učení se na této platformě podařilo implementovat i bez předchozích zkušeností. Apache Spark má kvalitní dokumentaci a širokou vývojářskou základnu. Tyto dva prvky výrazně usnadňovaly řešení problemů v průběhu implementace. V projektu byl použit programovací jazyk Scala, nativní jazyk Sparku. Ačkoliv se pro Java vývojáře mohla zdát syntaxe Scaly poněkud složitá, během implementace projektu vynikla síla tohoto jazyka. Zejména podpora funkcionálního programování činí z tohoto jazyka ideální volbu pro Spark. Integrované vývojové prostředí IntelliJ IDEA se ukázalo jako správná volba. Kvalitní podpora programovaciho jazyka Scala a jednotkových testů umožnila efektivní vývoj a rychlé testování aplikace.  
   
 Apache Hadoop ma pozvolnou křivku učení. Porozumět účelu jednotlivých částí systému potřebných pro běh Spark aplikace a poskládat tyto části do funkčního celku se ukázalo jako časové náročný proces. Při spoustění aplikace docházelo zprvu k haváriím, které si vyžádaly prověřování specifických systémových logů a následnou rekonfiguraci problematických prvků.  
