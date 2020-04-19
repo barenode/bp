@@ -58,7 +58,7 @@ Meta blok::
 [[als_block_connection]]
 image::als_block_connection02022020.jpg[title="Diagram propojení bloků", pdfwidth="75%"]
 
-V diagramu <<als_block_connection>> je zobrazené propojené mezi zdrojovými a cílovými bloky. Pokud chceme spočítat zdrojový faktor pro jedno zdrojové id (30) musíme do lineárního systému zahrnout všechny cílové faktory (cílové id 5, 12) pro které existuje hodnocení pro dané zdrojové a cílové id. Tyto mohou být typicky v rozdílných cílových blocích (1, 4) uložených na rozdílných počítačích v rámci clusteru.
+V diagramu <<als_block_connection>> je zobrazené propojené mezi zdrojovými a cílovými bloky. Pokud chceme spočítat zdrojový faktor pro jedno zdrojové id (30) musíme do lineárního systému zahrnout všechny cílové faktory (cílové id 5, 12) pro které existuje hodnocení pro dané zdrojové a cílové id. Tyto mohou být typicky v rozdílných cílových blocích (1, 4) uložených na rozdílných počítačích v rámci clustru.
 
 
 =====  Rozdělení hodnocení do bloků 

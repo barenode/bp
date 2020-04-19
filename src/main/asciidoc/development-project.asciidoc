@@ -34,7 +34,7 @@ Každý deskriptor projektu musí obsahovat základní informace o aplikaci. Jed
   </properties>
 ----
 
-V sekci properties definujeme proměnné použité dále v deskriptoru. V našem případě obsahují tyto proměnné zejména verze jednotlivých závislostí projektu. Verzím je třeba věnovat zvýšenou pozornost, je žádoucí aby tyto verze přesně odpovídaly verzím, které jsou nainstalovány v našem testovacím Spark clusteru. Pokud by byly použity nekompatibilní verze, mohlo by docházet k chybám při běhu programu. Tedy ačkoliv byla v době implementace aplikace posední vydaná verze Sparku 2.4.4 v projektu jsme použili verzi 2.3.1, která odpovídá verzi Sparku z Hadoop distribuce našeho testovacího clustru. Použijeme také stejné verze Javy a Scaly, které jsou použity v této verzi. Pro tuto verzi Sparku byla použita Java 8 a Scala 2.11.12.
+V sekci properties definujeme proměnné použité dále v deskriptoru. V našem případě obsahují tyto proměnné zejména verze jednotlivých závislostí projektu. Verzím je třeba věnovat zvýšenou pozornost, je žádoucí aby tyto verze přesně odpovídaly verzím, které jsou nainstalovány v našem testovacím Spark clustru. Pokud by byly použity nekompatibilní verze, mohlo by docházet k chybám při běhu programu. Tedy ačkoliv byla v době implementace aplikace posední vydaná verze Sparku 2.4.4 v projektu jsme použili verzi 2.3.1, která odpovídá verzi Sparku z Hadoop distribuce našeho testovacího clustru. Použijeme také stejné verze Javy a Scaly, které jsou použity v této verzi. Pro tuto verzi Sparku byla použita Java 8 a Scala 2.11.12.
 
 [source, xml]
 ----

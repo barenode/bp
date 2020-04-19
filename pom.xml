@@ -261,8 +261,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <groupId>org.codehaus.mojo</groupId>
                         <version>1.6.0</version>
-                        <executions>
-                            <!--                                   
+                        <executions>                                                
                             <execution>
                                 <id>book-asciidoctor</id>
                                 <phase>package</phase>
@@ -273,8 +272,7 @@
                                     <workingDirectory>${basedir}</workingDirectory>
                                     <executable>book-asciidoctor.cmd</executable>
                                 </configuration>
-                            </execution>     
-                            -->   
+                            </execution>                
                             <execution>
                                 <id>merge</id>
                                 <phase>package</phase>
@@ -288,7 +286,7 @@
                                       <argument>${basedir}/src/main/asciidoc/pdf/header_hot.pdf</argument>
                                       <argument>${basedir}/src/main/asciidoc/book.pdf</argument>   
                                       <argument>${basedir}/src/main/asciidoc/pdf/zadani_vskp.pdf</argument>  
-                                      <argument>${basedir}/src/main/asciidoc/bp.pdf</argument>
+                                      <argument>${basedir}/src/main/asciidoc/StrojoveUceniApacheSpark.pdf</argument>
                                     </arguments>
                                 </configuration>
                             </execution>                            

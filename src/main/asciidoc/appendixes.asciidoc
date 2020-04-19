@@ -2,7 +2,7 @@
 [appendix]
 == Zdrojový kód projektu
 
-Přílohou práce je exportovaný git repozitář obsahující kompletní zdrojové kódy práce. Tento repozitář je také dostupný na domovské stránce projektu https://github.com/barenode/bp nebo přes lokální klon repozitáře:
+Přílohou práce je exportovaný git repozitář obsahující kompletní zdrojový kód projektu. Tento repozitář je také dostupný na domovské stránce projektu https://github.com/barenode/bp nebo přes lokální klon repozitáře:
 
 ----
 git clone https://github.com/barenode/bp.git
