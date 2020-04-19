@@ -51,16 +51,15 @@ literal:
   font_color: b12146
   font_family: M+ 1mn    
 outline_list:
-  indent: $base_font_size * 1.5
+  indent: $base_font_size * 1.5                 
 footer:
   height: $base_line_height_length * 2.5
   line_height: 1
-  recto:
-    right:
+  columns: =100%
+  recto: &shared_footer
+    center:
       content: '{page-number}'
-  verso:
-    left:
-      content: $footer_recto_right_content    
+  verso: *shared_footer
 # code is used for source blocks (perhaps change to source or listing?)
 code:
   font_color: $base_font_color
