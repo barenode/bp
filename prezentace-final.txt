@@ -1,0 +1,25 @@
+[Doporuèovací systémy]
+Pro doporucovaci system jsme pouzil pristup zalozeny na takzvanem kolaborativnim filtrovani. 
+Pri tomto pristupu se systém snaží identifikovat vazby mezi uzivately a produkty na zaklade jejich predchozi interakce se systemem.
+Toto muze byt napriklad pocet shlednuti filmu u online televize nebo zakoupeni knihy u online knihkupectvi.
+Tuto hodnotu budu dale nazyvat hodnoceni produktu.
+
+V projektu jsem pro kolaborativni filtrovani pouzil alogoritmus zalozeny na fatorizaci matic.
+V tomto algoritmu hodnoceni produktu reprezentujeme jako matici kde je radek pro kazdeho uzivatele a sloupec pro kazdy produkt. 
+Pole teto matice obsahuji prislusna hodnoceni.
+Takova matice je velice rozsáhlá ale zároveò take øídká, typicky ménì než 1 % polí má pøiøazenou hodnotu.
+
+Algoritmus zdrojovou Matici rozloží na 2 takzvane faktorove matice. 
+Vektory v tìchto faktorových maticích mají nízký poèet rozmìrù, typicky v desitkach. 
+Každý tento rozmìr odpovídá skryté vlastnosti modelu a hodnoty odpovídají tomu 
+nakolik jsou uživatelé a produkty spjaty s touto skrytou vlastností. 
+
+Na rozdíl od zdrojove matice je matice vznikla vynasobenim faktorovych matic hustá,
+doplnìné pole obsahují odhad hodnocení produktu.
+
+Algoritmus byl implementovan pro distribuovany výpoèetní systém Apache Spark.
+API Sparku je aktualne dostupne pro radu popularnich programovacich jayzku jako jsou Java, Python, C# nebo R. 
+Pro tento projekt jsem pouzil Scalu nativni jayzk Sparku.
+
+Zdrojove kody ve Scale se kompiluji do standartniho java byte kodu a jsou urcene pro behove prostredi javy.
+Vystupem teto faze projektu tedy byl standartni java archiv obsahujici program algoritmu. 

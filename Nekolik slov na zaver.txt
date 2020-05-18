@@ -1,0 +1,15 @@
+Nekolik slov na zaver
+
+Tento projekt byla moje prvni se strojovym ucenim a vysledny model pracoval prekvapive dobre.
+V rpubehu projektu se potvrdilo to co  je casto zmionovane v odborne literature.
+Kvalita vysledneho modelu je primarne zavisla na kvalite vstupnich dat.
+S pouzitim jineho algoritmu nad stejnymi daty by jsme pravdepodobne dospely ke podobnemu vysloedku.
+Pouzity ALS algoritmus bylo mozne dober disstribuovat takze vetsina vypoctu probihala lokalne.  
+
+Apache Spark je užiteèný nástroj s jednoduchým a srozumitelným API. Komplexní,
+distribuovaný algoritmus pro strojové uèení se na této platformì podaøilo
+implementovat i bez pøedchozích zkušeností. Apache Spark má kvalitní dokumentaci a
+širokou vývojáøskou základnu. Tyto dva prvky výraznì usnadòovaly øešení problemù v
+prùbìhu implementace.
+
+Dekuji za pozornost
